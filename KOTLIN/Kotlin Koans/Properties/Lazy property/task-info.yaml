@@ -13,7 +13,7 @@ files:
     initialized_from_dependency: false
     possible_answer: 'var value: Int? = null'
     selected: false
-    status: Unchecked
+    status: Failed
   - offset: 110
     length: 6
     placeholder_text: TODO()
@@ -27,7 +27,7 @@ files:
                   }
                   return value!!
     selected: false
-    status: Unchecked
+    status: Failed
   text: |
     class LazyProperty(val initializer: () -> Int) {
         /* TODO */
@@ -65,5 +65,5 @@ files:
         }
     }
   learner_created: false
-status: Unchecked
+status: Failed
 record: -1
