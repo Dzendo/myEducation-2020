@@ -1,54 +1,26 @@
 // Upcasting/UpcastExercise2.kt
 package upcastingExercise2
-import atomictest.*
 
-private val trace = Trace()
-private var counter = 0
-
-abstract class Apple(val type: String) {
-  private val id = counter++
-  init {
-    trace("$type $id")
-  }
-  abstract fun consume()
+interface Apple {
+  fun consume(): String
 }
 
-class GrannySmith : Apple("GrannySmith") {
-  override fun consume() =
-    trace("chomp $type")
-}
+class GrannySmith
 
-class Gala : Apple("Gala") {
-  override fun consume() =
-    trace("bite $type")
-}
+class Gala
 
-class Fuji : Apple("Fuji") {
-  override fun consume() =
-    trace("press $type")
-}
+class Fuji
 
-class Braeburn : Apple("Braeburn") {
-  override fun consume() =
-    trace("peel $type")
-}
+class Braeburn
 
 fun main() {
-  val apples: List<Apple> = listOf(
+  val apples = listOf(
     GrannySmith(),
     Gala(),
     Fuji(),
     Braeburn()
   )
-  apples.forEach { it.consume() }
-  trace eq """
-    GrannySmith 0
-    Gala 1
-    Fuji 2
-    Braeburn 3
-    chomp GrannySmith
-    bite Gala
-    press Fuji
-    peel Braeburn
-  """
+  apples.forEach {
+//    println(it.consume())
+  }
 }

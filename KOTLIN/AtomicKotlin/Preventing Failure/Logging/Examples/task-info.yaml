@@ -5,20 +5,17 @@ files:
   text: |-
     // Logging/BasicLogging.kt
     package logging
-    import mu.*
+    import mu.KLogging
 
     private val log = KLogging().logger
 
-    fun KLogger.report(msg: String) {
-      this.trace(msg)
-      this.debug(msg)
-      this.info(msg)
-      this.warn(msg)
-      this.error(msg)
-    }
-
     fun main() {
-      log.report("Hello, Kotlin Logging!")
+      val msg = "Hello, Kotlin Logging!"
+      log.trace(msg)
+      log.debug(msg)
+      log.info(msg)
+      log.warn(msg)
+      log.error(msg)
     }
   learner_created: false
 - name: src/SimpleLoggingStrategy.kt
@@ -26,9 +23,9 @@ files:
   text: |-
     // Logging/SimpleLoggingStrategy.kt
     package logging
-    import checkinstructions.dataFile
+    import checkinstructions.DataFile
 
-    val logFile = dataFile("simpleLogFile.txt")
+    val logFile = DataFile("simpleLogFile.txt")
 
     fun debug(msg: String) =
       System.err.println("Debug: $msg")
@@ -52,20 +49,13 @@ files:
   text: |-
     // Logging/AtomicLog.kt
     package atomiclog
-    import checkinstructions.dataFile
+    import checkinstructions.DataFile
 
-    val logFile = dataFile("atomicLog.txt")
-
-    object log {
-      init {
-        // Reset for each run:
-        if (logFile.exists())
-          logFile.delete()
-      }
-
+    class Logger(fileName: String) {
+      // Reset ensures an empty file:
+      val logFile = DataFile(fileName).reset()
       private fun log(type: String, msg: String) =
         logFile.appendText("$type: $msg\n")
-
       fun trace(msg: String) = log("Trace", msg)
       fun debug(msg: String) = log("Debug", msg)
       fun info(msg: String) = log("Info", msg)
@@ -84,18 +74,19 @@ files:
   visible: true
   text: |-
     // Logging/UseAtomicLog.kt
-    import atomiclog.*
+    import atomiclog.Logger
     import atomictest.eq
 
+    private val logger = Logger("AtomicLog.txt")
+
     fun main() {
-      log.report("Hello, Atomic Log!")
-      logFile.readText() eq
+      logger.report("Hello, Atomic Log!")
+      logger.logFile.readText().trim() eq
     """Trace: Hello, Atomic Log!
     Debug: Hello, Atomic Log!
     Info: Hello, Atomic Log!
     Warn: Hello, Atomic Log!
-    Error: Hello, Atomic Log!
-    """
+    Error: Hello, Atomic Log!"""
     }
   learner_created: false
 status: Unchecked

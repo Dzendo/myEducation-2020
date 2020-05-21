@@ -1,15 +1,15 @@
 content:
 - Extension Functions
-- Named   Default Arguments
+- Named & Default Arguments
 - Overloading
 - when Expressions
 - Enumerations
 - Data Classes
 - Destructuring Declarations
 - Nullable Types
-- Safe Calls   the Elvis Operator
+- Safe Calls & the Elvis Operator
 - Non-null Assertions
 - Extensions for Nullable Types
 - Introduction to Generics
 - Extension Properties
-- break   continue
+- break & continue

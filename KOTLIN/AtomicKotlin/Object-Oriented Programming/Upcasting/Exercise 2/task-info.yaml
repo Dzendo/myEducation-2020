@@ -2,60 +2,95 @@ type: edu
 files:
 - name: src/Task.kt
   visible: true
+  placeholders:
+  - offset: 105
+    length: 17
+    placeholder_text: class GrannySmith
+    initial_state:
+      length: 17
+      offset: 105
+    initialized_from_dependency: false
+    possible_answer: |-
+      class GrannySmith : Apple {
+        override fun consume() = "chomp GrannySmith"
+      }
+    selected: false
+    status: Unchecked
+  - offset: 124
+    length: 10
+    placeholder_text: class Gala
+    initial_state:
+      length: 10
+      offset: 124
+    initialized_from_dependency: false
+    possible_answer: |-
+      class Gala : Apple {
+        override fun consume() = "bite Gala"
+      }
+    selected: false
+    status: Unchecked
+  - offset: 136
+    length: 10
+    placeholder_text: class Fuji
+    initial_state:
+      length: 10
+      offset: 136
+    initialized_from_dependency: false
+    possible_answer: |-
+      class Fuji : Apple {
+        override fun consume() = "press Fuji"
+      }
+    selected: false
+    status: Unchecked
+  - offset: 148
+    length: 14
+    placeholder_text: class Braeburn
+    initial_state:
+      length: 14
+      offset: 148
+    initialized_from_dependency: false
+    possible_answer: |-
+      class Braeburn : Apple {
+        override fun consume() = "peel Braeburn"
+      }
+    selected: false
+    status: Unchecked
+  - offset: 281
+    length: 27
+    placeholder_text: //    println(it.consume())
+    initial_state:
+      length: 27
+      offset: 281
+    initialized_from_dependency: false
+    possible_answer: '    println(it.consume())'
+    selected: false
+    status: Unchecked
   text: |-
     // Upcasting/UpcastExercise2.kt
     package upcastingExercise2
-    import atomictest.*
 
-    private val trace = Trace()
-    private var counter = 0
-
-    abstract class Apple(val type: String) {
-      private val id = counter++
-      init {
-        trace("$type $id")
-      }
-      abstract fun consume()
+    interface Apple {
+      fun consume(): String
     }
 
-    class GrannySmith : Apple("GrannySmith") {
-      override fun consume() =
-        trace("chomp $type")
-    }
+    class GrannySmith
 
-    class Gala : Apple("Gala") {
-      override fun consume() =
-        trace("bite $type")
-    }
+    class Gala
 
-    class Fuji : Apple("Fuji") {
-      override fun consume() =
-        trace("press $type")
-    }
+    class Fuji
 
-    class Braeburn : Apple("Braeburn") {
-      override fun consume() =
-        trace("peel $type")
-    }
+    class Braeburn
 
     fun main() {
-      val apples: List<Apple> = listOf(
+      val apples = listOf(
         GrannySmith(),
         Gala(),
         Fuji(),
         Braeburn()
       )
-      apples.forEach { it.consume() }
-      trace eq """
-        GrannySmith 0
-        Gala 1
-        Fuji 2
-        Braeburn 3
-        chomp GrannySmith
-        bite Gala
-        press Fuji
-        peel Braeburn
-      """
+      apples.forEach {
+    //    println(it.consume())
+      }
     }
   learner_created: false
 - name: test/Tests.kt

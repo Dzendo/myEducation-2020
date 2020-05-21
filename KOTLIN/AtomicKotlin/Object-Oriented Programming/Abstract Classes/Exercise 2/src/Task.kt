@@ -1,33 +1,24 @@
 // Abstract/AbsExercise2.kt
 package abstractClassesExercise2
-import atomictest.*
-
-private val trace = Trace()
 
 enum class Note {
   A, B, C, D, E, F, G
 }
 
-abstract class Instrument(val name: String) {
-  abstract fun play(n: Note)
+abstract class Instrument {
+  abstract fun play(n: Note): String
 }
 
-open class Wind : Instrument("Wind") {
-  override fun play(n: Note) {
-    trace("$name blow $n")
-  }
+class Wind : Instrument() {
+  override fun play(n: Note) = "Wind blow $n"
 }
 
-class Percussion : Instrument("Percussion") {
-  override fun play(n: Note) {
-    trace("$name strike $n")
-  }
+class Percussion : Instrument() {
+  override fun play(n: Note) = "Percussion strike $n"
 }
 
-class Stringed : Instrument("Stringed") {
-  override fun play(n: Note) {
-    trace("$name pluck $n")
-  }
+class Stringed : Instrument() {
+  override fun play(n: Note) = "Stringed pluck $n"
 }
 
 fun tune(i: Instrument) = i.play(Note.C)
@@ -38,10 +29,12 @@ fun main() {
     Percussion(),
     Stringed()
   )
-  orchestra.forEach { tune(it) }
-  trace eq """
-    Wind blow C
-    Percussion strike C
-    Stringed pluck C
-  """
+  for (instrument in orchestra) {
+    println(tune(instrument))
+  }
 }
+/* Output:
+Wind blow C
+Percussion strike C
+Stringed pluck C
+ */

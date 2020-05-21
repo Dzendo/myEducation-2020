@@ -52,17 +52,29 @@ files:
     import java.io.File
     import java.nio.file.Paths
 
-    fun dataFile(name: String): File {
-      val targetDir = File("DataFiles")
-      if(!targetDir.exists())
-        targetDir.mkdir()
-      return targetDir.resolve(name)
+    val targetDir = File("DataFiles")
+
+    class DataFile(val fileName: String) :
+      File(targetDir, fileName) {
+      init {
+        if (!targetDir.exists())
+          targetDir.mkdir()
+      }
+      fun erase() {
+        if (exists())
+          delete()
+      }
+      fun reset(): File {
+        erase()
+        createNewFile()
+        return this
+      }
     }
 
     fun main() {
-      dataFile("Test.txt") eq
-        Paths.get("DataFiles",
-          "Test.txt").toString()
+      DataFile("Test.txt") eq
+        Paths.get("DataFiles", "Test.txt")
+          .toString()
     }
   learner_created: false
 - name: src/GetTrace.kt
@@ -70,14 +82,13 @@ files:
   text: |-
     // CheckInstructions/GetTrace.kt
     package checkinstructions
-    import atomictest.capture
-    import atomictest.eq
+    import atomictest.*
 
     fun getTrace(fileName: String): List<String> {
       require(fileName.startsWith("file_")) {
         "$fileName must start with 'file_'"
       }
-      val file = dataFile(fileName)
+      val file = DataFile(fileName)
       require(file.exists()) {
         "$fileName doesn't exist"
       }
@@ -89,8 +100,8 @@ files:
     }
 
     fun main() {
-      dataFile("file_empty.txt").writeText("")
-      dataFile("file_real.txt").writeText(
+      DataFile("file_empty.txt").writeText("")
+      DataFile("file_real.txt").writeText(
         "wubba lubba dub dub")
       capture {
         getTrace("wrong_name.txt")
@@ -139,7 +150,7 @@ files:
       requireNotNull(n) {         // [1]
         "notNull() argument cannot be null"
       }
-      return n * 9
+      return n * 9                // [2]
     }
 
     fun main() {
@@ -149,7 +160,7 @@ files:
       } eq "IllegalArgumentException: " +
         "notNull() argument cannot be null"
       capture {
-        requireNotNull(n)         // [2]
+        requireNotNull(n)         // [3]
       } eq "IllegalArgumentException: " +
         "Required value was null."
       notNull(11) eq 99
@@ -162,7 +173,7 @@ files:
     package checkinstructions
     import atomictest.*
 
-    val resultFile = dataFile("Results.txt")
+    val resultFile = DataFile("Results.txt")
 
     fun createResultFile(create: Boolean) {
       if (create)
@@ -174,13 +185,34 @@ files:
     }
 
     fun main() {
-      if (resultFile.exists())
-        resultFile.delete()
+      resultFile.erase()
       capture {
         createResultFile(false)
       } eq "IllegalStateException: " +
         "Results.txt doesn't exist!"
       createResultFile(true)
+    }
+  learner_created: false
+- name: src/JulianMonth.kt
+  visible: true
+  text: |-
+    // CheckInstructions/JulianMonth.kt
+    package checkinstructions
+    import atomictest.*
+
+    data class Month(val monthNumber: Int) {
+      init {
+        require(monthNumber in 1..12) {
+          "Month out of range: $monthNumber"
+        }
+      }
+    }
+
+    fun main() {
+      Month(1) eq "Month(monthNumber=1)"
+      capture { Month(13) } eq
+        "IllegalArgumentException: " +
+        "Month out of range: 13"
     }
   learner_created: false
 status: Unchecked

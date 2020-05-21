@@ -2,35 +2,77 @@ type: edu
 files:
 - name: src/Task.kt
   visible: true
+  placeholders:
+  - offset: 84
+    length: 22
+    placeholder_text: abstract class Movable
+    initial_state:
+      length: 22
+      offset: 84
+    initialized_from_dependency: false
+    possible_answer: interface Movable
+    selected: false
+    status: Unchecked
+  - offset: 134
+    length: 24
+    placeholder_text: abstract class Sleepable
+    initial_state:
+      length: 24
+      offset: 134
+    initialized_from_dependency: false
+    possible_answer: interface Sleepable
+    selected: false
+    status: Unchecked
+  - offset: 190
+    length: 37
+    placeholder_text: '// class Sofa: Movable(), Sleepable()'
+    initial_state:
+      length: 37
+      offset: 190
+    initialized_from_dependency: false
+    possible_answer: 'class Sofa: Movable, Sleepable'
+    selected: false
+    status: Unchecked
+  - offset: 242
+    length: 77
+    placeholder_text: |-
+      /*
+        val sofa = Sofa()
+        sofa.move() eq "move"
+        sofa.sleepOn() eq "sleep"
+      */
+    initial_state:
+      length: 77
+      offset: 242
+    initialized_from_dependency: false
+    possible_answer: |2-
+        val sofa = Sofa()
+        sofa.move() eq "move"
+        sofa.sleepOn() eq "sleep"
+    selected: false
+    status: Unchecked
   text: |-
     // Abstract/AbsExercise1.kt
     package abstractClassesExercise1
-    import atomictest.*
 
-    private val trace = Trace()
+    import atomictest.eq
 
-    abstract class WithParams(
-      val i: Int,
-      var s: String = ""
-    ) {
-      init {
-        trace("WithParams $i $s")
-      }
+    abstract class Movable {
+      fun move() = "move"
     }
 
-    class Concrete(i: Int, s: String):
-      WithParams(i, s) {
-      init {
-        trace("Concrete $i $s")
-      }
+    abstract class Sleepable {
+      fun sleepOn() = "sleep"
     }
+
+    // class Sofa: Movable(), Sleepable()
 
     fun main() {
-      Concrete(11, "One Louder")
-      trace eq """
-        WithParams 11 One Louder
-        Concrete 11 One Louder
-      """
+    /*
+      val sofa = Sofa()
+      sofa.move() eq "move"
+      sofa.sleepOn() eq "sleep"
+    */
     }
   learner_created: false
 - name: test/Tests.kt

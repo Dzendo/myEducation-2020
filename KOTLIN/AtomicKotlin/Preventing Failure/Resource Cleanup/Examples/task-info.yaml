@@ -6,10 +6,10 @@ files:
     // ResourceCleanup/Closeable.kt
     package resourcecleanup
     import atomictest.eq
-    import checkinstructions.dataFile
+    import checkinstructions.DataFile
 
     fun main() {
-      dataFile("Results.txt")
+      DataFile("Results.txt")
         .bufferedReader()
         .use { it.readLines().first() } eq
         "Results"
@@ -21,13 +21,13 @@ files:
     // ResourceCleanup/UseLines.kt
     package resourcecleanup
     import atomictest.eq
-    import checkinstructions.dataFile
+    import checkinstructions.DataFile
 
     fun main() {
-      dataFile("Results.txt").useLines {
+      DataFile("Results.txt").useLines {
         it.filter { "#" in it }.first()  // [1]
       } eq "# ok"
-      dataFile("Results.txt").useLines { lines ->
+      DataFile("Results.txt").useLines { lines ->
         lines.filter { line ->           // [2]
           "#" in line
         }.first()
@@ -39,17 +39,18 @@ files:
   text: |-
     // ResourceCleanup/ForEachLine.kt
     package resourcecleanup
-    import checkinstructions.dataFile
+    import checkinstructions.DataFile
+    import atomictest.*
+
+    private val trace = Trace()
 
     fun main() {
-      dataFile("Results.txt").forEachLine {
+      DataFile("Results.txt").forEachLine {
         if (it.startsWith("#"))
-          println("'$it'")
+          trace("$it")
       }
+      trace eq "# ok"
     }
-    /* Output:
-    '# ok'
-    */
   learner_created: false
 - name: src/Usable.kt
   visible: true
@@ -57,21 +58,22 @@ files:
     // ResourceCleanup/Usable.kt
     package resourcecleanup
     import java.io.Closeable
+    import atomictest.*
 
-    class Usable(val msg: String) : Closeable {
-      fun operation() =
-        println("Usable.operation $msg")
-      override fun close() =
-        println("closing Usable $msg")
+    private val trace = Trace()
+
+    class Usable() : Closeable {
+      fun func() = trace("func()")
+      override fun close() = trace("close()")
     }
 
     fun main() {
-      Usable("Done").use { it.operation() }
+      Usable().use { it.func() }
+      trace eq """
+      func()
+      close()
+      """
     }
-    /* Output:
-    Usable.operation Done
-    closing Usable Done
-    */
   learner_created: false
 status: Unchecked
 record: -1

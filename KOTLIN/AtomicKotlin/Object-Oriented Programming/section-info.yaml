@@ -8,7 +8,7 @@ content:
 - Upcasting
 - Polymorphism
 - Composition
-- Inheritance   Extensions
+- Inheritance & Extensions
 - Class Delegation
 - Downcasting
 - Sealed Classes

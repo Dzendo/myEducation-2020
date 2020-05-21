@@ -2,53 +2,129 @@ type: edu
 files:
 - name: src/Task.kt
   visible: true
+  placeholders:
+  - offset: 270
+    length: 10
+    placeholder_text: class Hero
+    initial_state:
+      length: 10
+      offset: 270
+    initialized_from_dependency: false
+    possible_answer: |-
+      class Hero : ActionCharacter(), Fighter, Swimmer, Flyer {
+        override fun swim() = "Hero swim"
+        override fun fly() = "Hero fly"
+      }
+    selected: false
+    status: Unchecked
+  - offset: 311
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 311
+    initialized_from_dependency: false
+    possible_answer: println(x.fight())
+    selected: false
+    status: Unchecked
+  - offset: 349
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 349
+    initialized_from_dependency: false
+    possible_answer: println(x.swim())
+    selected: false
+    status: Unchecked
+  - offset: 384
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 384
+    initialized_from_dependency: false
+    possible_answer: println(x.fly())
+    selected: false
+    status: Unchecked
+  - offset: 431
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 431
+    initialized_from_dependency: false
+    possible_answer: println(x.fight())
+    selected: false
+    status: Unchecked
+  - offset: 454
+    length: 175
+    placeholder_text: |-
+      /*
+        val h = Hero()
+        tryFight(h) // Treat it as a Fight
+        trySwim(h) // Treat it as a Swim
+        tryFly(h) // Treat it as a Fly
+        doAction(h) // Treat it as an ActionCharacter
+      */
+    initial_state:
+      length: 175
+      offset: 454
+    initialized_from_dependency: false
+    possible_answer: |2-
+        val h = Hero()
+        tryFight(h) // Treat it as a Fight
+        trySwim(h) // Treat it as a Swim
+        tryFly(h) // Treat it as a Fly
+        doAction(h) // Treat it as an ActionCharacter
+    selected: false
+    status: Unchecked
   text: |-
     // Upcasting/UpcastExercise3.kt
     package upcastingExercise3
-    import atomictest.*
 
-    private val trace = Trace()
-
-    interface Fight {
-      fun fight()
+    interface Fighter {
+      fun fight(): String
     }
 
-    interface Swim {
-      fun swim()
+    interface Swimmer {
+      fun swim(): String
     }
 
-    interface Fly {
-      fun fly()
+    interface Flyer {
+      fun fly(): String
     }
 
     open class ActionCharacter {
-      fun fight() =
-        trace("ActionCharacter fight")
+      fun fight(): String = "ActionCharacter fight"
     }
 
-    class Hero :
-      ActionCharacter(), Fight, Swim, Fly {
-      override fun swim() = trace("Hero swim")
-      override fun fly() = trace("Hero fly")
+    class Hero
+
+    fun tryFight(x: Fighter) {
+      TODO()
     }
 
-    fun t(x: Fight) = x.fight()
-    fun u(x: Swim) = x.swim()
-    fun v(x: Fly) = x.fly()
-    fun w(x: ActionCharacter) = x.fight()
+    fun trySwim(x: Swimmer) {
+      TODO()
+    }
+
+    fun tryFly(x: Flyer) {
+      TODO()
+    }
+
+    fun doAction(x: ActionCharacter) {
+      TODO()
+    }
 
     fun main() {
+    /*
       val h = Hero()
-      t(h) // Treat it as a Fight
-      u(h) // Treat it as a Swim
-      v(h) // Treat it as a Fly
-      w(h) // Treat it as an ActionCharacter
-      trace eq """
-        ActionCharacter fight
-        Hero swim
-        Hero fly
-        ActionCharacter fight
-      """
+      tryFight(h) // Treat it as a Fight
+      trySwim(h) // Treat it as a Swim
+      tryFly(h) // Treat it as a Fly
+      doAction(h) // Treat it as an ActionCharacter
+    */
     }
   learner_created: false
 - name: test/Tests.kt

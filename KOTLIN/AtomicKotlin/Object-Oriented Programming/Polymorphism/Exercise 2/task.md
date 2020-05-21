@@ -1,5 +1,9 @@
 ## Polymorphism (#2)
 
-Add `Wizard`, which implements `Magician`, and `Goblin` which implements
-`Fighter`, to `FantasyGame.kt`. In `main()`, create and test a `Wizard` named
-"Max" and a `Goblin` named "Gorbag."
+The starter code contains two classes: `Frog` extends `Animal`. `Animal`
+defines two member functions `talk` and `jump`, and `Frog` overrides them.
+All the functions record the corresponding information in `trace`. 
+Note that our animal always talks right after it jumps.
+
+`main` creates `Frog`, stores it as `Animal` and calls `jump` on it.
+Your task is to guess what will be stored in `trace` after this program runs.

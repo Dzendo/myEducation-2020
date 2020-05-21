@@ -1,5 +1,4 @@
 type: ide
-custom_name: Exercise 4
 files:
 - name: src/Task.kt
   visible: true

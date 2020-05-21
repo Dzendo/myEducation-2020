@@ -2,34 +2,61 @@ type: edu
 files:
 - name: src/Task.kt
   visible: true
+  placeholders:
+  - offset: 75
+    length: 49
+    placeholder_text: '/* TODO: Implement Animal, Cat and Dog classes */'
+    initial_state:
+      length: 49
+      offset: 75
+    initialized_from_dependency: false
+    possible_answer: |-
+      open class Animal(val sound: String = "???")
+
+      class Cat(sound: String = "meow") : Animal(sound)
+
+      class Dog(sound: String = "woof") : Animal(sound)
+    selected: false
+    status: Unchecked
+  - offset: 139
+    length: 131
+    placeholder_text: |-
+      /*
+        val animal = Animal()
+        println(animal.sound)
+        val cat = Cat()
+        println(cat.sound)
+        val dog = Dog()
+        println(dog.sound)
+      */
+    initial_state:
+      length: 131
+      offset: 139
+    initialized_from_dependency: false
+    possible_answer: |2-
+        val animal = Animal()
+        println(animal.sound)
+        val cat = Cat()
+        println(cat.sound)
+        val dog = Dog()
+        println(dog.sound)
+    selected: false
+    status: Unchecked
   text: |-
     // BaseClassInit/BCIExercise1.kt
     package baseClassInitializationExercise1
-    import atomictest.*
 
-    private val trace = Trace()
-
-    open class A {
-      init {
-        trace("A")
-      }
-    }
-
-    open class B : A() {
-      init {
-        trace("B")
-      }
-    }
-
-    class C : B() {
-      init {
-        trace("C")
-      }
-    }
+    /* TODO: Implement Animal, Cat and Dog classes */
 
     fun main() {
-      C()
-      trace eq "A B C"
+    /*
+      val animal = Animal()
+      println(animal.sound)
+      val cat = Cat()
+      println(cat.sound)
+      val dog = Dog()
+      println(dog.sound)
+    */
     }
   learner_created: false
 - name: test/Tests.kt

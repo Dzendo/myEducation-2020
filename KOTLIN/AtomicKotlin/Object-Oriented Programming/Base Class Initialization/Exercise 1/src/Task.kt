@@ -1,28 +1,15 @@
 // BaseClassInit/BCIExercise1.kt
 package baseClassInitializationExercise1
-import atomictest.*
 
-private val trace = Trace()
-
-open class A {
-  init {
-    trace("A")
-  }
-}
-
-open class B : A() {
-  init {
-    trace("B")
-  }
-}
-
-class C : B() {
-  init {
-    trace("C")
-  }
-}
+/* TODO: Implement Animal, Cat and Dog classes */
 
 fun main() {
-  C()
-  trace eq "A B C"
+/*
+  val animal = Animal()
+  println(animal.sound)
+  val cat = Cat()
+  println(cat.sound)
+  val dog = Dog()
+  println(dog.sound)
+*/
 }

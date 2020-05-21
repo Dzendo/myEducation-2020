@@ -1,27 +1,63 @@
-// Polymorphism/PolyExercise1.kt
 package polymorphismExercise1
-import atomictest.eq
+import atomictest.*
 
-open class Pet {
-  open fun speak() = "Pet"
+private val trace = Trace()
+
+abstract class Character(val name: String) {
+  abstract fun play(): String
 }
 
-class Dog : Pet() {
-  override fun speak() = "Bark!"
+interface Fighter {
+  fun fight() = "Fight!"
 }
 
-class Cat : Pet() {
-  override fun speak() = "Meow"
+interface Magician {
+  fun doMagic() = "Magic!"
 }
 
-class Hamster : Pet() {
-  override fun speak() = "Squeak!"
+interface Flyer {
+  fun fly() = "Fly!"
 }
 
-fun talk(pet: Pet) = pet.speak()
+class Warrior :
+  Character("Warrior"), Fighter {
+  override fun play() = fight()
+}
+
+open class Elf(name: String = "Elf") :
+  Character(name), Magician {
+  override fun play() = doMagic()
+}
+
+class FightingElf :
+  Elf("FightingElf"), Fighter {
+  override fun play() =
+    super.play() + fight()
+}
+
+class Dragon
+
+class Wizard
+
+fun Character.playTurn() =
+  trace((name + ": " + play()))
 
 fun main() {
-  talk(Dog()) eq "Bark!"
-  talk(Cat()) eq "Meow"
-  talk(Hamster()) eq "Squeak!"
+  val characters = listOf(
+    Warrior(),
+    Elf(),
+    FightingElf(),
+    Dragon(),
+    Wizard()
+  )
+  characters.forEach { c ->
+//    c.playTurn()
+  }
+  trace eq """
+    Warrior: Fight!
+    Elf: Magic!
+    FightingElf: Magic!Fight!
+    Dragon: Fly!
+    Magician: Magic!Fly!
+  """
 }

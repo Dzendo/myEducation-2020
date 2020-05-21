@@ -1,73 +1,34 @@
 // BaseClassInit/BCIExercise2.kt
 package baseClassInitializationExercise2
-import atomictest.*
 
-private val trace = Trace()
-
-open class Plate {
+open class Plate(description: String) {
   init {
-    trace("Plate")
+    println("Plate-$description")
   }
 }
 
-class DinnerPlate : Plate() {
+class DinnerPlate : Plate("DinnerPlate")
+
+open class Utensil(description: String) {
   init {
-    trace("DinnerPlate")
+    println("Utensil-$description")
   }
 }
 
-open class Utensil {
+class Spoon : Utensil("Spoon")
+
+class Fork : Utensil("Fork")
+
+class Knife : Utensil("Knife")
+
+open class Custom {
   init {
-    trace("Utensil")
+    println("Custom")
   }
 }
 
-class Spoon : Utensil() {
-  init {
-    trace("Spoon")
-  }
-}
-
-class Fork : Utensil() {
-  init {
-    trace("Fork")
-  }
-}
-
-class Knife : Utensil() {
-  init {
-    trace("Knife")
-  }
-}
-
-open class Custom() {
-  init {
-    trace("Custom")
-  }
-}
-
-class PlaceSetting : Custom() {
-  val spoon = Spoon()
-  val fork = Fork()
-  val knife = Knife()
-  val plate = DinnerPlate()
-  init {
-    trace("PlaceSetting")
-  }
-}
+class PlaceSetting
 
 fun main() {
   PlaceSetting()
-  trace eq """
-    Custom
-    Utensil
-    Spoon
-    Utensil
-    Fork
-    Utensil
-    Knife
-    Plate
-    DinnerPlate
-    PlaceSetting
-  """
 }

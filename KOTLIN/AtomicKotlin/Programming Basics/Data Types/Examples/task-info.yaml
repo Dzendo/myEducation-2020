@@ -1,5 +1,4 @@
 type: theory
-custom_name: Examples
 files:
 - name: src/StringPlusNumber.kt
   visible: true
