@@ -1,0 +1,52 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    // Abstract/AbsExercise1.kt
+    package abstractClassesExercise1
+    import atomictest.*
+
+    private val trace = Trace()
+
+    abstract class WithParams(
+      val i: Int,
+      var s: String = ""
+    ) {
+      init {
+        trace("WithParams $i $s")
+      }
+    }
+
+    class Concrete(i: Int, s: String):
+      WithParams(i, s) {
+      init {
+        trace("Concrete $i $s")
+      }
+    }
+
+    fun main() {
+      Concrete(11, "One Louder")
+      trace eq """
+        WithParams 11 One Louder
+        Concrete 11 One Louder
+      """
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package abstractClassesExercise1
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestAbstractClassesExercise1 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

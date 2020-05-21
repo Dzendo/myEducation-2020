@@ -1,0 +1,249 @@
+type: theory
+files:
+- name: src/Airport.kt
+  visible: true
+  text: |-
+    // NestedClasses/Airport.kt
+    package nestedclasses
+    import atomictest.eq
+
+    class Airport(private val code: String) {
+      open class Plane {
+        // Can access private properties:
+        fun contact(airport: Airport) =
+          "Contacting ${airport.code}"
+      }
+      private class PrivatePlane : Plane()
+      fun privatePlane() : Plane = PrivatePlane()
+    }
+
+    fun main() {
+      val denver = Airport("DEN")
+      var plane = Airport.Plane()           // [1]
+      plane.contact(denver) eq "Contacting DEN"
+      // Can't do this:
+      // val privatePlane = Airport.PrivatePlane()
+      val frankfurt = Airport("FRA")
+      plane = frankfurt.privatePlane()
+      // Can't do this:
+      // val p = plane as PrivatePlane      // [2]
+      plane.contact(frankfurt) eq "Contacting FRA"
+    }
+  learner_created: false
+- name: src/NestedHouse.kt
+  visible: true
+  text: |-
+    // NestedClasses/NestedHouse.kt
+    package nestedclasses
+    import atomictest.*
+
+    abstract class Cleanable(val id: String) {
+      open val parts: List<Cleanable> = listOf()
+      fun clean(): String =
+      "${parts.map(Cleanable::clean)} $id clean\n"
+    }
+
+    class House: Cleanable("House") {
+      override val parts = listOf(
+        Bedroom("Master Bedroom"),
+        Bedroom("Guest Bedroom")
+      )
+      class Bedroom(id: String): Cleanable(id) {
+        override val parts =
+          listOf(Closet(), Bathroom())
+        class Closet: Cleanable("Closet") {
+          override val parts =
+            listOf(Shelf(), Shelf())
+          class Shelf: Cleanable("Shelf")
+        }
+        class Bathroom: Cleanable("Bathroom") {
+          override val parts =
+            listOf(Toilet(), Sink())
+          class Toilet: Cleanable("Toilet")
+          class Sink: Cleanable("Sink")
+        }
+      }
+    }
+
+    fun main() {
+      House().clean().trim() eq """
+      [[[[] Shelf clean
+      , [] Shelf clean
+      ] Closet clean
+      , [[] Toilet clean
+      , [] Sink clean
+      ] Bathroom clean
+      ] Master Bedroom clean
+      , [[[] Shelf clean
+      , [] Shelf clean
+      ] Closet clean
+      , [[] Toilet clean
+      , [] Sink clean
+      ] Bathroom clean
+      ] Guest Bedroom clean
+      ] House clean
+      """.trimIndent()
+    }
+  learner_created: false
+- name: src/LocalClasses.kt
+  visible: true
+  text: |-
+    // NestedClasses/LocalClasses.kt
+    package nestedclasses
+
+    fun localClasses() {
+      open class Amphibian
+      class Frog: Amphibian()
+      val amphibian: Amphibian = Frog()
+    }
+  learner_created: false
+- name: src/ReturnLocal.kt
+  visible: true
+  text: |-
+    // NestedClasses/ReturnLocal.kt
+    package nestedclasses
+
+    interface Amphibian
+
+    fun createAmphibian(): Amphibian {
+      class Frog: Amphibian
+      return Frog()
+    }
+
+    fun main() {
+      val amphibian = createAmphibian()
+      // amphibian as Frog
+    }
+  learner_created: false
+- name: src/WithinInterface.kt
+  visible: true
+  text: |-
+    // NestedClasses/WithinInterface.kt
+    package nestedclasses
+    import atomictest.*
+
+    interface Item {
+      val type: Type
+      data class Type(val type: String)
+    }
+
+    class Bolt(type: String) : Item {
+      override val type = Item.Type(type)
+    }
+
+    fun main() {
+      val items = listOf(
+        Bolt("Slotted"), Bolt("Hex")
+      )
+      items.map(Item::type) eq
+        "[Type(type=Slotted), Type(type=Hex)]"
+    }
+  learner_created: false
+- name: src/Ticket.kt
+  visible: true
+  text: |-
+    // NestedClasses/Ticket.kt
+    package nestedclasses
+    import atomictest.eq
+    import nestedclasses.Ticket.Seat.*
+
+    class Ticket(private var seat: Seat = COACH) {
+      enum class Seat {
+        COACH,
+        PREMIUM,
+        BUSINESS,
+        FIRST
+      }
+      fun upgrade(): Ticket {
+        seat = values()[
+          (seat.ordinal + 1)
+          .coerceAtMost(FIRST.ordinal)
+        ]
+        return this
+      }
+      fun meal() = when(seat) {
+        COACH -> "Bag Meal"
+        PREMIUM -> "Bag Meal with Cookie"
+        BUSINESS -> "Hot Meal"
+        FIRST -> "Private Chef"
+      }
+      override fun toString() = "$seat"
+    }
+
+    fun main() {
+      val tickets = listOf(
+        Ticket(),
+        Ticket(PREMIUM),
+        Ticket(BUSINESS),
+        Ticket(FIRST)
+      )
+      tickets.map(Ticket::meal) eq
+        "[Bag Meal, Bag Meal with Cookie, " +
+        "Hot Meal, Private Chef]"
+      tickets.map(Ticket::upgrade) eq
+        "[PREMIUM, BUSINESS, FIRST, FIRST]"
+      tickets eq
+        "[PREMIUM, BUSINESS, FIRST, FIRST]"
+      tickets.map(Ticket::meal) eq
+        "[Bag Meal with Cookie, Hot Meal, " +
+        "Private Chef, Private Chef]"
+    }
+  learner_created: false
+- name: src/FillIt.kt
+  visible: true
+  text: |-
+    // NestedClasses/FillIt.kt
+    package nestedclasses
+    import nestedclasses.Game.State.*
+    import nestedclasses.Game.Mark.*
+    import kotlin.random.Random
+    import atomictest.*
+
+    interface Game {
+      enum class State { PLAYING, FINISHED }
+      enum class Mark { BLANK, X ,O }
+    }
+
+    class FillIt(
+      val side: Int = 3, randomSeed: Int = 0
+    ) : Game {
+      val rand = Random(randomSeed)
+      private var state = PLAYING
+      private var grid =
+        MutableList(side * side) { BLANK }
+      private var player = X
+      fun turn() {
+        val blanks = grid.withIndex()
+          .filter { it.value == BLANK }
+        if(blanks.isEmpty()) {
+          state = FINISHED
+        } else {
+          grid[blanks.random(rand).index] = player
+          player = if (player == X) O else X
+        }
+      }
+      fun play() {
+        while(state != FINISHED)
+          turn()
+      }
+      override fun toString() =
+        grid.chunked(side).joinToString("\n")
+    }
+
+    fun main() {
+      val game = FillIt(8, 17)
+      game.play()
+      game eq """
+      [O, X, O, X, O, X, X, X]
+      [X, O, O, O, O, O, X, X]
+      [O, O, X, O, O, O, X, X]
+      [X, O, O, O, O, O, X, O]
+      [X, X, O, O, X, X, X, O]
+      [X, X, O, O, X, X, O, X]
+      [O, X, X, O, O, O, X, O]
+      [X, O, X, X, X, O, X, X]
+      """.trimIndent()
+    }
+  learner_created: false
+status: Unchecked
+record: -1

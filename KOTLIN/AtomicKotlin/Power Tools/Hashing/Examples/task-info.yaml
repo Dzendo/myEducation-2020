@@ -1,0 +1,179 @@
+type: theory
+files:
+- name: src/SimpleHashing.kt
+  visible: true
+  text: |-
+    // Hashing/SimpleHashing.kt
+    import atomictest.eq
+
+    fun main() {
+      val keys = 'A'..'z'
+      val hm = HashMap(
+        keys.associate { it to keys.indexOf(it) })
+      hm['Z'] eq 25
+      hm['x'] = 42
+      hm['x'] eq 42
+
+      val items = 'A'..'F'
+      val hs = HashSet(
+        items + items + items + items + items
+      )
+      hs eq "[A, B, C, D, E, F]"
+      ('C' in hs) eq true
+      ('c' in hs) eq false
+      hs.containsAll(('B'..'D').toSet()) eq true
+      hs.intersect(('D'..'Z').toSet()) eq
+        "[D, E, F]"
+    }
+  learner_created: false
+- name: src/UnpredictableHashing.kt
+  visible: true
+  text: |-
+    // Hashing/UnpredictableHashing.kt
+    import atomictest.eq
+
+    fun main() {
+      "Hash order is unpredictable".toHashSet() eq
+        "[H,  , a, b, c, d, e, h, i, " +
+        "l, n, o, p, r, s, t, u]"
+    }
+  learner_created: false
+- name: src/Pets.kt
+  visible: true
+  text: |-
+    // Hashing/Pets.kt
+    package hashing
+    import atomictest.eq
+
+    interface Pet {
+      companion object {
+        var n = 0
+        fun next() = n++
+      }
+    }
+
+    data class Cat(
+      val name: String,
+      val id: Int = Pet.next()
+    ) : Pet
+
+    data class Dog(
+      val name: String,
+      val id: Int = Pet.next()
+    ) : Pet
+
+    data class Rat(
+      val name: String,
+      val id: Int = Pet.next()
+    ) : Pet
+
+    fun main() {
+      val pets = HashSet(setOf(
+        Cat("Elsie"),
+        Dog("Rufus"),
+        Rat("Fizzy"),
+        Cat("Stanford"),
+        Rat("Freckly"),
+        Rat("Fuzzy")))
+      pets.joinToString(separator = "\n") eq
+        """
+        Cat(name=Stanford, id=3)
+        Rat(name=Freckly, id=4)
+        Rat(name=Fuzzy, id=5)
+        Rat(name=Fizzy, id=2)
+        Cat(name=Elsie, id=0)
+        Dog(name=Rufus, id=1)
+        """.trimIndent()
+
+      (pets.first() in pets) eq true
+      (Dog("Pugsly") in pets) eq false
+      // Because each object has a unique id:
+      (Dog("Rufus") in pets) eq false
+    }
+  learner_created: false
+- name: src/KeyFailure.kt
+  visible: true
+  text: |-
+    // Hashing/KeyFailure.kt
+    import atomictest.eq
+
+    data class Key(var id: String)
+
+    fun main() {
+      val key = Key("A")
+      val hm = hashMapOf(key to "Hello")
+      hm eq "{Key(id=A)=Hello}"
+      hm[key] eq "Hello"             // [1]
+
+      key.id = "Goodbye"
+      hm eq "{Key(id=Goodbye)=Hello}"
+      hm[key] eq null                // [2]
+    }
+  learner_created: false
+- name: src/HashCodeFailure.kt
+  visible: true
+  text: |-
+    // Hashing/HashCodeFailure.kt
+    import atomictest.*
+
+    class NotDataClass(id: String)
+    data class DataClass(val id: String)
+
+    fun main() {
+      val key = NotDataClass("A")
+      val key2 = NotDataClass("A")
+      key.hashCode() neq key2.hashCode()    // [1]
+      key.equals(key2) eq false             // [2]
+      val hm = hashMapOf(key to "Hello")
+      hm[key] eq "Hello"
+      hm[key2] eq null                      // [3]
+
+      val dckey = DataClass("A")
+      val dckey2 = DataClass("A")
+      dckey.hashCode() eq dckey2.hashCode() // [4]
+      dckey.equals(dckey2) eq true          // [5]
+      val hmdc = hashMapOf(dckey to "Hello")
+      hmdc[dckey] eq "Hello"
+      hmdc[dckey2] eq "Hello"               // [6]
+    }
+  learner_created: false
+- name: src/StringHashCode.kt
+  visible: true
+  text: |-
+    // Hashing/StringHashCode.kt
+    import atomictest.eq
+
+    fun main() {
+      "Hello".hashCode() eq "Hello".hashCode();
+    }
+  learner_created: false
+- name: src/EasyKeys.kt
+  visible: true
+  text: |-
+    // Hashing/EasyKeys.kt
+    package hashing
+    import atomictest.eq
+
+    data class Employee(
+      val first: String,
+      val last: String, val id: Int
+    )
+
+    fun main() {
+      val employees = HashSet(setOf(
+        Employee("Lucia", "Dubois", 1),
+        Employee("Bob", "Dobbs", 2),
+        Employee("Ilsa", "Schmidt", 3)))
+      employees.joinToString(separator = "\n") eq
+        """
+        Employee(first=Bob, last=Dobbs, id=2)
+        Employee(first=Lucia, last=Dubois, id=1)
+        Employee(first=Ilsa, last=Schmidt, id=3)
+        """.trimIndent()
+
+      (Employee("Ilsa", "Schmidt", 3)
+        in employees) eq true
+    }
+  learner_created: false
+status: Unchecked
+record: -1

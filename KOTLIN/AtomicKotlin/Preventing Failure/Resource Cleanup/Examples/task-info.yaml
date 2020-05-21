@@ -1,0 +1,77 @@
+type: theory
+files:
+- name: src/Closeable.kt
+  visible: true
+  text: |-
+    // ResourceCleanup/Closeable.kt
+    package resourcecleanup
+    import atomictest.eq
+    import checkinstructions.dataFile
+
+    fun main() {
+      dataFile("Results.txt")
+        .bufferedReader()
+        .use { it.readLines().first() } eq
+        "Results"
+    }
+  learner_created: false
+- name: src/UseLines.kt
+  visible: true
+  text: |-
+    // ResourceCleanup/UseLines.kt
+    package resourcecleanup
+    import atomictest.eq
+    import checkinstructions.dataFile
+
+    fun main() {
+      dataFile("Results.txt").useLines {
+        it.filter { "#" in it }.first()  // [1]
+      } eq "# ok"
+      dataFile("Results.txt").useLines { lines ->
+        lines.filter { line ->           // [2]
+          "#" in line
+        }.first()
+      } eq "# ok"
+    }
+  learner_created: false
+- name: src/ForEachLine.kt
+  visible: true
+  text: |-
+    // ResourceCleanup/ForEachLine.kt
+    package resourcecleanup
+    import checkinstructions.dataFile
+
+    fun main() {
+      dataFile("Results.txt").forEachLine {
+        if (it.startsWith("#"))
+          println("'$it'")
+      }
+    }
+    /* Output:
+    '# ok'
+    */
+  learner_created: false
+- name: src/Usable.kt
+  visible: true
+  text: |-
+    // ResourceCleanup/Usable.kt
+    package resourcecleanup
+    import java.io.Closeable
+
+    class Usable(val msg: String) : Closeable {
+      fun operation() =
+        println("Usable.operation $msg")
+      override fun close() =
+        println("closing Usable $msg")
+    }
+
+    fun main() {
+      Usable("Done").use { it.operation() }
+    }
+    /* Output:
+    Usable.operation Done
+    closing Usable Done
+    */
+  learner_created: false
+status: Unchecked
+record: -1

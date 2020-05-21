@@ -1,0 +1,85 @@
+type: edu
+custom_name: Custom Setter & Getter
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 136
+    length: 136
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 136
+    initialized_from_dependency: false
+    possible_answer: |-
+      set(value) {
+                  field = if(value != 0) value else throw IllegalArgumentException()
+              }
+    selected: false
+    status: Solved
+  - offset: 306
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 176
+    initialized_from_dependency: false
+    possible_answer: get() = numerator.toDouble()/denominator
+    selected: false
+    status: Solved
+  text: |-
+    import java.lang.IllegalArgumentException
+
+    class Fraction(val numerator: Int, denominator: Int) {
+
+        var denominator: Int = 1
+            TODO()
+
+        val decimal: Double
+            TODO()
+
+        init {
+            this.denominator = denominator
+        }
+
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Rule
+    import org.junit.Test
+    import org.junit.rules.ExpectedException
+    import java.lang.IllegalArgumentException
+
+
+    class Test {
+
+        @Rule
+        @JvmField
+        var exceptionRule = ExpectedException.none()
+
+
+        @Test
+        fun testSolutionValid() {
+            val frac = Fraction(2, 1)
+        }
+
+
+        @Test
+        fun testSolutionInvalidConstructor() {
+            exceptionRule.expect(IllegalArgumentException::class.java)
+            val fracInvalid = Fraction(2, 0)
+        }
+
+
+        @Test
+        fun testSolutionInvalidSet() {
+            val frac = Fraction(2, 1)
+            exceptionRule.expect(IllegalArgumentException::class.java)
+            frac.denominator = 0
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

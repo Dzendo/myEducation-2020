@@ -1,0 +1,15 @@
+type: theory
+files:
+- name: src/Task.java
+  visible: true
+  text: |
+    // you can experiment here, it won’t be checked
+
+    class Task {
+      public static void main(String[] args) {
+        // put your code here
+      }
+    }
+  learner_created: false
+status: Solved
+record: -1

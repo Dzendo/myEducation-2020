@@ -1,0 +1,202 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 45
+    length: 8
+    placeholder_text: /*TODO*/
+    initial_state:
+      length: 8
+      offset: 45
+    initialized_from_dependency: false
+    possible_answer: |-
+      var x = 0
+        var y = 0
+    selected: false
+    status: Unchecked
+  - offset: 85
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 85
+    initialized_from_dependency: false
+    possible_answer: x += steps
+    selected: false
+    status: Unchecked
+  - offset: 126
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 126
+    initialized_from_dependency: false
+    possible_answer: x -= steps
+    selected: false
+    status: Unchecked
+  - offset: 167
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 167
+    initialized_from_dependency: false
+    possible_answer: y += steps
+    selected: false
+    status: Unchecked
+  - offset: 206
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 206
+    initialized_from_dependency: false
+    possible_answer: y -= steps
+    selected: false
+    status: Unchecked
+  - offset: 248
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 248
+    initialized_from_dependency: false
+    possible_answer: '"($x, $y)"'
+    selected: false
+    status: Unchecked
+  text: |-
+    package propertiesExercise2
+
+    class Robot {
+      /*TODO*/
+
+      fun right(steps: Int) {
+        TODO()
+      }
+
+      fun left(steps: Int) {
+        TODO()
+      }
+
+      fun down(steps: Int) {
+        TODO()
+      }
+
+      fun up(steps: Int) {
+        TODO()
+      }
+
+      fun getLocation(): String = TODO()
+    }
+
+    fun main() {
+      val robot = Robot()
+      println(robot.getLocation())
+      robot.right(1)
+      println(robot.getLocation())
+      robot.down(2)
+      println(robot.getLocation())
+    }
+    /* Output:
+    (0, 0)
+    (1, 0)
+    (1, 2)
+    */
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package propertiesExercise2
+
+    import org.junit.Assert
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.TIMEOUT
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestPropertiesExercise2 {
+      class RobotHandler {
+        val robot: Robot = Robot()
+        val loggedMovements = StringBuilder()
+
+        fun goRight(steps: Int) {
+          robot.right(steps)
+          loggedMovements.appendln("right($steps)")
+        }
+
+        fun goLeft(steps: Int) {
+          robot.left(steps)
+          loggedMovements.appendln("left($steps)")
+
+        }
+
+        fun goDown(steps: Int) {
+          robot.down(steps)
+          loggedMovements.appendln("down($steps)")
+
+        }
+
+        fun goUp(steps: Int) {
+          robot.up(steps)
+          loggedMovements.appendln("up($steps)")
+        }
+      }
+
+      private fun testMovements(location: String, movements: RobotHandler.() -> Unit) {
+        val robotHandler = RobotHandler()
+        robotHandler.movements()
+        val actualLocation = robotHandler.robot.getLocation()
+        val message = if (robotHandler.loggedMovements.isEmpty()) {
+          "Initial location of the robot should be (0, 0)"
+        } else {
+          "Wrong location after:\n" + robotHandler.loggedMovements
+        }
+        Assert.assertEquals(message, location, actualLocation)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test1Initial() = testMovements("(0, 0)") {}
+
+      @Test(timeout = TIMEOUT)
+      fun test2Right() = testMovements("(1, 0)") {
+        goRight(1)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test3Left() = testMovements("(1, 0)") {
+        goRight(2)
+        goLeft(1)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test4Down() = testMovements("(0, 1)") {
+        goDown(1)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test5Up() = testMovements("(0, 1)") {
+        goDown(2)
+        goUp(1)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test6SeveralSteps() = testMovements("(3, 5)") {
+        goRight(3)
+        goDown(5)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test7SeveralSteps2() = testMovements("(10, 10)") {
+        goRight(13)
+        goDown(15)
+        goUp(5)
+        goLeft(3)
+      }
+    }
+  learner_created: false
+feedback_link: |
+  https://docs.google.com/forms/d/e/1FAIpQLSdkaliSwYkjiV21bZl0yP-In2g5p17sAQCfaGjyHx_QYMWTiQ/viewform?usp=pp_url&entry.189755027=Introduction+to+Objects+%2F+Properties+%2F+Exercise1
+status: Unchecked
+record: -1

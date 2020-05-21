@@ -1,0 +1,4 @@
+package TRY
+
+interface UserInterface {
+}

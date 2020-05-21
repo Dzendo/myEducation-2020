@@ -1,0 +1,388 @@
+type: theory
+files:
+- name: src/RobotMaze.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/RobotMaze.kt
+    package oodesign
+
+    val stringMaze = """
+    .....#..._o#_......._.._...#..._q#_......._.
+    a_..b#p..__#l..#k...__._...#p..__#c..#...d__
+    ############################################
+    g_..______h#.._____m_.._......l_.#n_____.._o
+    ############################################
+    f_._....._##R#_#...a___q._.##..__#_._....._.
+    ._...#..._##_#...#########.##..__#______.._.
+    ._...#...g##_..#.##!__._...##..__._.j#k...__
+    ############################################
+    ._n......_m#j......._i._......._.#f......._e
+    ############################################
+    ._.________#b._______.._._.....__#d._....._.
+    ._._.....__#_._______.._.________#_._______.
+    ._._..h..__#_._______.._._.....__#_._....._.
+    ._._.....__#_._______.._.________#_._______.
+    ._.________#_._....._.._._.....__#_._....._.
+    ._._..i..__#_._....._.._c________#_._..e.._.
+    """.trim()
+  learner_created: false
+- name: src/Result.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Result.kt
+    // Report success or failure
+    package oodesign
+
+    sealed class Result(
+      val success: Boolean,
+      val room: Room
+    ) {
+      class Success(room: Room) :
+        Result(true, room)
+      object Fail : Result(false, Room())
+    }
+  learner_created: false
+- name: src/Actors.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Actors.kt
+    package oodesign
+
+    sealed class Actor {
+      abstract val symbol: Char
+      open fun id() = symbol
+      open val room: Room
+        get() = throw NotImplementedError()
+      override fun toString() =
+        "${this::class.simpleName} ${id()}" +
+          "(${room.row}, ${room.col})"
+      open fun interact(robot: Robot): Room =
+        throw NotImplementedError()
+      // Makes the exact type of Actor object:
+      open fun makeActor(r: Room): Actor =
+        throw NotImplementedError()
+      // Match the symbol to create & configure
+      // a Room with the new Actor, or Fail:
+      open
+      fun create(ch: Char, row: Int, col: Int) =
+        if (ch == symbol) {
+          val room = Room(row, col)
+          room.actor = makeActor(room)
+          Result.Success(room)
+        } else Result.Fail
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Void() : Actor() {
+      override val symbol = '~'
+      override fun interact(robot: Robot) =
+        robot.room // Stay in old room
+      override fun makeActor(r: Room) = void
+      companion object {
+        val void = Void()
+      }
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Wall(
+      override val room: Room = Room()
+    ) : Actor() {
+      override val symbol = '#'
+      override fun interact(robot: Robot) =
+        robot.room // Stay in old room
+      override fun makeActor(r: Room) = wall
+      companion object {
+        val wall = Wall()
+      }
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Empty(
+      override val room: Room = Room()
+    ) : Actor() {
+      override val symbol = '_'
+      // The Robot moves into the new room:
+      override fun interact(robot: Robot) = room
+      override fun makeActor(r: Room) = Empty(r)
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Food(
+      override val room: Room = Room()
+    ) : Actor() {
+      override val symbol = '.'
+      override fun interact(robot: Robot): Room {
+        robot.energy++ // Consume food
+        room.actor = Empty(room) // Remove food
+        return room // Move into new room
+      }
+      override fun makeActor(r: Room) = Food(r)
+    }
+    // Continued ...
+    // ... Continuing
+
+    class EndGame(
+      override val room: Room = Room()
+    ) : Actor() {
+      override val symbol = '!'
+      override fun interact(robot: Robot) =
+        Room(room.row, room.col, EndGame(room))
+      override fun makeActor(r: Room) = EndGame(r)
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Robot(
+      override var room: Room = Room()
+    ) : Actor() {
+      override val symbol = 'R'
+      var energy = 0
+      override fun interact(robot: Robot) =
+        robot.room
+      fun move(urge: Urge) {
+        val nextRoom = room.doors.open(urge)
+        room = nextRoom.actor.interact(this)
+      }
+      override fun makeActor(r: Room) = Robot(r)
+    }
+    // Continued ...
+    // ... Continuing
+
+    class Teleport(
+      override val symbol: Char = 'T',
+      override val room: Room = Room()
+    ) : Actor() {
+      var target = Room()
+      override fun toString() =
+        "${this::class.simpleName}: ${id()}" +
+        "(${target.row}, ${target.col})"
+      override fun interact(robot: Robot) = target
+      override fun
+        create(ch: Char, row: Int, col: Int) =
+        if (ch in 'a'..'z') {
+          val room = Room(row, col)
+          room.actor = Teleport(ch, room)
+          Result.Success(room)
+        } else Result.Fail
+    }
+  learner_created: false
+- name: src/Urge.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Urge.kt
+    package oodesign
+
+    enum class Urge { North, South, East, West }
+  learner_created: false
+- name: src/Factory.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Factory.kt
+    package oodesign
+    import atomictest.eq
+    import kotlin.reflect.full.createInstance
+
+    object Factory {
+      val prototypes: List<Actor> =
+        Actor::class.sealedSubclasses.map {
+          it.createInstance()
+        }
+      // Keep trying until you produce an object:
+      fun make(ch: Char, row: Int, col: Int) =
+        prototypes.map { it.create(ch, row, col) }
+          .first { it.success }.room
+    }
+
+    fun main() {
+      Stage(stringMaze).mazeView() eq stringMaze
+    }
+  learner_created: false
+- name: src/MazeView.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/MazeView.kt
+    package oodesign
+
+    fun Stage.mazeView(): String {
+      var currentRow = 0
+      fun Room.newline() =
+        if (currentRow != row) {
+          currentRow = row
+          "\n"
+        } else ""
+      return rooms.joinToString("") {
+        it.newline() + it.actor.id()
+      }
+    }
+  learner_created: false
+- name: src/Room.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Room.kt
+    package oodesign
+    import oodesign.Urge.*
+
+    class Room(
+      val row: Int = 0, val col: Int = 0,
+      var actor: Actor = Void()
+    ) {
+      val doors = Doors()
+      override fun toString() =
+        "Room($row, $col, $actor)"
+      companion object {
+        val edge = Room()
+      }
+    }
+
+    class Doors {
+      private val doors = mutableMapOf(
+        North to Room.edge,
+        South to Room.edge,
+        East to Room.edge,
+        West to Room.edge
+      )
+      fun open(urge: Urge): Room =
+        doors.getOrDefault(urge, Room.edge)
+      fun connect(
+        row: Int, col: Int, rooms: List<Room>
+      ) {
+        fun link(toRow: Int, toCol: Int) =
+          rooms.firstOrNull {
+            it.row == toRow && it.col == toCol
+          } ?: Room.edge
+        doors[North] = link(row - 1, col)
+        doors[South] = link(row + 1, col)
+        doors[East] = link(row, col + 1)
+        doors[West] = link(row, col - 1)
+      }
+    }
+  learner_created: false
+- name: src/Stage.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/Stage.kt
+    package oodesign
+
+    class Stage(val maze: String) {
+      val lines = maze.split("\n")
+      val height = lines.size
+      val width = lines[0].length
+      val robot = Robot(Room())
+      val rooms: List<Room> =
+        lines.withIndex().flatMap { (row, line) ->
+          line.withIndex().map { (col, ch) ->
+            Factory.make(ch, row, col)
+          }
+        }
+      fun teleportPairs(): List<List<Teleport>> =
+        rooms.map { it.actor }
+          .filterIsInstance<Teleport>()
+          .sortedBy { it.symbol }
+          .chunked(2)
+      init { // The 'Builder' pattern:
+        // Step 1: Connect the doors
+        rooms.forEach {
+          it.doors.connect(it.row, it.col, rooms)
+        }
+        // Step 2: Connect the Teleport pairs
+        for ((a, b) in teleportPairs()) {
+          a.target = b.room
+          b.target = a.room
+        }
+        // Step 3: Find the Robot
+        robot.room = rooms.first {
+          it.actor.symbol == robot.symbol
+        }
+      }
+    }
+  learner_created: false
+- name: src/RobotExplorer.kt
+  visible: true
+  text: |-
+    // ObjectOrientedDesign/RobotExplorer.kt
+    package oodesign
+    import org.hexworks.zircon.api.*
+    import org.hexworks.zircon.api.application.*
+    import org.hexworks.zircon.api.data.*
+    import org.hexworks.zircon.api.uievent.*
+    import org.hexworks.zircon.api.graphics.*
+    import org.hexworks.zircon.api.color.*
+    import org.hexworks.zircon.api.extensions.*
+
+    fun robotExplorer(stage: Stage) {
+      val style = StyleSet.defaultStyle()
+      // Initialize the zircon terminal emulator:
+      val grid = SwingApplications
+        .startTileGrid(AppConfig.newBuilder()
+          .withDefaultTileset(
+            TrueTypeFontResources.ubuntuMono(25))
+          .withSize(Size.create(
+            stage.width, stage.height + 1))
+          .build()) // +1 for a blank bottom line
+      // Strip newlines and create an iterator:
+      val maze = stage.maze
+        .filter { it != '\n' }.iterator()
+      // Fill the grid with the maze:
+      grid.size.fetchPositions().forEach {
+        if (maze.hasNext())
+          grid.putTile(maze.next()
+            .toCharacterTile())
+      }
+      // The robot's location as a Position:
+      fun robotPosition() = Position.create(
+        stage.robot.room.col,
+        stage.robot.room.row)
+      // The red robot icon as a layer:
+      val robotIcon = grid.addLayer(
+        Layer.newBuilder()
+          .withSize(Size.one())
+          .withOffset(robotPosition())
+          .build().apply {
+            fill(
+              stage.robot.symbol.toCharacterTile(
+                style.withForegroundColor(
+                  ANSITileColor.RED)))
+          }
+        )
+      // Update the character beneath the robot:
+      fun updateSymbolAtRobot() {
+        grid.cursorPosition = robotPosition()
+        grid.putTile(stage.robot
+          .room.actor.id().toCharacterTile())
+      }
+      // Put a string on the blank bottom line:
+      fun console(s: String) {
+        grid.draw(s.toCharacterTileString(),
+          Position.create(1, grid.height - 1))
+      }
+      // Move the robot and update the screen:
+      fun robotGo(urge: Urge) {
+        updateSymbolAtRobot()
+        stage.robot.move(urge)
+        robotIcon.moveTo(robotPosition())
+        console("Energy: ${stage.robot.energy}  ")
+      }
+      // Respond to the keyboard arrow keys:
+      grid.processKeyboardEvents(
+        KeyboardEventType.KEY_PRESSED
+      ) { event, _ ->
+        when (event.code) {
+          KeyCode.UP -> robotGo(Urge.North)
+          KeyCode.DOWN -> robotGo(Urge.South)
+          KeyCode.LEFT -> robotGo(Urge.West)
+          KeyCode.RIGHT -> robotGo(Urge.East)
+          else -> Pass
+        }
+      }
+    }
+
+    fun main() {
+      robotExplorer(Stage(stringMaze))
+    }
+  learner_created: false
+status: Unchecked
+record: -1

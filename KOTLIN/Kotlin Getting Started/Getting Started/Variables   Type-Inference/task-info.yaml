@@ -1,0 +1,43 @@
+type: edu
+custom_name: Variables & Type-Inference
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 47
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: |-
+      var age = 18
+      var size = 182.5
+      val name = "Hans"
+    selected: false
+    status: Solved
+  text: TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Test
+
+    class Test {
+        @Test fun testSolution() {
+
+            assertTrue(age is Int)
+            assertTrue(size is Double)
+            assertTrue(name is String)
+
+            assertEquals(18, age)
+            assertEquals(182.5, size, 0.01)
+            assertEquals("Hans", name)
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

@@ -1,0 +1,42 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 160
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: 'fun getFullName(firstName: String, lastName: String, birthName:
+      String = lastName) = "$firstName $lastName ($birthName)"'
+    selected: false
+    status: Solved
+  text: TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Test
+
+    class Test {
+        @Test fun testParam() {
+            val firstName = "Peter"
+            val lastName = "Petersen"
+            val birthName = "Lustig"
+            assertEquals("$firstName $lastName ($birthName)", getFullName(firstName, lastName, birthName))
+        }
+
+        @Test fun testDefault() {
+            val firstName = "Peter"
+            val lastName = "Petersen"
+            assertEquals("$firstName $lastName ($lastName)", getFullName(firstName, lastName))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

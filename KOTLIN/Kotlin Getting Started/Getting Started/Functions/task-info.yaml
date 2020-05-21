@@ -1,0 +1,77 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 57
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: |-
+      fun printSum(v1: Int, v2: Int) {
+          print(v1 + v2)
+      }
+    selected: true
+    status: Solved
+  - offset: 59
+    length: 33
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 8
+    initialized_from_dependency: false
+    possible_answer: 'fun sum(v1: Int, v2: Int) = v1 + v2'
+    selected: true
+    status: Solved
+  text: |-
+    TODO()
+
+    TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.After
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Before
+    import org.junit.Test
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+
+    class Test {
+
+
+        private val outStream = ByteArrayOutputStream()
+        private val originalOut = System.out
+
+        @Before
+        fun setUpStreams() {
+            System.setOut(PrintStream(outStream))
+        }
+
+        @After
+        fun restoreStreams() {
+            System.setOut(originalOut)
+        }
+
+        @Test fun testPrintSum() {
+            val v1 = 1
+            val v2 = 5
+            printSum(v1, v2)
+            assertTrue(outStream.toString().contains("${v1 + v2}"))
+        }
+
+        @Test fun testSum() {
+            val v1 = 1
+            val v2 = 5
+            assertEquals(v1 + v2, sum(v1, v2))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

@@ -1,0 +1,83 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 474
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: 'data class Address(val street: String, val houseNumber: String,
+      val postalCode: Int, val city: String)'
+    selected: false
+    status: Solved
+  - offset: 476
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 8
+    initialized_from_dependency: false
+    possible_answer: 'data class AddressBook(val addresses: MutableList<Address>)'
+    selected: false
+    status: Solved
+  - offset: 522
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 54
+    initialized_from_dependency: false
+    possible_answer: addresses.contains(address)
+    selected: false
+    status: Solved
+  text: |
+    TODO()
+
+    TODO() {
+        fun contains(address: Address) = TODO()
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert.*
+    import org.junit.Test
+
+    class Test {
+        @Test fun testAddress() {
+            val street = "ExampleStreet"
+            val houseNumber = "1"
+            val postalCode = 12345
+            val city = "ExampleCity"
+
+            val address = Address(street, houseNumber, postalCode, city)
+            assertEquals(street, address.street)
+            assertEquals(houseNumber, address.houseNumber)
+            assertEquals(postalCode, address.postalCode)
+            assertEquals(city, address.city)
+
+            assertEquals("Address(street=$street, houseNumber=$houseNumber, postalCode=$postalCode, city=$city)", address.toString())
+        }
+
+        @Test fun testAddressBook() {
+            val street = "ExampleStreet"
+            val houseNumber = "1"
+            val postalCode = 12345
+            val city = "ExampleCity"
+
+            val address = Address(street, houseNumber, postalCode, city)
+            val address2 = Address(street, houseNumber, postalCode, city)
+            val address3 = Address(street.toUpperCase(), houseNumber, postalCode, city)
+            val addressBook = AddressBook(mutableListOf(address))
+
+            assertTrue(addressBook.contains(address2))
+            assertFalse(addressBook.contains(address3))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

@@ -1,0 +1,267 @@
+type: theory
+files:
+- name: src/Speakers.kt
+  visible: true
+  text: |-
+    // Generics/Speakers.kt
+    package generics
+    import atomictest.eq
+
+    class Person {
+      fun speak() = "Hi!"
+      fun sit() = true
+    }
+
+    class Dog {
+      fun bark() = "Ruff!"
+      fun lieDown() = true
+    }
+
+    class Robot {
+      fun connect() = "Beep!"
+      fun charge() = true
+    }
+
+    fun talk(speaker: Any) = when (speaker) {
+      is Person -> speaker.speak()
+      is Dog -> speaker.bark()
+      is Robot -> speaker.connect()
+      else -> "Not a talker" // Or exception
+    }
+
+    fun main() {
+      talk(Person()) eq "Hi!"
+      talk(Dog()) eq "Ruff!"
+      talk(Robot()) eq "Beep!"
+      talk(11) eq "Not a talker"
+    }
+  learner_created: false
+- name: src/BasicGenerics.kt
+  visible: true
+  text: |-
+    // Generics/BasicGenerics.kt
+    package generics
+    import atomictest.eq
+
+    fun <T> gFunc(arg: T): T = arg
+
+    class GClass<T>(val x: T) {
+      fun f(): T = x
+    }
+
+    class MFunc {
+      fun <T> f(arg: T): T = arg
+    }
+
+    interface GInterface<T> {
+      val x: T
+      fun f(): T
+    }
+
+    fun main() {
+      gFunc("Yellow") eq "Yellow"
+      gFunc(1) eq 1
+      gFunc(Dog()).bark() eq "Ruff!"       // [1]
+      gFunc<Dog>(Dog()).bark() eq "Ruff!"
+
+      GClass("Cyan").f() eq "Cyan"
+      GClass(11).f() eq 11
+      GClass(Dog()).f().bark() eq "Ruff!"  // [2]
+      GClass<Dog>(Dog()).f().bark() eq "Ruff!"
+
+      MFunc().f("Amber") eq "Amber"
+      MFunc().f(111) eq 111
+      MFunc().f(Dog()).bark() eq "Ruff!"   // [3]
+      MFunc().f<Dog>(Dog()).bark() eq "Ruff!"
+    }
+  learner_created: false
+- name: src/CarHolder.kt
+  visible: true
+  text: |-
+    // Generics/CarHolder.kt
+    package generics
+    import atomictest.eq
+
+    data class Car(val name: String = "Car")
+
+    class CarHolder(val c: Car)
+
+    fun main() {
+      val ch = CarHolder(Car())
+      val x: Car = ch.c
+      x eq "Car(name=Car)"
+    }
+  learner_created: false
+- name: src/Holder.kt
+  visible: true
+  text: |-
+    // Generics/Holder.kt
+    package generics
+    import atomictest.eq
+
+    class Holder<T>(val a: T) {
+      fun get(): T = a
+    }
+
+    fun main() {
+      val ch = Holder(Car())
+      val x: Car = ch.a
+      val y: Car = ch.get()
+      y eq "Car(name=Car)"
+    }
+  learner_created: false
+- name: src/GetAShape.kt
+  visible: true
+  text: |-
+    // Generics/GetAShape.kt
+    package generics
+    import atomictest.*
+    import kotlin.random.Random
+
+    private var trace = Trace()
+    private var rand = Random(11)
+
+    open class Shape(val color: String) {
+      override fun toString() =
+        "${this::class.simpleName} $color"
+    }
+    class Circle(color: String) : Shape(color)
+    class Square(color: String) : Shape(color)
+    class Triangle(color: String) : Shape(color)
+
+    fun get1(shapes: List<Shape>): Shape {
+      val shape = shapes.random(rand)
+      trace("get1 $shape!")
+      return shape
+    }
+
+    fun <T: Shape> get2(shapes: List<T>): T {
+      val shape = shapes.random(rand)
+      trace("get2 $shape!")
+      return shape
+    }
+
+    fun main() {
+      val circles: List<Circle> = listOf(
+        Circle("Red"), Circle("Green")
+      )
+      val shapes: List<Shape> = listOf(
+        Square("Blue"), Triangle("Yellow")
+      )
+      val shape1: Shape = get1(circles)
+      val shape2: Circle = get2(circles)
+      val shape3: Shape = get2(shapes)
+      trace eq """
+      get1 Circle Red!
+      get2 Circle Green!
+      get2 Square Blue!
+      """
+    }
+  learner_created: false
+- name: src/GenericSpeakers.kt
+  visible: true
+  text: |-
+    // Generics/GenericSpeakers.kt
+    package generics
+    import atomictest.eq
+
+    // Passing the target object:
+    fun <T> talkg(spkr: T, spk: T.() -> String) =
+      spkr.spk()
+
+    // Extension function on the target object:
+    fun <T> T.talkge(spk: T.() -> String) = spk()
+
+    // Extension functions:
+    fun Person.chortle() = "Hah!"
+    fun Dog.whuff() = "Whuff!"
+    fun Robot.oil() = "Oiling..."
+
+    fun main() {
+      val person = Person()
+      val dog = Dog()
+      val robot = Robot()
+      // Pass function reference:
+      talkg(person, Person::speak) eq "Hi!"
+      talkg(person, Person::chortle) eq "Hah!"
+      talkg(dog, Dog::bark) eq "Ruff!"
+      talkg(dog, Dog::whuff) eq "Whuff!"
+      talkg(robot, Robot::connect) eq "Beep!"
+      talkg(robot, Robot::oil) eq "Oiling..."
+      // Pass a lambda:
+      talkg(person) { speak() } eq "Hi!"
+      talkg(person) { chortle() } eq "Hah!"
+      talkg(dog) { bark() } eq "Ruff!"
+      talkg(dog) { whuff() } eq "Whuff!"
+      talkg(robot) { connect() } eq "Beep!"
+      talkg(robot) { oil() } eq "Oiling..."
+      // Use the generic extension function:
+      person.talkge(Person::speak) eq "Hi!"
+      person.talkge(Person::chortle) eq "Hah!"
+      dog.talkge(Dog::bark) eq "Ruff!"
+      dog.talkge(Dog::whuff) eq "Whuff!"
+      robot.talkge(Robot::connect) eq "Beep!"
+      robot.talkge(Robot::oil) eq "Oiling..."
+      // A lambda and the generic extension:
+      person.talkge { speak() } eq "Hi!"
+      person.talkge { chortle() } eq "Hah!"
+      dog.talkge { bark() } eq "Ruff!"
+      dog.talkge { whuff() } eq "Whuff!"
+      robot.talkge { connect() } eq "Beep!"
+      robot.talkge { oil() } eq "Oiling..."
+    }
+  learner_created: false
+- name: src/GenericSafeCast.kt
+  visible: true
+  text: |-
+    // Generics/GenericSafeCast.kt
+    package generics
+    import kotlin.reflect.KClass
+
+    inline infix fun <reified T : Any> Any?.to(
+      klass: KClass<T>
+    ): T? =
+      if (klass.isInstance(this)) this as T
+      else null
+
+    inline fun <reified T : Any, R> Any?.to(
+      klass: KClass<T>,
+      convert: T.() -> R? // = { it } ???
+    ): R? =
+      if (klass.isInstance(this)) {
+        convert(this as T)
+      } else {
+        null
+      }
+
+    fun main() {
+      val x: String? = "foo" to String::class
+    }
+  learner_created: false
+- name: src/Perform.kt
+  visible: true
+  text: |-
+    // Generics/Perform.kt
+    package generics
+    import atomictest.eq
+
+    fun <T> T.perform(
+      f1: T.() -> String,
+      f2: T.() -> Boolean,
+      f3: T.() -> String
+    ) = "${f1()} ${f2()} ${f3()}"
+
+    fun main() {
+      val p = Person()
+      val d = Dog()
+      val r = Robot()
+      p.perform(Person::speak, Person::sit,
+        Person::chortle) eq "Hi! true Hah!"
+      d.perform(Dog::bark, Dog::lieDown,
+        Dog::whuff) eq "Ruff! true Whuff!"
+      r.perform(Robot::connect, Robot::charge,
+        Robot::oil) eq "Beep! true Oiling..."
+    }
+  learner_created: false
+status: Unchecked
+record: -1

@@ -1,0 +1,413 @@
+
+Kotlin Bootcamp для программистов 2: основы Kotlin
+
+"C:\Program Files\Java\jdk-14.0.1\bin\java.exe" -Dkotlin.repl.ideMode=true -Dfile.encoding=UTF-8 @C:\Users\delaf\AppData\Local\Temp\idea_arg_file1926724821
+Welcome to Kotlin version 1.3.72 (JRE 14.0.1+7)
+Type :help for help, :quit for quit
+
+fun printHello() {
+     println("Hello World")
+ }
+
+ printHello()
+Hello World
+
+Шаг 1: Изучите числовые операторы
+
+1 + 1
+res1: kotlin.Int = 2
+
+53-3
+res2: kotlin.Int = 50
+
+50/10
+res3: kotlin.Int = 5
+
+1.0 / 2.0
+res4: kotlin.Double = 0.5
+
+2,0 * 3,5
+error: expecting an element
+2,0 * 3,5
+ ^
+error: expecting an element
+2,0 * 3,5
+       ^
+
+6 * 50
+res6: kotlin.Int = 300
+
+2.0 * 3.5
+res7: kotlin.Double = 7.0
+
+6.0*50.0
+res8: kotlin.Double = 300.0
+
+6.0*50
+res9: kotlin.Double = 300.0
+
+2.times(3)
+res10: kotlin.Int = 6
+
+3.5.plus(4)
+res11: kotlin.Double = 7.5
+
+2.4.div(2)
+res12: kotlin.Double = 1.2
+
+Примечание. Можно создавать фактические обертки объектов вокруг чисел, что называется боксом.
+ Бокс происходит автоматически, например, для коллекций,
+ где номера упаковываются и распаковываются по мере необходимости.
+Предупреждение: использование обёрток объекта требует больше памяти, чем хранение простого числового примитива.
+Не используйте бокс, если он не нужен, например, в коллекции, о которой пойдет речь позже.
+
+Шаг 2: Практика использования типов
+
+Kotlin не выполняет явного преобразования между числовыми типами,
+поэтому вы не можете присвоить короткое значение непосредственно длинной переменной или a Byte для Int.
+Это связано с тем, что неявное преобразование чисел является распространенным источником ошибок в программах.
+Вы всегда можете назначить значения разных типов путем приведения.
+
+val i: Int = 6
+
+val b1 = i.toByte()
+ println(b1)
+6
+
+val b2: Byte = 1 // OK, literals are checked statically
+ println(b2)
+1
+
+val i1: Int = b2
+error: type mismatch: inferred type is Byte but Int was expected
+val i1: Int = b2
+              ^
+
+val i2: String = b2
+error: type mismatch: inferred type is Byte but String was expected
+val i2: String = b2
+                 ^
+
+val i2: String = b2
+error: type mismatch: inferred type is Byte but String was expected
+val i2: String = b2
+                 ^
+
+val i3: Double = b2
+error: type mismatch: inferred type is Byte but Double was expected
+val i3: Double = b2
+                 ^
+Для заданий, которые возвращали ошибки, попробуйте вместо этого привести их.
+
+val i4: Int = b2.toInt() // OK!
+ println(i4)
+1
+
+val i5: String = b2.toString()
+ println(i5)
+1
+
+val i6: Double = b2.toDouble()
+ println(i6)
+1.0
+
+Чтобы сделать длинные числовые константы более читабельными,
+Kotlin позволяет размещать подчеркивания в числах там, где это имеет смысл для вас.
+Попробуйте ввести разные числовые константы.
+
+val oneMillion = 1_000_000
+ val socialSecurityNumber = 999_99_9999L
+ val hexBytes = 0xFF_EC_DE_5E
+ val bytes = 0b11010010_01101001_10010100_10010010
+
+Примечание. Поскольку Kotlin строго типизирован,
+компилятор обычно может определять тип переменных, поэтому вам не нужно явно объявлять его.
+
+Шаг 3: Узнайте значение типов переменных
+
+var fish = 1
+ fish = 2
+ val aquarium = 1
+ aquarium = 2
+ ⇒ ошибка: значение val не может быть переназначено
+error: val cannot be reassigned
+aquarium = 2
+^
+
+var fish: Int = 12
+var lakes: Double = 2.5
+Как только тип был назначен вами или компилятором, вы не можете изменить тип, или вы получаете ошибку.
+
+Шаг 4: Узнайте о строках
+
+val numberOfFish = 5
+ val numberOfPlants = 12
+ "I have $numberOfFish fish" + " and $numberOfPlants plants"
+res26: kotlin.String = I have 5 fish and 12 plants
+
+"I have ${numberOfFish + numberOfPlants} fish and plants"
+res27: kotlin.String = I have 17 fish and plants
+
+3. Задача: сравнить условия и логические значения
+
+В этом задании вы узнаете о логических значениях и проверке условий на языке программирования Kotlin.
+Как и в других языках, Котлин имеет булевы и логические операторы ,
+такие как меньше, равно, больше чем, и так далее ( <, ==, >, !=, <=, >=).
+
+val numberOfFish = 50
+ val numberOfPlants = 23
+ if (numberOfFish > numberOfPlants) {
+     println("Good ratio!")
+ } else {
+     println("Unhealthy ratio")
+ }
+Good ratio!
+
+val fish = 50
+ if (fish in 1..100) {
+     println(fish)
+ }
+50
+
+if (numberOfFish == 0) {
+     println("Empty tank")
+ } else if (numberOfFish < 40) {
+     println("Got fish!")
+ } else {
+     println("That's a lot of fish!")
+ }
+That's a lot of fish!
+
+when (numberOfFish) {
+     0  -> println("Empty tank")
+     in 1..39 -> println("Got fish!")
+     else -> println("That's a lot of fish!")
+ }
+That's a lot of fish!
+
+4. Задача: узнать об обнуляемости
+
+В этой задаче вы узнаете о переменных, которые можно обнулять или не обнулять.
+Ошибки программирования, связанные с нулевыми значениями, стали источником множества ошибок.
+Kotlin стремится уменьшить количество ошибок, вводя ненулевые переменные.
+
+Шаг 1: Узнайте об обнуляемости
+
+var rocks: Int = null
+error: null can not be a value of a non-null type Int
+var rocks: Int = null
+                 ^
+var marbles: Int? = null
+Если у вас есть сложные типы данных, такие как список:
+
+Вы можете позволить элементам списка быть нулевыми.
+Вы можете разрешить, чтобы список был нулевым, но если он не нулевой, его элементы не могут быть нулевыми.
+Вы можете разрешить как список, так и элементы быть пустыми.
+
+Шаг 2: Узнайте о? и?: операторы
+
+
+var fishFoodTreats = 6
+ if (fishFoodTreats != null) {
+     fishFoodTreats = fishFoodTreats.dec()
+ }
+
+var fishFoodTreats = 6
+ fishFoodTreats = fishFoodTreats?.dec()
+
+fishFoodTreats = fishFoodTreats?.dec() ?: 0
+
+Это сокращение от «если fishFoodTreatsнет null, уменьшите и используйте его;
+в противном случае используйте значение после ?:, которое равно 0.»
+Если fishFoodTreats есть null, оценка останавливается, и dec()метод не вызывается.
+
+Примечание:?: оператор иногда называют «оператор Элвиса,»
+потому что это как смайлик на его сторону с Помпадур прической, как Элвис Пресли стилем его волос.
+Узнайте больше об операторе Elvis в документации Kotlin.
+
+Точка о нулевых указателях
+val s = "lkmlkmnlkmlkm"
+ val len = s!!.length   // throws NullPointerException if s is null
+ println(len)
+13
+
+val s: String? = "lkmlkmnlkmlkm"
+ val len = s!!.length   // throws NullPointerException if s is null
+ println(len)
+13
+
+val s1: String? = null
+ val len = s1!!.length   // throws NullPointerException if s is null
+ println(len)
+kotlin.KotlinNullPointerException
+
+Примечание. В сленге программирования восклицательный знак часто называют « взрывом », "bang,"
+поэтому оператор ненулевого утверждения иногда называют
+оператором «двойного взрыва» "double-bang"  или «взрыв взрыва» "bang bang".
+
+Примечание: как правило, плохая идея использовать оператор двойного взрыва.
+Вот почему создатели языка заставили вас ввести два восклицательных знака вместо одного.
+Однако иногда вам нужен двойной удар при работе с устаревшим кодом Java.
+
+5. Задача: исследовать массивы, списки и циклы
+
+В этом задании вы узнаете о массивах и списках,
+а также узнаете различные способы создания циклов на языке программирования Kotlin.
+
+Шаг 1: Составьте списки
+
+val school = listOf("mackerel", "trout", "halibut")
+ println(school)
+[mackerel, trout, halibut]
+
+val myList = mutableListOf("tuna", "salmon", "shark")
+ myList.remove("shark")
+res42: kotlin.Boolean = true
+
+Примечание. С помощью списка, определенного с помощью val, вы не можете изменить список,
+к которому относится переменная, но вы все равно можете изменить содержимое списка.
+
+Шаг 2. Создание массивов
+
+Как и другие языки, у Kotlin есть массивы.
+В отличие от списков в Kotlin, которые имеют изменяемые и неизменяемые версии, нет изменяемой версии Array.
+Как только вы создадите массив, размер будет фиксированным.
+Вы не можете добавлять или удалять элементы, кроме как путем копирования в новый массив.
+
+Примечание. С помощью массива, определенного с помощью val, вы не можете изменить,
+к какому массиву относится переменная, но вы все равно можете изменить содержимое массива.
+
+
+val school = arrayOf("shark", "salmon", "minnow")
+ println(java.util.Arrays.toString(school))
+[shark, salmon, minnow]
+
+val mix = arrayOf("fish", 2)
+
+val numbers = intArrayOf(1,2,3)
+
+Примечание. Использование массива примитивного типа, например,
+ Int или Byte позволяет избежать накладных расходов на бокс.
+
+Объедините два массива с +оператором.
+
+val numbers = intArrayOf(1,2,3)
+ val numbers3 = intArrayOf(4,5,6)
+ val foo2 = numbers3 + numbers
+ println(foo2[5])
+3
+
+Попробуйте разные комбинации вложенных массивов и списков.
+Как и на других языках, вы можете вкладывать массивы и списки.
+То есть, когда вы помещаете массив в массив, вы получаете массив массивов,
+а не сплющенный массив их содержимого.
+Элементы массива также могут быть списками, а элементы списков могут быть массивами.
+
+val numbers = intArrayOf(1, 2, 3)
+ val oceans = listOf("Atlantic", "Pacific")
+ val oddList = listOf(numbers, oceans, "salmon")
+ println(oddList)
+[[I@4a17c516, [Atlantic, Pacific], salmon]
+
+Первый элемент, numbersэто Array.
+Когда вы не используете утилиту для его печати,
+Kotlin печатает адрес, а не содержимое массива.
+
+Приятной особенностью Kotlin является то,
+что вы можете инициализировать массивы с помощью кода вместо инициализации их равными 0.
+Попробуйте этот пример:
+
+val array = Array (5) { it * 2 }
+ println(java.util.Arrays.toString(array))
+[0, 2, 4, 6, 8]
+
+Шаг 3: сделать петли
+val school = arrayOf("shark", "salmon", "minnow")
+ for (element in school) {
+     print(element + " ")
+ }
+shark salmon minnow
+
+for ((index, element) in school.withIndex()) {
+     println("Item at $index is $element\n")
+ }
+Item at 0 is shark
+Item at 1 is salmon
+Item at 2 is minnow
+
+for (i in 1..5) print(i)
+12345
+
+for (i in 5 downTo 1) print(i)
+54321
+
+for (i in 3..6 step 2) print(i)
+35
+
+for (i in 'd'..'g') print (i)
+defg
+
+var bubbles = 0
+ while (bubbles < 50) {
+     bubbles++
+ }
+ println("$bubbles bubbles in the water\n")
+
+ do {
+     bubbles--
+ } while (bubbles > 50)
+ println("$bubbles bubbles in the water\n")
+
+ repeat(2) {
+     println("A fish is swimming")
+ }
+50 bubbles in the water
+49 bubbles in the water
+A fish is swimmingA fish is swimming
+
+Kotlin очень похож на другие языки, когда дело доходит до основ, таких как операторы, списки и циклы,
+но есть некоторые важные различия.
+
+Следующие функции могут отличаться в Kotlin от того, к чему вы привыкли в других языках:
+
+Типы Kotlin не могут быть неявно преобразованы - используйте приведение.
+Переменные, объявленные с, valмогут быть назначены только один раз.
+Переменные Kotlin не обнуляются по умолчанию. Используйте, ?чтобы сделать переменные обнуляемыми.
+С Kotlin вы можете циклически проходить по индексу и элементам массива одновременно for.
+Следующие конструкции программирования Kotlin похожи на другие языки:
+
+Массивы и списки могут иметь один тип или смешанные типы.
+Массивы и списки могут быть вложенными.
+Вы можете создавать циклы с for, while, do/ whileи repeat.
+whenЗаявление версия Котлин о в switchзаявлении, но whenявляется более гибким.
+
+7. Узнайте больше
+Котлинская документация
+Если вам нужна дополнительная информация по какой-либо теме этого курса или вы застряли,
+https://kotlinlang.org - ваша лучшая отправная точка.
+
+Kotlin соглашения о кодировании
+Котлин идиомы
+Явное приведение типов
+Определение переменных
+Строковые шаблоны
+Обнуляемые значения
+Списки
+Массивы
+if, when, for,while
+?: (Элвис) оператор
+!! оператор
+Котлин учебники
+Веб- сайт https://play.kotlinlang.org содержит подробные учебные пособия под названием Kotlin Koans,
+веб-переводчик , а также полный набор справочной документации с примерами.
+
+Курс Udacity
+Чтобы просмотреть курс Udacity по этой теме, см. Kotlin Bootcamp for Programmers .
+
+IntelliJ IDEA
+Документацию для IntelliJ IDEA можно найти на веб-сайте JetBrains.
+
+
+
+
+

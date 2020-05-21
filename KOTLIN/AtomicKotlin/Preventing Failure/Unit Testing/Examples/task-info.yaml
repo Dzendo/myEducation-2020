@@ -1,0 +1,173 @@
+type: theory
+files:
+- name: src/NoFramework.kt
+  visible: true
+  text: |-
+    // UnitTesting/NoFramework.kt
+    package unittesting
+    import kotlin.test.assertEquals
+    import kotlin.test.assertTrue
+
+    fun foo() = 42
+
+    fun allIsGood() = true
+
+    fun testFoo() {
+      assertEquals(
+        expected = 42,
+        actual = foo(),
+        message = "Wrong answer")
+    }
+
+    fun testAllIsGood() {
+      assertTrue(allIsGood(), "Wrong answer")
+    }
+
+    fun main() {
+      testFoo()
+      testAllIsGood()
+    }
+  learner_created: false
+- name: src/UsingExpect.kt
+  visible: true
+  text: |-
+    // UnitTesting/UsingExpect.kt
+    package unittesting
+    import kotlin.test.*
+
+    fun testFoo2() = expect(42, "Wrong answer") {
+      foo()
+    }
+
+    fun main() {
+      testFoo2()
+    }
+  learner_created: false
+- name: src/SampleTest.kt
+  visible: true
+  text: |-
+    // UnitTesting/SampleTest.kt
+    package unittesting
+    import kotlin.test.*
+
+    class SampleTest {
+      @Test
+      fun testFoo() {
+        expect(42, "Wrong answer") { foo() }
+      }
+
+      @Test
+      fun testAllIsGood() {
+        assertTrue(allIsGood(), "Wrong answer")
+      }
+    }
+  learner_created: false
+- name: src/StateMachine.kt
+  visible: true
+  text: |-
+    // UnitTesting/StateMachine.kt
+    package unittesting
+    import unittesting.State.*
+
+    enum class State { ON, OFF, PAUSED }
+
+    class StateMachine {
+      var state: State = OFF
+        private set
+      private fun updateState(
+        current: State, new: State
+      ) {
+        if (state == current) {
+          state = new
+        }
+      }
+      fun start() = updateState(OFF, ON)
+      fun pause() = updateState(ON, PAUSED)
+      fun resume() = updateState(PAUSED, ON)
+      fun finish() {
+        state = OFF
+      }
+    }
+  learner_created: false
+- name: src/TestStateMachine.kt
+  visible: true
+  text: |-
+    // UnitTesting/TestStateMachine.kt
+    package unittesting
+    import kotlin.test.*
+
+    class TestStateMachine {
+      private lateinit var sm: StateMachine  // [1]
+
+      @BeforeTest
+      fun initStateMachine() {
+        sm = StateMachine()                  // [2]
+      }
+
+      @Test
+      fun `test start`() {
+        sm.start()
+        assertEquals(State.ON, sm.state)
+      }
+
+      @Test
+      fun `test pause and resume`() {
+        sm.start()
+        sm.pause()
+        assertEquals(State.PAUSED, sm.state)
+        sm.resume()
+        assertEquals(State.ON, sm.state)
+        sm.pause()
+        assertEquals(State.PAUSED, sm.state)
+      }
+
+      // ...
+    }
+  learner_created: false
+- name: src/Learner.kt
+  visible: true
+  text: |-
+    // UnitTesting/Learner.kt
+    package learner
+
+    enum class Language {
+      EN, FR, DE
+    }
+
+    data class Learner(
+      val id: Int,
+      val name: String,
+      val surname: String,
+      val lang: Language
+    )
+  learner_created: false
+- name: src/TestingLearner.kt
+  visible: true
+  text: |-
+    // UnitTesting/TestingLearner.kt
+    package learner
+    import learner.Language.*
+    import kotlin.test.Test
+
+    fun createLearner(
+      id: Int,
+      lang: Language = EN,               // [1]
+      name: String = "Test Name $id",
+      surname: String = "Test Surname $id"
+    ) = Learner(id, name, surname, lang)
+
+    class TestingLearner {
+      @Test
+      fun testLearners() {
+        // TODO replace with member reference
+        // (1..9).map(::createLearner)
+        val learners = (1..9).map {
+          createLearner(it)
+        }
+        val learner = createLearner(10, FR)
+        // use learners in tests
+      }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

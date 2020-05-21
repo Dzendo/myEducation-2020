@@ -1,0 +1,276 @@
+type: theory
+files:
+- name: src/PaintColors.kt
+  visible: true
+  text: |-
+    // Immutability/PaintColors.kt
+    package paintcolors
+
+    enum class Color {
+      red, blue, yellow, purple,
+      green, orange, brown
+    }
+  learner_created: false
+- name: src/ColorBlend.kt
+  visible: true
+  text: |-
+    // Immutability/ColorBlend.kt
+    package colorblend
+    import atomictest.eq
+    import paintcolors.Color
+    import paintcolors.Color.*
+
+    fun blend(a: Color, b: Color) = when {
+      a == b -> a
+      a == brown || b == brown -> brown
+      else -> when (a to b) {
+        red to blue, blue to red -> purple
+        red to yellow, yellow to red -> orange
+        blue to yellow, yellow to blue -> green
+        else -> {
+          // Interesting but not accurate:
+          val values = values()
+          values[
+            (a.ordinal + b.ordinal) % values.size]
+        }
+      }
+    }
+
+    fun test(
+      mix: (a: Color, b: Color) -> Color?
+    ) {
+      mix(red, red) eq red
+      mix(purple, brown) eq brown
+      mix(red, yellow) eq orange
+      mix(yellow, blue) eq green
+      mix(purple, orange) eq blue // Not accurate
+    }
+
+    fun main() {
+      test(::blend)
+    }
+  learner_created: false
+- name: src/MutableBlendMap.kt
+  visible: true
+  text: |-
+    // Immutability/MutableBlendMap.kt
+    package mutableblendmap
+    import paintcolors.Color
+
+    class BlendMap {
+      private val map =
+        mutableMapOf<Pair<Color, Color>, Color>()
+
+      init {
+        for (a in Color.values()) {
+          for (b in Color.values()) {
+            map[a to b] = colorblend.blend(a, b)
+          }
+        }
+      }
+
+      fun blend(a: Color, b: Color) = map[a to b]
+    }
+
+    fun main() {
+      colorblend.test(BlendMap()::blend)
+    }
+  learner_created: false
+- name: src/MutableBlendMap2.kt
+  visible: true
+  text: |-
+    // Immutability/MutableBlendMap2.kt
+    package mutableblendmap2
+    import paintcolors.Color
+
+    class BlendMap {
+      private val
+        imap: Map<Pair<Color, Color>, Color>
+
+      init {
+        val map = mutableMapOf<
+          Pair<Color, Color>, Color>()
+        for (a in Color.values()) {
+          for (b in Color.values()) {
+            map[a to b] = colorblend.blend(a, b)
+          }
+        }
+        imap = map.toMap()  // Read-only Map
+      }
+
+      fun blend(a: Color, b: Color) = imap[a to b]
+    }
+
+    fun main() {
+      colorblend.test(BlendMap()::blend)
+    }
+  learner_created: false
+- name: src/XYZMap.kt
+  visible: true
+  text: |-
+    // Immutability/XYZMap.kt
+    package xyzmap
+
+    enum class XYZ { x, y, z }
+
+    fun main() {
+      val normal = XYZ.values().map { a ->
+        println()
+        XYZ.values().map { b ->
+          print("$a:$b,"); a to b
+        }
+      }
+      println()
+      normal.forEach { println(it) }
+    }
+    /* Output:
+    x:x,x:y,x:z,
+    y:x,y:y,y:z,
+    z:x,z:y,z:z,
+    [(x, x), (x, y), (x, z)]
+    [(y, x), (y, y), (y, z)]
+    [(z, x), (z, y), (z, z)]
+    */
+  learner_created: false
+- name: src/XYZFlatMap.kt
+  visible: true
+  text: |-
+    // Immutability/XYZFlatMap.kt
+    package xyzflatmap
+
+    enum class XYZ { x, y, z }
+
+    fun main() {
+      val flat = XYZ.values().flatMap { a ->
+        XYZ.values().map { b ->
+          a to b
+        }
+      }
+      flat.forEach { println(it) }
+    }
+    /* Output:
+    (x, x)
+    (x, y)
+    (x, z)
+    (y, x)
+    (y, y)
+    (y, z)
+    (z, x)
+    (z, y)
+    (z, z)
+    */
+  learner_created: false
+- name: src/ReadOnlyBlendMap.kt
+  visible: true
+  text: |-
+    // Immutability/ReadOnlyBlendMap.kt
+    package readonlyblendmap
+    import paintcolors.Color
+
+    val combinations = Color.values()
+      .flatMap { a ->
+        Color.values().map { b -> a to b }
+      }
+
+    val blendMap = combinations.map {
+      it to colorblend.blend(it.first, it.second)
+    }.toMap()
+
+    fun blend(a: Color, b: Color) =
+      blendMap[a to b]
+
+    fun main() {
+      colorblend.test(::blend)
+    }
+  learner_created: false
+- name: src/ReadOnlyBlendMap2.kt
+  visible: true
+  text: |-
+    // Immutability/ReadOnlyBlendMap2.kt
+    package readonlyblendmap2
+    import paintcolors.Color
+
+    val blendMap = Color.values()
+      .flatMap { a ->
+        Color.values().map { b -> a to b }
+      }
+      .map {
+        it to colorblend.blend(it.first, it.second)
+      }
+      .toMap()
+
+    fun blend(a: Color, b: Color) =
+      blendMap[a to b]
+
+    fun main() {
+      colorblend.test(::blend)
+    }
+  learner_created: false
+- name: src/ReadOnlyBlendMap3.kt
+  visible: true
+  text: |-
+    // Immutability/ReadOnlyBlendMap3.kt
+    package readonlyblendmap3
+    import paintcolors.Color
+
+    class BlendMap {
+      private val map = Color.values()
+        .flatMap { a ->
+          Color.values().map { b -> a to b }
+        }
+        .map {
+          it to colorblend.blend(
+            it.first, it.second)
+        }
+        .toMap()
+
+      fun blend(a: Color, b: Color) = map[a to b]
+    }
+
+    fun main() {
+      colorblend.test(BlendMap()::blend)
+    }
+  learner_created: false
+- name: src/ReadOnlyBlendMap4.kt
+  visible: true
+  text: |-
+    // Immutability/ReadOnlyBlendMap4.kt
+    package readonlyblendmap4
+    import paintcolors.Color
+
+    @ExperimentalStdlibApi
+    val map1: Map<Pair<Color, Color>, Color> =
+      buildMap {
+        for (a in Color.values()) {
+          for (b in Color.values()) {
+            this[a to b] = colorblend.blend(a, b)
+          }
+        }
+      }
+
+    fun main() {
+      //colorblend.test(BlendMap()::blend)
+    }
+  learner_created: false
+- name: src/DataClassCopy.kt
+  visible: true
+  text: |-
+    // Immutability/DataClassCopy.kt
+    import atomictest.eq
+
+    data class DC(
+      val a: String,
+      val b: String,
+      val c: String,
+      val d: String
+    )
+
+    fun main() {
+      val dc = DC("one", "two", "three", "four")
+      val dc2 = dc.copy(b = "bouncy", d = "red")
+      dc eq "DC(a=one, b=two, c=three, d=four)"
+      dc2 eq "DC(a=one, b=bouncy, c=three, d=red)"
+    }
+  learner_created: false
+status: Unchecked
+record: -1

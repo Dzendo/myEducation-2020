@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <!--
+  ~ Copyright (C) 2019 Google Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!-- NavHostFragment(java) движок, кот вызывает  ЭТИ фрагменты из app:navGraph,
+    когда пользователь перемещается по приложению - лежит в станд библиотеке(много интересного)
+    т.е. активация и реакции фрагментов из main_navigation обеспечиваются стандартным модулем
+     androidx.navigation.fragment.NavHostFragment (в т.ч. переходы, анимации и.т.д-->
+
+<!-- Интересно - наверно их (navigation) может быль много - целая иерархия и вызовы друг из друга??-->
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/title_destination">
+    <!-- здесь указывается id стартовый фрагмент при передаче управления -->
+
+    <!-- title/TitleFragment для титульного экрана-->
+    <fragment
+        android:id="@+id/title_destination"
+        android:name="com.example.android.guessthewordr.screens.title.TitleFragment"
+        android:label="title_fragment"
+        tools:layout="@layout/title_fragment">
+        <!-- can navigate to the game fragment-->
+        <action
+            android:id="@+id/action_title_to_game"
+            app:destination="@id/game_destination"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <!-- game/GameFragment для экрана игры-->
+    <fragment
+        android:id="@+id/game_destination"
+        android:name="com.example.android.guessthewordr.screens.game.GameFragment"
+        android:label="game_fragment"
+        tools:layout="@layout/game_fragment">
+        <!--can navigate to the score fragment and UpTo title fragment-->
+        <action
+            android:id="@+id/action_game_to_score"
+            app:destination="@id/score_destination"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/title_destination" />
+    </fragment>
+    <!-- score/ScoreFragment для экрана счета-->
+    <fragment
+        android:id="@+id/score_destination"
+        android:name="com.example.android.guessthewordr.screens.score.ScoreFragment"
+        android:label="score_fragment"
+        tools:layout="@layout/score_fragment">
+        <!--получает Bundle and can navigate back to the game fragment and UpTo title fragment-->
+        <action
+            android:id="@+id/action_restart"
+            app:destination="@+id/game_destination"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/title_destination" />
+        <argument
+            android:name="score"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+</navigation>

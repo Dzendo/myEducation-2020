@@ -1,0 +1,34 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    // DownCasting/DownCastEx2.kt
+    package downcastingExercise2
+    import downcasting.*
+    import atomictest.eq
+
+    fun main() {
+      group.filterIsInstance<Dog>()
+        .map(Dog::bark) eq "[Yip!, Yip!]"
+      group.filterIsInstance(Dog::class.java)
+        .map(Dog::bark) eq "[Yip!, Yip!]"
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package downcastingExercise2
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestDowncastingExercise2 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

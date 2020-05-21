@@ -1,0 +1,115 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 8
+    placeholder_text: /*TODO*/
+    initial_state:
+      length: 8
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: |-
+      package pythagorean
+
+      import kotlin.math.sqrt
+
+      class EquilateralTriangle(val side: Double) {
+        fun area() = sqrt(3.0) / 4 * side * side
+      }
+    selected: false
+    status: Unchecked
+  text: /*TODO*/
+  learner_created: false
+- name: src/Main.kt
+  visible: true
+  placeholders:
+  - offset: 27
+    length: 5
+    placeholder_text: '     '
+    initial_state:
+      length: 5
+      offset: 27
+    initialized_from_dependency: false
+    possible_answer: import pythagorean.EquilateralTriangle
+    selected: false
+    status: Unchecked
+  - offset: 49
+    length: 86
+    placeholder_text: |-
+      /*
+        val et = EquilateralTriangle(1.0)
+        println(et.area()) // 0.4330127018922193
+        */
+    initial_state:
+      length: 86
+      offset: 49
+    initialized_from_dependency: false
+    possible_answer: |-
+      val et = EquilateralTriangle(1.0)
+        println(et.area()) // 0.4330127018922193
+    selected: false
+    status: Unchecked
+  text: "package packagesExercise3\n\n     \n\nfun main() {\n  /*\n  val et = EquilateralTriangle(1.0)\n\
+    \  println(et.area()) // 0.4330127018922193\n  */\n}"
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package packagesExercise3
+
+    import org.junit.Assert
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.TIMEOUT
+    import util.loadClass
+    import util.loadMemberFunction
+    import util.runAndCheckSystemOutput
+    import kotlin.math.sqrt
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestPackagesExercise3 {
+      private fun checkArea(side: Double) {
+        val triangleClass = loadClass("pythagorean", "EquilateralTriangle")
+        val constructors = triangleClass.constructors
+        if (constructors.size != 1) {
+          throw AssertionError("The class EquilateralTriangle should have one constructor")
+        }
+        val constructor = constructors.first()
+        val et = constructor.call(side)
+        val expected = sqrt(3.0) / 4 * side * side
+
+        val areaMethod = loadMemberFunction(triangleClass, "area")
+        val areaResult = areaMethod.call(et) as? Double
+          ?: throw AssertionError("area member function should return Double as a result")
+        Assert.assertEquals("Wrong result for side $side", expected, areaResult, 0.00000000000001)
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun testArea1() = checkArea(1.0)
+
+      @Test(timeout = TIMEOUT)
+      fun testArea2() = checkArea(2.0)
+
+      @Test(timeout = TIMEOUT)
+      fun testArea3() = checkArea(3.0)
+
+      @Test(timeout = TIMEOUT)
+      fun testArea4() = checkArea(4.0)
+
+      @Test(timeout = TIMEOUT)
+      fun testMain() {
+        runAndCheckSystemOutput(
+          "'main' function in 'Main.kt' should print 'et.area()' value",
+          "0.4330127018922193") {
+          main()
+        }
+      }
+    }
+  learner_created: false
+feedback_link: |
+  https://docs.google.com/forms/d/e/1FAIpQLSdkaliSwYkjiV21bZl0yP-In2g5p17sAQCfaGjyHx_QYMWTiQ/viewform?usp=pp_url&entry.189755027=Introduction+to+Objects+%2F+Imports+%26+Packages+%2F+Exercise1
+status: Unchecked
+record: -1

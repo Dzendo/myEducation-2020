@@ -1,0 +1,113 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 85
+    length: 26
+    placeholder_text: '// TODO: add property here'
+    initial_state:
+      length: 26
+      offset: 85
+    initialized_from_dependency: false
+    possible_answer: 'val surname: String,'
+    selected: false
+    status: Unchecked
+  - offset: 172
+    length: 32
+    placeholder_text: |-
+      val (name, age) = person
+      // TODO
+    initial_state:
+      length: 32
+      offset: 172
+    initialized_from_dependency: false
+    possible_answer: |-
+      val (name, age) = person
+        println("Name: $name")
+        println("Age: $age")
+    selected: false
+    status: Unchecked
+  - offset: 221
+    length: 109
+    placeholder_text: |-
+      val person = Person("Alice",  30)
+      //  val person = Person("Alice", "Johnson", 30)
+        displayPersonInfo(person)
+    initial_state:
+      length: 109
+      offset: 221
+    initialized_from_dependency: false
+    possible_answer: |-
+      //  val person = Person("Alice",  30)
+        val person = Person("Alice", "Johnson", 30)
+        displayPersonInfo(person)
+    selected: false
+    status: Unchecked
+  text: |-
+    package destructuringDeclarationsExercise3
+
+    data class Person(
+      val name: String,
+      // TODO: add property here
+      val age: Int
+    )
+
+    fun displayPersonInfo(person: Person) {
+      val (name, age) = person
+    // TODO
+    }
+
+    fun main() {
+    val person = Person("Alice",  30)
+    //  val person = Person("Alice", "Johnson", 30)
+      displayPersonInfo(person)
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |
+    package destructuringDeclarationsExercise3
+
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.*
+    import kotlin.test.assertEquals
+    import kotlin.test.assertTrue
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestDestructuringDeclarationsExercise3 {
+
+        @Test
+        fun `#01 class name`() {
+            loadClass("destructuringDeclarationsExercise3", "Person")
+        }
+
+        @Test
+        fun `#02 class declaration`() {
+            val actualClass = Person::class
+            assertTrue(
+                    actual = actualClass.isData,
+                    message = "Class Person has to be declared as a data class"
+            )
+            loadAssertedMemberProperty(actualClass, "name", String::class)
+            loadAssertedMemberProperty(actualClass, "surname", String::class)
+            loadAssertedMemberProperty(actualClass, "age", Int::class)
+        }
+
+        @Test
+        fun `#03 main output`() {
+            val person = createInstance<Person>("Alice", "Johnson", 30)
+            val expected = "Name: Alice\nAge: Johnson\n"
+            runAndCheckSystemOutput(
+                    expectedOutput = expected,
+                    message = "Incorrect result of class destructuring, expected output:\n$expected"
+            ) {
+                displayPersonInfo(person)
+            }
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

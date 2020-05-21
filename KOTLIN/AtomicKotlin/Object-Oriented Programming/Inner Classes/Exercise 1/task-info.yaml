@@ -1,0 +1,60 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    // InnerClasses/InnerEx1.kt
+    package innerClassesExercise1
+    import atomictest.eq
+
+    interface Pet {
+      fun speak(): String
+    }
+
+    class PetCreator {
+      fun home() = " home!"
+      fun dog(): Pet {
+        val say = "Bark"
+        class Dog : Pet {
+          override fun speak() = say + home()
+        }
+        return Dog()
+      }
+      fun cat(): Pet {
+        val emit = "Meow"
+        return object : Pet {
+          override fun speak() = emit + home()
+        }
+      }
+      fun hamster(): Pet {
+        val poke = "Squeak"
+        return object : Pet {
+          override fun speak() = poke + home()
+        }
+      }
+    }
+
+    fun main() {
+      val create = PetCreator()
+      create.dog().speak() eq "Bark home!"
+      create.cat().speak() eq "Meow home!"
+      create.hamster().speak() eq "Squeak home!"
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package innerClassesExercise1
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestInnerClassesExercise1 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

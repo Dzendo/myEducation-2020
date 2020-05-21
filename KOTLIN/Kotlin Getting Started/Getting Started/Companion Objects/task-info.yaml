@@ -1,0 +1,74 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 21
+    length: 86
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 21
+    initialized_from_dependency: false
+    possible_answer: |-
+      companion object {
+              const val NAME_KEY = "MY_DB"
+          }
+    selected: false
+    status: Solved
+  - offset: 132
+    length: 2
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 52
+    initialized_from_dependency: false
+    possible_answer: println(Database.NAME_KEY)
+    selected: false
+    status: Solved
+  text: |-
+    class Database {
+        TODO()
+    }
+
+    fun printKey() {
+        TODO()
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.After
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Before
+    import org.junit.Test
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+
+    class Test {
+
+        private val outStream = ByteArrayOutputStream()
+        private val originalOut = System.out
+
+        @Before
+        fun setUpStreams() {
+            System.setOut(PrintStream(outStream))
+        }
+
+        @After
+        fun restoreStreams() {
+            System.setOut(originalOut)
+        }
+
+        @Test fun testSolution() {
+            assertEquals("MY_DB", Database.NAME_KEY)
+        }
+        @Test fun testPrintKey() {
+            printKey()
+            assertTrue(outStream.toString().contains("MY_DB"))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

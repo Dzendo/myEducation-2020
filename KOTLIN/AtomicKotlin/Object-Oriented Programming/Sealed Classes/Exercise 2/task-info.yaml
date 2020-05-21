@@ -1,0 +1,41 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    // SealedClasses/SealedEx2.kt
+    package sealedClassesExercise2
+    import sealedClassesExercise1.*
+    import atomictest.*
+
+    private val trace = Trace()
+
+    fun main() {
+      Transport::class.sealedSubclasses
+        .map { it.simpleName }
+        .forEach { trace(it) }
+      trace eq """
+      Train
+      Bus
+      Tram
+      Plane
+      """
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package sealedClassesExercise2
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestSealedClassesExercise2 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

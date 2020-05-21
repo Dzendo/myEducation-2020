@@ -1,0 +1,16 @@
+title: Разработка на платформе Java
+language: Russian
+summary: Данный курс предназначен изучения основ разработки на Java и смежных технологий
+  и рассчитан на студентов IT-специальностей.
+programming_language: Java
+content:
+- JAVA.Introduction
+- Java.Procedural
+- Java.OOP.Exceptions
+- Java. Maven
+- Java. I O
+- Java. Generics and Collections
+- Java. Lambda expressions and Stream API
+- Java. Multithreading
+- Exam
+mode: Study

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- файл макета для одного элемента -->
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="sleep"
+            type="com.example.android.trackrecycledview.database.SleepNight"/>
+
+        <!-- Mожете получить доступ к onClick() функции SleepNightListener из этого макета.-->
+        <variable
+            name="clickListener"
+            type="com.example.android.trackrecycledview.sleeptracker.SleepNightListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(sleep)}">
+        <!-- Чтобы прослушивать щелчки в любой части этого элемента списка -->
+
+
+        <ImageView
+            android:id="@+id/quality_image"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_sleep_5"
+            tools:srcCompat="@drawable/ic_sleep_4"
+            app:sleepImage="@{sleep}"/>
+        <!-- Это свойство создает связь между представлением и объектом привязки через адаптер.
+         Всякий раз, когда на sleepImage него ссылаются, адаптер будет адаптировать данные из SleepNight.-->
+
+        <!--TextView дизайн GridLayout не нуждается в этом
+            android:id="@+id/sleep_length"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quality_image"
+            app:layout_constraintTop_toTopOf="@+id/quality_image"
+            tools:text="Wednesday"
+            app:sleepDurationFormatted="@{sleep}"/-->
+        <!--  Всякий раз , когда sleepDurationFormatted или sleepQualityString ссылаются,
+        адаптеры будут адаптировать данные из SleepNight.-->
+
+        <!--TextView для LinearLayout
+            android:id="@+id/quality_string"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/sleep_length"
+            app:layout_constraintStart_toStartOf="@+id/sleep_length"
+            app:layout_constraintTop_toBottomOf="@+id/sleep_length"
+            tools:text="Excellent!!! Linear"
+            app:sleepQualityString="@{sleep}"/-->
+        <!-- с тем же именем, что и адаптер привязки -->
+
+        <TextView
+            android:id="@+id/quality_string"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/quality_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/quality_image"
+            app:layout_constraintTop_toBottomOf="@+id/quality_image"
+            tools:text="Excellent!!! Grid"
+            app:sleepQualityString="@{sleep}" />
+        <!-- Поскольку вы использовали привязку данных, вам не нужно ничего менять в Adapter.
+         Код должен просто работать, а ваш список должен отображаться в виде сетки.-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

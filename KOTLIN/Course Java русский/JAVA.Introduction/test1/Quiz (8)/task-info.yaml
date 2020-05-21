@@ -1,0 +1,26 @@
+type: choice
+is_multiple_choice: true
+options:
+- text: Компиляция байткода перед выполнением программы
+- text: Компиляция байткода в машинный код во время работы программы
+- text: Используется во всех JVM
+- text: Способ улучшения безопасности Java приложений
+- text: Используется в JVM HotSpot
+- text: Способ увеличения производительности Java приложений
+message_correct: Congratulations!
+message_incorrect: Incorrect solution
+files:
+- name: src/Main.java
+  visible: true
+  text: |
+    // You can experiment here, it won’t be checked
+
+    class Task {
+      public static void main(String[] args) {
+        // put your code here
+      }
+    }
+  learner_created: false
+status: Unchecked
+record: -1
+custom_name: Quiz

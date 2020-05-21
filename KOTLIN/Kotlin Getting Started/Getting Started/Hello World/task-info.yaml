@@ -1,0 +1,57 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 39
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: |-
+      fun main(){
+          print("Hello World")
+      }
+    selected: false
+    status: Solved
+  text: TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.After
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Before
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+    import org.junit.Test
+
+
+
+    class Test {
+
+        private val outStream = ByteArrayOutputStream()
+        private val originalOut = System.out
+
+        @Before
+        fun setUpStreams() {
+            System.setOut(PrintStream(outStream))
+        }
+
+        @After
+        fun restoreStreams() {
+            System.setOut(originalOut)
+        }
+
+        @Test
+        fun testSolution() {
+            main()
+            assertTrue(outStream.toString().contains("Hello World"))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

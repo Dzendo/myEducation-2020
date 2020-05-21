@@ -1,0 +1,102 @@
+type: edu
+custom_name: Function Types & Lambdas
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 395
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 9
+    initialized_from_dependency: false
+    possible_answer: (Int, Int) -> Int
+    selected: false
+    status: Solved
+  - offset: 404
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 18
+    initialized_from_dependency: false
+    possible_answer: |-
+      { v1, v2 ->
+          v1 + v2
+      }
+    selected: false
+    status: Solved
+  - offset: 430
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 44
+    initialized_from_dependency: false
+    possible_answer: 'values: List<Int>, v2: Int, operation: (Int, Int) -> Int'
+    selected: false
+    status: Solved
+  - offset: 440
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 54
+    initialized_from_dependency: false
+    possible_answer: values.map{ operation(it, v2) }
+    selected: false
+    status: Solved
+  - offset: 492
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 106
+    initialized_from_dependency: false
+    possible_answer: operateOnEach(values, v2, sum)
+    selected: false
+    status: Solved
+  text: |-
+    val sum: TODO() = TODO()
+
+    fun operateOnEach(TODO()) = TODO()
+
+    fun sumOnEach(values: List<Int>, v2: Int) = TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Test
+
+    class Test {
+
+        @Test fun testSum() {
+            val v1 = 1
+            val v2 = 6
+            assertEquals(v1 + v2, sum(v1, v2))
+        }
+
+        @Test fun testOperateOnEachSum() {
+            val list = listOf(1, 2, 3, 4, 5)
+            val v2 = 2
+            assertEquals(list.map { it + v2 }, operateOnEach(list, v2) { val1, val2 -> val1 + val2 })
+        }
+
+        @Test fun testOperateOnEachMin() {
+            val list = listOf(1, 2, 3, 4, 5)
+            val v2 = 2
+            assertEquals(list.map { it - v2 }, operateOnEach(list, v2) { val1, val2 -> val1 - val2 })
+        }
+
+        @Test fun testSumOnEach() {
+            val list = listOf(1, 2, 3, 4, 5)
+            val v2 = 2
+            assertEquals(list.map { it + v2 }, sumOnEach(list, v2))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

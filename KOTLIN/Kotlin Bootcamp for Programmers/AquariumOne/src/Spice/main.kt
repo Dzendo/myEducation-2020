@@ -1,0 +1,3 @@
+package Spice
+
+fun main(){}

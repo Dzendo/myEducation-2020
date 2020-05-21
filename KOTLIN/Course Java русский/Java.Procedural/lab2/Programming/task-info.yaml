@@ -1,0 +1,9 @@
+type: code
+files:
+- name: src/Main.java
+  visible: true
+  text: "class GetNetAddress {    \n    public static void main(String[] args) {\n\
+    \        // put solution here            \n    }\n}"
+  learner_created: false
+status: Unchecked
+record: -1

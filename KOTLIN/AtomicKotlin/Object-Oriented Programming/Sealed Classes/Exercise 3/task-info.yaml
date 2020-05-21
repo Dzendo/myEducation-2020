@@ -1,0 +1,43 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    // SealedClasses/SealedEx3.kt
+    package sealedClassesExercise3
+    import atomictest.eq
+    import kotlin.random.Random
+
+    sealed class Top {
+      class Middle1 : Top()
+      class Middle2 : Top()
+      open class Middle3 : Top()
+      class Bottom3 : Middle3()
+    }
+
+    fun main() {
+      Top::class.sealedSubclasses
+        .map { it.simpleName } eq
+        "[Middle1, Middle2, Middle3]"
+      val rand = Random(17)
+      Top::class.sealedSubclasses
+        .random(rand).simpleName eq "Middle3"
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package sealedClassesExercise3
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestSealedClassesExercise3 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

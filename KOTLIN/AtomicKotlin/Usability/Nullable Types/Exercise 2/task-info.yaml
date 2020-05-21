@@ -1,0 +1,23 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    package nullableTypesExercise2
+
+    // type your solution here
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package nullableTypesExercise2
+
+    import org.junit.Test
+    import util.untestable
+
+    class TestNullableTypesExercise2 {
+        @Test fun testSolution() = untestable()
+    }
+  learner_created: false
+status: Unchecked
+record: -1

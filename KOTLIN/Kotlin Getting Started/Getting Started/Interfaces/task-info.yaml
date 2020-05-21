@@ -1,0 +1,90 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 39
+    length: 171
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 39
+    initialized_from_dependency: false
+    possible_answer: |-
+      open class Smiley: Drawable {
+          override fun draw() {
+              print(":-)")
+          }
+      }
+    selected: false
+    status: Solved
+  - offset: 212
+    length: 2
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 47
+    initialized_from_dependency: false
+    possible_answer: |-
+      class HairySmiley: Smiley() {
+          override fun draw() {
+              print("?")
+              super.draw()
+          }
+      }
+    selected: false
+    status: Solved
+  text: |-
+    interface Drawable {
+        fun draw()
+    }
+
+    TODO()
+
+    TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.After
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Before
+    import org.junit.Test
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+
+    class Test {
+
+        private val outStream = ByteArrayOutputStream()
+        private val originalOut = System.out
+
+        @Before
+        fun setUpStreams() {
+            System.setOut(PrintStream(outStream))
+        }
+
+        @After
+        fun restoreStreams() {
+            System.setOut(originalOut)
+        }
+
+        @Test fun testSmiley() {
+            val smiley = Smiley()
+            assertTrue(smiley is Drawable)
+            smiley.draw()
+            assertEquals(":-)", outStream.toString())
+        }
+
+        @Test fun testHairySmiley() {
+            val smiley = HairySmiley()
+            assertTrue(smiley is Drawable)
+            assertTrue(smiley is Smiley)
+            smiley.draw()
+            assertEquals("?:-)", outStream.toString())
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

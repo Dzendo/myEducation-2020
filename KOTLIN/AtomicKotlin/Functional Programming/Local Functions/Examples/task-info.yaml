@@ -1,0 +1,195 @@
+type: theory
+files:
+- name: src/LocalFunctions.kt
+  visible: true
+  text: |-
+    // LocalFunctions/LocalFunctions.kt
+
+    fun main() {
+      val logMsg = StringBuilder()
+      fun log(message: String) =
+        logMsg.appendln(message)
+      log("Starting computation")
+      val x = 42  // Imitate computation
+      log("Computation result: $x")
+      println(logMsg.toString())
+    }
+    /* Output:
+    Starting computation
+    Computation result: 42
+    */
+  learner_created: false
+- name: src/LocalExtensions.kt
+  visible: true
+  text: |-
+    // LocalFunctions/LocalExtensions.kt
+    import atomictest.eq
+
+    fun main() {
+      fun String.exclaim() = "$this!"
+      "Hello".exclaim() eq "Hello!"
+      "Hallo".exclaim() eq "Hallo!"
+      "Bonjour".exclaim() eq "Bonjour!"
+      "Ciao".exclaim() eq "Ciao!"
+    }
+  learner_created: false
+- name: src/Session.kt
+  visible: true
+  text: |-
+    // LocalFunctions/Session.kt
+    package localfunctions
+
+    class Session(
+      val title: String,
+      val speaker: String
+    )
+
+    val sessions = listOf(Session(
+      "Kotlin Coroutines", "Roman Elizarov"))
+
+    val favoriteSpeakers = setOf("Roman Elizarov")
+  learner_created: false
+- name: src/LocalFunctionReference.kt
+  visible: true
+  text: |-
+    // LocalFunctions/LocalFunctionReference.kt
+    package localfunctions
+    import atomictest.eq
+
+    fun main() {
+      fun interesting(session: Session): Boolean {
+        if (session.title.contains("Kotlin") &&
+          session.speaker in favoriteSpeakers) {
+          return true
+        }
+        // ... more checks
+        return false
+      }
+      sessions.any(::interesting) eq true
+    }
+  learner_created: false
+- name: src/InterestingSessions.kt
+  visible: true
+  text: |-
+    // LocalFunctions/InterestingSessions.kt
+    package localfunctions
+    import atomictest.eq
+
+    fun main() {
+      sessions.any(
+        fun(session: Session): Boolean {    // [1]
+          if (session.title.contains("Kotlin") &&
+            session.speaker in favoriteSpeakers) {
+            return true
+          }
+          // ... more checks
+          return false
+        }) eq true
+    }
+  learner_created: false
+- name: src/ReturnFromFun.kt
+  visible: true
+  text: |-
+    // LocalFunctions/ReturnFromFun.kt
+
+    fun main() {
+      val list = listOf(1, 2, 3, 4, 5)
+      val value = 3
+      list.forEach {
+        if (it == value) return           // [1]
+      }
+      println("This line is NOT called")  // [2]
+    }
+    /* Output:
+    */
+  learner_created: false
+- name: src/LabeledReturn.kt
+  visible: true
+  text: |-
+    // LocalFunctions/LabeledReturn.kt
+
+    fun main() {
+      val list = listOf(1, 2, 3, 4, 5)
+      val value = 3
+      list.forEach {
+        if (it == value) return@forEach
+      }
+      println("This line is called")
+    }
+    /* Output:
+    This line is called
+    */
+  learner_created: false
+- name: src/CustomLabel.kt
+  visible: true
+  text: |-
+    // LocalFunctions/CustomLabel.kt
+
+    fun main() {
+      val list = listOf(1, 2, 3, 4, 5)
+      val value = 3
+      list.forEach tag@{             // [1]
+        if (it == value) return@tag  // [2]
+      }
+      println("This line is called")
+    }
+    /* Output:
+    This line is called
+    */
+  learner_created: false
+- name: src/ReturnInsideLambda.kt
+  visible: true
+  text: |-
+    // LocalFunctions/ReturnInsideLambda.kt
+    package localfunctions
+    import atomictest.eq
+
+    fun main() {
+      sessions.any { session ->
+        if (session.title.contains("Kotlin") &&
+          session.speaker in favoriteSpeakers) {
+          return@any true
+        }
+        // ... more checks
+        false
+      } eq true
+    }
+  learner_created: false
+- name: src/ReturningFunc.kt
+  visible: true
+  text: |-
+    // LocalFunctions/ReturningFunc.kt
+    package lambdawithreceiver
+    import atomictest.eq
+
+    fun first(): (Int) -> Int {
+      val func = fun (i: Int): Int {
+        return i + 1
+      }
+      func(1) eq 2
+      return func                // [1]
+    }
+
+    fun second(): (String) -> String {
+      val func2 = { s: String -> "$s!" }
+      func2("abc") eq "abc!"
+      return func2               // [1]
+    }
+
+    fun third(): () -> String {
+      fun greet() = "Hi!"
+      return ::greet             // [1]
+    }
+
+    fun main() {
+      val firstFun: (Int) -> Int = first()
+      val secondFun: (String) -> String = second()
+      val thirdFun: () -> String = third()
+
+      firstFun(42) eq 43            // [2]
+      secondFun("xyz") eq "xyz!"    // [3]
+      thirdFun() eq "Hi!"           // [4]
+    }
+  learner_created: false
+status: Unchecked
+record: -1

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello_blank_fragment">Привет пустой фрагмент</string>
+    <string name="add_gdg">Не смогли найти gdg в вашем регионе? Отлично, идите вперед и начните один. Заполните форму ниже и ожидайте услышать от нас в ближайшее время!</string>
+    <string name="application_submitted">Получил ваш запрос на подачу заявки!! Ну да ладно, не совсем так. Это всего лишь тестовая форма для образовательных целей. Если вы действительно хотите подать заявку, пожалуйста, посетите наш веб-сайт!</string>
+    <string name="gdg_search">Поиск по GDG</string>
+    <string name="gdg_apply">Применяются для выполнения GDG</string>
+    <string name="gdgs_are">Gdg Являются…</string>
+    <string name="gdg_description_long">GDG-это локальные группы разработчиков, которые особенно заинтересованы в Google продукты и API. Каждая локальная группа называется главой gdg и может проводить различные технические мероприятия для разработчики - от всего лишь нескольких человек, собравшихся вместе, чтобы посмотреть наши последние видео, до больших собраний с демо-версиями а технические разговоры - на хакатоны. Разработчики Google поддерживает и признает gdg глав, но не владеет или управляют их.</string>
+    <string name="about_google_developer_groups">О Группах Разработчиков Google</string>
+    <string name="gdg_description_bullets">управляется страстными людьми в местных сообществах разработчиков  ️Группа для обмена идеями и общения с другими разработчиками  ️Место, где можно узнать о технологиях и инструментах разработки Google  Открыто и бесплатно для всех заинтересованных сторон</string>
+    <string name="waiting_for_location_and_network">Ожидание результата определения местоположения и сети.  Если работает на эмулятор откройте приложение Карты, чтобы включить службы определения местоположения.</string>
+    <string name="stage_image_description">Фото со сцены с девфеста</string>
+    <string name="submit_button_description">Кнопка для отправки формы</string>
+    <string name="form_name_description">введите свое имя</string>
+    <string name="motivation">Расскажите нам немного больше о том, почему вы хотите запустить GDG</string>
+    <string name="your_name_label">Ваше имя</string>
+    <string name="email_label">электронная почта</string>
+    <string name="city_label">город</string>
+    <string name="country_label">страна</string>
+    <string name="region_label">регион</string>
+    <string name="enter_motivation">Пожалуйста, введите свою мотивацию в 1-2 предложениях</string>
+    <string name="submitted">Подано, нет необходимости подавать еще раз</string>
+    <string name="done">Сделано</string>
+    <string name="submit">Представить</string>
+</resources>

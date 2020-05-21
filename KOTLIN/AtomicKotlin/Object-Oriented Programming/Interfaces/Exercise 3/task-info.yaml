@@ -1,0 +1,143 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 47
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 47
+    initialized_from_dependency: false
+    possible_answer: 'val sound: String'
+    selected: false
+    status: Unchecked
+  - offset: 77
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 77
+    initialized_from_dependency: false
+    possible_answer: override val sound get() = "Bark!"
+    selected: false
+    status: Unchecked
+  - offset: 107
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 107
+    initialized_from_dependency: false
+    possible_answer: override val sound get() = "Meow!"
+    selected: false
+    status: Unchecked
+  - offset: 141
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 141
+    initialized_from_dependency: false
+    possible_answer: override val sound get() = "Squeak!"
+    selected: false
+    status: Unchecked
+  - offset: 167
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 167
+    initialized_from_dependency: false
+    possible_answer: |-
+      val pets = listOf(Dog(), Cat(), Hamster())
+        for (pet in pets) {
+          println(pet.sound)
+        }
+    selected: false
+    status: Unchecked
+  text: |-
+    package interfacesExercise3
+
+    interface Pet {
+      // TODO
+    }
+
+    class Dog: Pet {
+      // TODO
+    }
+
+    class Cat: Pet {
+      // TODO
+    }
+
+    class Hamster: Pet {
+      // TODO
+    }
+
+    fun main() {
+      // TODO
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |
+    package interfacesExercise3
+
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.loadClass
+    import kotlin.reflect.KClass
+    import kotlin.reflect.full.memberProperties
+    import kotlin.test.assertEquals
+    import kotlin.test.assertTrue
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestInterfacesExercise3 {
+
+        companion object {
+            private const val PROP_NAME = "sound"
+        }
+
+        @Test
+        fun `#01 pets structure`() {
+            val loadClasses = loadClasses()
+            assertTrue(
+                    actual = loadClasses.first().isAbstract,
+                    message = "Class ${loadClasses.first().simpleName} should be an abstract class or an interface"
+            )
+            loadClasses.forEach { clazz ->
+                assertTrue(
+                        actual = clazz.memberProperties.map { it.name }.contains(PROP_NAME),
+                        message = "Class ${clazz.simpleName} should implement property \"$PROP_NAME\""
+                )
+            }
+        }
+
+        private fun loadClasses(): List<KClass<out Any>> {
+            return listOf("Pet", "Dog", "Cat", "Hamster")
+                    .map { name -> loadClass("interfacesExercise3", name) }
+        }
+
+        @Test
+        fun `#02 pets sounds`() {
+            val actualSounds = loadClasses()
+                    .subList(1, 4)
+                    .map { it to it.constructors.first().call() }
+                    .map { (clazz, pet) ->
+                        val soundGetter = clazz.memberProperties.find { it.name == PROP_NAME }!!
+                        soundGetter.call(pet)
+                    }
+            val expectedSounds = listOf("Bark!", "Meow!", "Squeak!")
+            assertEquals(
+                    expected = expectedSounds,
+                    actual = actualSounds,
+                    message = "Expected the following set of sounds: $expectedSounds"
+            )
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

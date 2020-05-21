@@ -1,0 +1,68 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 28
+    length: 35
+    placeholder_text: tailrec fun simulation() { TODO() }
+    initial_state:
+      length: 35
+      offset: 28
+    initialized_from_dependency: false
+    possible_answer: |-
+      tailrec fun simulation(group: String, level: Int) {
+        println("Simulation: $group Reality: $level")
+        if (level > 0) simulation(group, level - 1)
+      }
+    selected: false
+    status: Unchecked
+  text: |-
+    package recursionExercise1
+
+    tailrec fun simulation() { TODO() }
+
+    fun main() {
+    //  simulation("FOO", 10)
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package recursionExercise1
+
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.TIMEOUT
+    import util.checkParametersOfTopLevelFunction
+    import util.runAndCheckSystemOutput
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestRecursionExercise1 {
+      private fun expectedOutput(group: String, n: Int) = buildString {
+        (n downTo 0).forEach {
+          appendln("Simulation: $group Reality: $it")
+        }
+      }
+
+      @Test(timeout = TIMEOUT)
+      fun test() {
+        testSimulation("FOO", 8)
+        testSimulation("bar", 13)
+        testSimulation("bar", 0)
+      }
+
+      private fun testSimulation(group: String, level: Int) {
+        val simulationFunction = ::simulation
+        checkParametersOfTopLevelFunction(simulationFunction, listOf("group" to "kotlin.String", "level" to "kotlin.Int"))
+
+        runAndCheckSystemOutput("Wrong result for 'simulation(\"$group\", $level)'",
+          expectedOutput(group, level)) {
+          simulationFunction.call(group, level)
+        }
+      }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

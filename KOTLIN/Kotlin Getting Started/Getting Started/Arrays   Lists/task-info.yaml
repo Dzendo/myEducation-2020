@@ -1,0 +1,59 @@
+type: edu
+custom_name: Arrays & Lists
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 25
+    length: 37
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 25
+    initialized_from_dependency: false
+    possible_answer: |-
+      listOf(
+              "A",
+              "B",
+              "C"
+      )
+    selected: false
+    status: Solved
+  - offset: 90
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 59
+    initialized_from_dependency: false
+    possible_answer: |-
+      arrayOf(
+              "A",
+              "B",
+              "C"
+      )
+    selected: false
+    status: Solved
+  text: |-
+    fun createStringList() = TODO()
+
+    fun createStringArray() = TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert.*
+    import org.junit.Test
+
+    class Test {
+        @Test fun testList() {
+            assertEquals(listOf("A", "B", "C"), createStringList())
+        }
+
+        @Test fun testArray() {
+            assertArrayEquals(arrayOf("A", "B", "C"), createStringArray())
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

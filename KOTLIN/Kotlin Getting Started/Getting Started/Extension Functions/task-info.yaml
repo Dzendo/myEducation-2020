@@ -1,0 +1,36 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 0
+    length: 313
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 0
+    initialized_from_dependency: false
+    possible_answer: |-
+      fun String.invertCase() = this.map {
+          if (it.isUpperCase()) it.toLowerCase() else it.toUpperCase()
+      }.joinToString(separator = "")
+    selected: true
+    status: Solved
+  text: TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Test
+
+    class Test {
+        @Test fun testSolution() {
+            val string = "hElLo"
+            assertEquals("HeLlO", string.invertCase())
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

@@ -1,0 +1,221 @@
+type: theory
+files:
+- name: src/Num.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/Num.kt
+    package operatoroverloading
+    import atomictest.eq
+
+    data class Num(val n: Int)
+
+    operator fun Num.plus(rval: Num) =
+      Num(n + rval.n)
+
+    fun main() {
+      Num(4) + Num(5) eq Num(9)
+      Num(4).plus(Num(5)) eq Num(9)
+    }
+  learner_created: false
+- name: src/MemberOperator.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/MemberOperator.kt
+    package operatoroverloading
+    import atomictest.eq
+
+    data class Num2(private val n: Int) {
+      operator fun plus(rval: Num2) =
+        Num2(n + rval.n)
+    }
+
+    // Cannot access 'n': it is private in 'Num2':
+    // operator fun Num2.minus(rval: Num2) =
+    //  Num2(n - rval.n)
+
+    fun main() {
+      Num2(4) + Num2(5) eq Num2(9)
+    }
+  learner_created: false
+- name: src/Molecule.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/Molecule.kt
+    import atomictest.eq
+
+    data class Molecule(
+      val id: Int = idCount++,
+      var attached: Molecule? = null
+    ) {
+      companion object {
+        private var idCount = 0
+      }
+      operator fun plus(other: Molecule) {
+        attached = other
+      }
+    }
+
+    fun main() {
+      val m1 = Molecule()
+      val m2 = Molecule()
+      m1 + m2                      // [1]
+      m1 eq "Molecule(id=0, attached=" +
+        "Molecule(id=1, attached=null))"
+    }
+  learner_created: false
+- name: src/AllOperators.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/AllOperators.kt
+    package operatoroverloading
+
+    class C {
+      // equals() cannot be an extension function
+      // and must be defined specially:
+      override operator
+      fun equals(other: Any?) = true
+    }
+
+    // Unary operators:
+    operator fun C.unaryPlus() = this
+    operator fun C.unaryMinus() = this
+    operator fun C.not() = this
+
+    // Increment/decrement:
+    operator fun C.inc() = this
+    operator fun C.dec() = this
+
+    // Binary operators:
+    operator fun C.plus(rv: C) = rv
+    operator fun C.minus(rv: C) = rv
+    operator fun C.times(rv: C) = rv
+    operator fun C.div(rv: C) = rv
+    operator fun C.rem(rv: C) = rv
+    operator fun C.rangeTo(rv: C) = rv
+
+    // 'In' operator:
+    operator fun C.contains(rv: C) = true
+
+    // Indexed access:
+    operator fun C.get(i: Int) = this
+    operator fun C.set(i: Int, c: C) = this
+
+    // Augmented assignment:
+    operator fun C.plusAssign(rv: C) = Unit
+    operator fun C.minusAssign(rv: C) = Unit
+    operator fun C.timesAssign(rv: C) = Unit
+    operator fun C.divAssign(rv: C) = Unit
+    operator fun C.remAssign(rv: C) = Unit
+
+    // Comparison, must return Int:
+    operator fun C.compareTo(rv: C) = 1
+
+    fun main() {
+      val c = C()
+      +c               // unaryPlus()
+      -c               // unaryMinus()
+      !c               // not()
+      var cc = C()
+      cc++             // inc() (needs var)
+      cc--             // dec() (needs var)
+      c + c            // plus()
+      c - c            // minus()
+      c * c            // times()
+      c / c            // div()
+      c % c            // rem()
+      c..c             // rangeTo()
+      c in c           // contains()
+      c !in c          // contains()
+      c[2]             // get()
+      c[2] = c         // set()
+      c += c           // plusAssign()
+      c -= c           // minusAssign()
+      c *= c           // timesAssign()
+      c /= c           // divAssign()
+      c %= c           // remAssign()
+      // equals():
+      c == c
+      c != c
+      // compareTo():
+      c < c
+      c > c
+      c <= c
+      c >= c
+    }
+  learner_created: false
+- name: src/Invoke.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/Invoke.kt
+    import atomictest.eq
+
+    class Func {
+      operator fun invoke() = "invoke()"
+      operator fun invoke(i: Int) = "invoke($i)"
+      operator fun invoke(i: Int, j: String) =
+        "invoke($i, $j)"
+      operator fun invoke(
+        i: Int, j: String, k: Double
+      ) =
+        "invoke($i, $j, $k)"
+    }
+
+    fun main() {
+      val f = Func()
+      f() eq "invoke()"
+      f(22) eq "invoke(22)"
+      f(22, "Hi") eq "invoke(22, Hi)"
+      f(22, "Three", 3.1416) eq
+        "invoke(22, Three, 3.1416)"
+    }
+  learner_created: false
+- name: src/StringInvoke.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/StringInvoke.kt
+    import atomictest.eq
+
+    operator fun String.invoke(
+      f: (s: String) -> String
+    ) = f(this)
+
+    fun main() {
+      "mumbling" { it.toUpperCase() } eq
+        "MUMBLING"
+    }
+  learner_created: false
+- name: src/Backticks.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/Backticks.kt
+
+    fun `A long name with spaces`() = Unit
+
+    fun `*how* is this working?`() = Unit
+
+    fun `'when' is a keyword`() = Unit
+
+    // fun `Illegal characters :<>`() = Unit
+
+    fun main() {
+      `A long name with spaces`()
+      `*how* is this working?`()
+      `'when' is a keyword`()
+    }
+  learner_created: false
+- name: src/Swearing.kt
+  visible: true
+  text: |-
+    // OperatorOverloading/Swearing.kt
+    import atomictest.eq
+
+    infix fun String.`#!%`(s: String) =
+      "$this Rowzafrazaca $s"
+
+    fun main() {
+      "howdy" `#!%` "Ma'am!" eq
+        "howdy Rowzafrazaca Ma'am!"
+    }
+  learner_created: false
+status: Unchecked
+record: -1

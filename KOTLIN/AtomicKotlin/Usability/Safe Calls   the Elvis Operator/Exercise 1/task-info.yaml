@@ -1,0 +1,61 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 69
+    length: 17
+    placeholder_text: fun downcase() {}
+    initial_state:
+      length: 17
+      offset: 69
+    initialized_from_dependency: false
+    possible_answer: 'fun downcase(s: String?): String = s?.toLowerCase() ?: ""'
+    selected: false
+    status: Unchecked
+  text: |-
+    package safeCallsAndTheElvisOperatorExercise1
+
+    import atomictest.eq
+
+    fun downcase() {}
+
+    fun main() {
+    /*
+      downcase(null) eq ""
+      downcase("ABC") eq "abc"
+    */
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package safeCallsAndTheElvisOperatorExercise1
+
+    import org.junit.Assert
+    import org.junit.Test
+    import util.checkParametersOfTopLevelFunction
+
+    class TestSafeCallsAndTheElvisOperatorExercise1 {
+        private fun testDowncase(s: String?) {
+            val downcaseFunc = ::downcase
+            checkParametersOfTopLevelFunction(downcaseFunc, listOf("" to "kotlin.String?"))
+            val actual = downcaseFunc.call(s)
+            Assert.assertEquals("Wrong result for calling downcase(\"$s\")", s?.toLowerCase() ?: "", actual)
+        }
+
+        @Test
+        fun test1() = testDowncase("abc")
+
+        @Test
+        fun test2() = testDowncase("ABC")
+
+        @Test
+        fun test3() = testDowncase("Hello!")
+
+        @Test
+        fun test4() = testDowncase(null)
+    }
+  learner_created: false
+status: Unchecked
+record: -1

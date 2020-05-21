@@ -1,0 +1,53 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 81
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 35
+    initialized_from_dependency: false
+    possible_answer: Char? = if (this.isBlank()) null else this[0]
+    selected: false
+    status: Solved
+  - offset: 132
+    length: 6
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 86
+    initialized_from_dependency: false
+    possible_answer: value?.toUpperCase()
+    selected: false
+    status: Solved
+  text: |-
+    fun String.firstCharacterOrNull(): TODO()
+
+    fun toUpperCaseIfNotNull(value: String?) = TODO()
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertNull
+    import org.junit.Test
+
+    class Test {
+        @Test fun testFirstOrNull() {
+            assertNull("".firstCharacterOrNull())
+            assertNull(" ".firstCharacterOrNull())
+            assertEquals('H', "Hallo".firstCharacterOrNull())
+            assertEquals('h', "hallo".firstCharacterOrNull())
+        }
+
+        @Test fun testToUpperCase() {
+            assertNull(toUpperCaseIfNotNull(null))
+            assertEquals("HELLO", toUpperCaseIfNotNull("hello"))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

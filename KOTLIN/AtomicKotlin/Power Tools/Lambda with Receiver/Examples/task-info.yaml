@@ -1,0 +1,236 @@
+type: theory
+files:
+- name: src/LWRStateMachine.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/LWRStateMachine.kt
+    package statemachine
+    import atomictest.Trace
+    import statemachine.State.*
+
+    val trace = Trace()
+
+    enum class State { ON, OFF, PAUSED }
+
+    class StateMachine {
+      var state: State = OFF
+        private set
+
+      private fun updateState(
+        current: State?, new: State
+      ) {
+        if (current == null || state == current) {
+          trace("$state -> $new")
+          state = new
+        }
+      }
+
+      fun start() = updateState(OFF, ON)
+
+      fun pause() = updateState(ON, PAUSED)
+
+      fun resume() = updateState(PAUSED, ON)
+
+      fun finish() = updateState(null, OFF)
+    }
+  learner_created: false
+- name: src/UseNewStateMachine1.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/UseNewStateMachine1.kt
+    package statemachine
+
+    fun main() {
+      trace.clear()
+      trace("first")
+      newStateMachine1 { sm ->    // [1]
+        sm.finish()               // [2]
+      }
+      trace("second")
+      newStateMachine1 {
+        it.pause()                // [3]
+        it.resume()
+        it.finish()
+      }
+      trace eq """
+      first
+      OFF -> ON
+      ON -> OFF
+      second
+      OFF -> ON
+      ON -> PAUSED
+      PAUSED -> ON
+      ON -> OFF
+      """
+    }
+  learner_created: false
+- name: src/NewStateMachine1.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/NewStateMachine1.kt
+    package statemachine
+
+    fun newStateMachine1(
+      operate: (StateMachine) -> Unit
+    ) {
+      val stateMachine = StateMachine()
+      stateMachine.start()
+      operate(stateMachine)
+    }
+  learner_created: false
+- name: src/UseNewStateMachine2.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/UseNewStateMachine2.kt
+    package statemachine2
+    import statemachine.trace
+
+    fun main() {
+      trace.clear()
+      newStateMachine2 {     // [1]
+        this.pause()         // [2]
+        resume()             // [3]
+        finish()
+      }
+      trace eq """
+      OFF -> ON
+      ON -> PAUSED
+      PAUSED -> ON
+      ON -> OFF
+      """
+    }
+  learner_created: false
+- name: src/NewStateMachine2.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/NewStateMachine2.kt
+    package statemachine2
+    import statemachine.StateMachine
+
+    fun newStateMachine1(
+      operate: (StateMachine) -> Unit     // [1]
+    ) {
+      val stateMachine = StateMachine()
+      stateMachine.start()
+      operate(stateMachine)               // [2]
+    }
+
+    fun newStateMachine2(
+      operate: StateMachine.() -> Unit    // [3]
+    ) {
+      val stateMachine = StateMachine()
+      stateMachine.start()
+      stateMachine.operate()              // [4]
+    }
+
+    fun main() {
+      newStateMachine1 {
+        it.finish()
+      }
+      newStateMachine2 {
+        finish()
+      }
+    }
+  learner_created: false
+- name: src/AnonymousFunction.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/AnonymousFunction.kt
+    package lambdawithreceiver
+    import atomictest.eq
+
+    fun main() {
+      val divides = fun Int.(d: Int): Boolean {
+        return this % d == 0
+      }
+      10.divides(2) eq true
+      10.divides(3) eq false
+    }
+  learner_created: false
+- name: src/StringBuilder.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/StringBuilder.kt
+    package lambdawithreceiver
+    import atomictest.eq
+
+    fun main() {
+      val stringBuilder = StringBuilder()  // [1]
+      stringBuilder.append("Alphabet: ")   // [2]
+      for (ch in 'a'..'z') {
+        stringBuilder.append(ch)           // [3]
+      }
+      stringBuilder.toString() eq          // [4]
+        "Alphabet: abcdefghijklmnopqrstuvwxyz"
+    }
+  learner_created: false
+- name: src/BuildString.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/BuildString.kt
+    package buildstring
+    import atomictest.eq
+
+    fun main() {
+      buildString {
+        this.append("Alphabet: ")     // [1]
+        for (ch in 'a'..'z') {
+          append(ch)                  // [2]
+        }
+      } eq
+        "Alphabet: abcdefghijklmnopqrstuvwxyz"
+    }
+  learner_created: false
+- name: src/BuildStringDef.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/BuildStringDef.kt
+    package buildstring
+
+    fun buildString(
+      builderAction: StringBuilder.() -> Unit
+    ): String {
+      val sb = StringBuilder()
+      sb.builderAction()        // [1]
+      return sb.toString()
+    }
+  learner_created: false
+- name: src/BuildLists.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/BuildLists.kt
+    package buildinglists
+    import atomictest.eq
+
+    fun main() {
+      val strings: List<String> = buildList {
+        add("Chars:")                       // [1]
+        for (ch in 'a'..'d') {
+          add("$ch")
+        }
+      }
+      strings eq
+        listOf("Chars:", "a", "b", "c", "d")
+    }
+
+    fun <E> buildList(
+      builderAction: MutableList<E>.() -> Unit
+    ): List<E> {                            // [2]
+      val list = mutableListOf<E>()
+      list.builderAction()
+      return list
+    }
+  learner_created: false
+- name: src/SMExtensions.kt
+  visible: true
+  text: |-
+    // LambdaWithReceiver/SMExtensions.kt
+    package statemachine
+
+    fun StateMachine.pauseAndResume() {
+      this.pause()   // Explicit
+      resume()       // Implicit
+    }
+  learner_created: false
+status: Unchecked
+record: -1

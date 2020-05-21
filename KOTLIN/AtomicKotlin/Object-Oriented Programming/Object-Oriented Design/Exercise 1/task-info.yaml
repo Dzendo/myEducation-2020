@@ -1,0 +1,40 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  text: |-
+    package objectOrientedDesignExercise1
+
+    /*
+    // Add the following to `Actors.kt`:
+
+    class Bomb(
+      override val room: Room = Room()
+    ) : Actor() {
+      override val symbol = '*'
+      override fun makeActor(r: Room) = Bomb(r)
+      override fun interact(robot: Robot): Room {
+        robot.energy = 0 // Bomb erases energy
+        room.actor = Empty(room)
+        return room
+      }
+    }
+     */
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    package objectOrientedDesignExercise1
+
+    import org.junit.Test
+    import util.unimplementedTest
+
+    class TestObjectOrientedDesignExercise1 {
+        @Test fun testSolution() {
+            //TODO: implement your test here
+            unimplementedTest()
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1

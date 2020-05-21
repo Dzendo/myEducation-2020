@@ -1,0 +1,59 @@
+type: edu
+custom_name: Output & String-Template
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 34
+    length: 20
+    placeholder_text: TODO()
+    initial_state:
+      length: 6
+      offset: 34
+    initialized_from_dependency: false
+    possible_answer: 'print("Name: $name")'
+    selected: false
+    status: Solved
+  text: |-
+    fun printName(name: String) {
+        TODO()
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |-
+    import org.junit.After
+    import org.junit.Assert
+    import org.junit.Assert.assertEquals
+    import org.junit.Assert.assertTrue
+    import org.junit.Before
+    import org.junit.Test
+    import java.io.ByteArrayOutputStream
+    import java.io.PrintStream
+
+
+    class Test {
+
+        private val outStream = ByteArrayOutputStream()
+        private val originalOut = System.out
+
+        @Before
+        fun setUpStreams() {
+            System.setOut(PrintStream(outStream))
+        }
+
+        @After
+        fun restoreStreams() {
+            System.setOut(originalOut)
+        }
+
+        @Test
+        fun testSolution() {
+            val name = "Paul"
+            printName(name)
+            assertTrue(outStream.toString().contains("Name: $name"))
+        }
+    }
+  learner_created: false
+status: Solved
+record: -1

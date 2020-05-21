@@ -1,0 +1,98 @@
+type: edu
+files:
+- name: src/Task.kt
+  visible: true
+  placeholders:
+  - offset: 171
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 171
+    initialized_from_dependency: false
+    possible_answer: initOrder += "one"
+    selected: false
+    status: Unchecked
+  - offset: 196
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 196
+    initialized_from_dependency: false
+    possible_answer: initOrder += "two"
+    selected: false
+    status: Unchecked
+  - offset: 221
+    length: 7
+    placeholder_text: // TODO
+    initial_state:
+      length: 7
+      offset: 221
+    initialized_from_dependency: false
+    possible_answer: initOrder += "three"
+    selected: false
+    status: Unchecked
+  text: |-
+    // ComplexConstructors/Exercise3.kt
+    package complexConstructorsExercise3
+    import atomictest.eq
+
+    class MultipleInit {
+      val initOrder = mutableListOf<String>()
+      init {
+        // TODO
+      }
+      init {
+        // TODO
+      }
+      init {
+        // TODO
+      }
+    }
+
+    fun main() {
+      MultipleInit().initOrder eq "[one, two, three]"
+    }
+  learner_created: false
+- name: test/Tests.kt
+  visible: false
+  text: |
+    package complexConstructorsExercise3
+
+    import org.junit.FixMethodOrder
+    import org.junit.Test
+    import org.junit.runners.MethodSorters
+    import util.assertConstructorNumber
+    import util.checkParametersOfConstructor
+    import util.loadClass
+    import util.loadMemberProperty
+    import kotlin.reflect.full.memberProperties
+    import kotlin.test.assertEquals
+
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    class TestComplexConstructorsExercise3 {
+
+        @Test
+        fun `#01 MultipleInit class structure`() {
+            val multipleInitClass = loadClass("complexConstructorsExercise3", "MultipleInit")
+            multipleInitClass.assertConstructorNumber(1)
+            val multipleInitConstructor = multipleInitClass.constructors.first()
+            checkParametersOfConstructor(multipleInitConstructor, multipleInitClass, emptyList())
+            loadMemberProperty(multipleInitClass, "initOrder")
+        }
+
+        @Test
+        fun `#02 MultipleInit initialisation block`() {
+            val multipleInitClass = loadClass("complexConstructorsExercise3", "MultipleInit")
+            val multipleInitInstance = multipleInitClass.constructors.first().call()
+            assertEquals(
+                    expected = listOf("one", "two", "three"),
+                    actual = multipleInitClass.memberProperties.firstOrNull { it.name == "initOrder" }?.call(multipleInitInstance),
+                    message = "MultipleInit member property 'initOrder' should be equal to '[one, two, three]' after initialisation"
+            )
+        }
+    }
+  learner_created: false
+status: Unchecked
+record: -1
