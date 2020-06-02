@@ -21,17 +21,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ShareCompat
 import androidx.core.widget.NestedScrollView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.samples.apps.sunfloweras.data.Plant
 import com.google.samples.apps.sunfloweras.databinding.FragmentPlantDetailBinding
 import com.google.samples.apps.sunfloweras.utilities.InjectorUtils
 import com.google.samples.apps.sunfloweras.viewmodels.PlantDetailViewModel
@@ -132,6 +128,10 @@ class PlantDetailFragment : Fragment() {
         }       // это конец .apply к binding
         setHasOptionsMenu(true)     // Установить меню - реально только для action_share справа
 
+            // Возврат в садик если по LiveData выбрали новую растению
+            plantDetailViewModel.navGo.observe(viewLifecycleOwner, Observer {
+                if (it) view?.findNavController()?.navigateUp()
+            })
         return binding.root     // и вот этот binding наконец-то передаем (возращаем) на высветку
     }
 

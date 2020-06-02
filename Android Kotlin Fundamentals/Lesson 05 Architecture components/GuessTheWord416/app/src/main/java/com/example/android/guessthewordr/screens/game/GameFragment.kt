@@ -142,7 +142,7 @@ class GameFragment : Fragment() {
         // Этот наблюдатель все равно здесь нужен, т.к. xml изменит ТОЛЬКО переменную "конецигры"
         // А здесь надо ее прослушать чтобы перейти к фрагменту результатов через navigation
         // Это (переход) дело фрагмента, а не ViewModel, т.к. это UI, а не данные
-        viewModel.eventGameFinish.observe(this, Observer { hasFinished ->
+        viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
             if (hasFinished) gameFinished() // Udacity
         })
 

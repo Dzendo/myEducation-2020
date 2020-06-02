@@ -16,8 +16,7 @@
 
 package com.google.samples.apps.sunfloweras.viewmodels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.samples.apps.sunfloweras.PlantDetailFragment
 import com.google.samples.apps.sunfloweras.data.GardenPlantingRepository
 import com.google.samples.apps.sunfloweras.data.PlantRepository
@@ -30,14 +29,19 @@ class PlantDetailViewModel(
     plantRepository: PlantRepository,
     private val gardenPlantingRepository: GardenPlantingRepository,
     private val plantId: String
-) : ViewModel() {
+) : ViewModel(){
 
     val isPlanted = gardenPlantingRepository.isPlanted(plantId)
     val plant = plantRepository.getPlant(plantId)
+
+    // Переменная для возврата из этого экрана если нажали + т.е. добавили в садик
+    val navGo: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun addPlantToGarden() {
         viewModelScope.launch {
             gardenPlantingRepository.createGardenPlanting(plantId)
         }
+        // возврат из этого экрана нажали + т.е. добавили в садик и более здесь делать нечего
+        navGo.value = true
     }
 }
