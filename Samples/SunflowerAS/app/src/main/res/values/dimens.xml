@@ -17,11 +17,12 @@
 
 <resources>
 
-    <!-- Per Material Design specs: -->
+    <!-- Per Material Design specs: В соответствии со спецификациями дизайна материала: -->
     <!-- https://material.io/design/components/buttons-floating-action-button.html#specs -->
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Padding on the bottom of a screen so that the FAB won't overlap scrolled text. -->
+    <!-- Отступ в нижней части экрана, чтобы ФАБ не перекрывал прокрученный текст. -->
     <dimen name="fab_bottom_padding">72dp</dimen>
 
     <dimen name="plant_detail_app_bar_height">278dp</dimen>
@@ -38,12 +39,15 @@
     <dimen name="card_corner_radius">12dp</dimen>
 
     <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
+    <!-- высота для панели инструментов детализации растений-используется для преобразования в пиксели при скрытии / отображении -->
     <dimen name="toolbar_elevation">5dp</dimen>
 
     <!-- Plant List Header margin -->
+    <!-- Поле заголовка списка растений -->
     <dimen name="header_margin">24dp</dimen>
 
     <!-- minimum height of plant detail page so that the collapsing toolbar can be shown on every page -->
+    <!-- минимальная высота страницы сведений о растении, так что сворачивающаяся панель инструментов может быть показана на каждой странице -->
     <dimen name="plant_description_min_height">555dp</dimen>
 
 </resources>

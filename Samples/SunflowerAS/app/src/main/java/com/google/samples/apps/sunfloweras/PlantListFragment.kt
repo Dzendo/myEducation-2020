@@ -42,21 +42,24 @@ class PlantListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Надуваться будет fragment_plant_list.xml
         val binding = FragmentPlantListBinding.inflate(inflater, container, false)
-        context ?: return binding.root
+        context ?: return binding.root      // по моему если садика еще нет
 
         val adapter = PlantAdapter()
         binding.plantList.adapter = adapter
         subscribeUi(adapter)
 
+        // включить верхнее меню во фрагменте - тогда вызовется onCreateOptionsMenu и onOptionsItemSelected
         setHasOptionsMenu(true)
         return binding.root
     }
 
+    // Устанавливается значек(меню) фильтрации - рисование значка в квадратике справа наверху
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_plant_list, menu)
     }
-
+// реакция на нажатие на значк в квадратике справа наверху
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.filter_zone -> {
@@ -66,13 +69,13 @@ class PlantListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
+//???
     private fun subscribeUi(adapter: PlantAdapter) {
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             adapter.submitList(plants)
         }
     }
-
+//???
     private fun updateData() {
         with(viewModel) {
             if (isFiltered()) {

@@ -29,3 +29,11 @@ class GardenActivity : AppCompatActivity() {
         setContentView<ActivityGardenBinding>(this,R.layout.activity_garden)
     }
 }
+/*
+Вызывается просто стартовый Layout activity_garden для навигации и все
+Здесь самая сокращенная запись от:
+private lateinit var binding: ActivityMainBinding
+ override fun onCreate
+binding = DataBindingUtil.setContentView (this, R.layout.activity_main)
+Можно напихать слушателей но не надо, лучше в фрагменты
+ */

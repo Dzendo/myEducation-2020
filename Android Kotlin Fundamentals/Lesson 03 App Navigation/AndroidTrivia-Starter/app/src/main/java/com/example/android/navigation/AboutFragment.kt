@@ -25,7 +25,7 @@ import android.view.ViewGroup
 class AboutFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента

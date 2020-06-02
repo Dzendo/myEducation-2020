@@ -16,8 +16,9 @@
   -->
 
 <!-- Values used for animations -->
+<!-- Значения, используемые для анимации -->
 <resources>
-
     <!-- Duration (in milliseconds) for slide transition animation -->
+    <!-- Длительность (в миллисекундах) для анимации перехода слайдов -->
     <integer name="slide">200</integer>
 </resources>

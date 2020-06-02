@@ -36,7 +36,7 @@ class GardenPlantingRepository private constructor(
 
     companion object {
 
-        // For Singleton instantiation
+        // For Singleton instantiation Для одноэлементный экземпляр
         @Volatile private var instance: GardenPlantingRepository? = null
 
         fun getInstance(gardenPlantingDao: GardenPlantingDao) =

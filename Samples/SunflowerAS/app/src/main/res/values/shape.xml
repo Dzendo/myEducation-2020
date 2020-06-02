@@ -39,7 +39,7 @@
         name="ShapeAppearance.Sunflower.FAB"
         parent="ShapeAppearance.MaterialComponents.SmallComponent" />
 
-    <!-- Add plant button -->
+    <!-- Add plant button Кнопка Добавить растение -->
     <dimen name="button_corner_radius">12dp</dimen>
 
 </resources>

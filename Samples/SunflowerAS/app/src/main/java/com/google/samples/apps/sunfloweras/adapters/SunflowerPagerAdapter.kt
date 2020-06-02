@@ -23,20 +23,26 @@ import com.google.samples.apps.sunfloweras.PlantListFragment
 
 const val MY_GARDEN_PAGE_INDEX = 0
 const val PLANT_LIST_PAGE_INDEX = 1
-
+// Это на основе стандартного адаптера из androidx.viewpager2.adapter строит в фрагменте this
 class SunflowerPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     /**
      * Mapping of the ViewPager page indexes to their respective Fragments
+     * Сопоставление индексов страниц ViewPager с их соответствующими фрагментами
      */
+    // Вызывается и выполняется лямбда ниже в createFragment т.е. зовется нужный[0-1] фрагмент
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         MY_GARDEN_PAGE_INDEX to { GardenFragment() },
         PLANT_LIST_PAGE_INDEX to { PlantListFragment() }
     )
-
+    // стандарт - задается сколько экранов может меняться (в данном случае - 2)
     override fun getItemCount() = tabFragmentsCreators.size
 
     override fun createFragment(position: Int): Fragment {
         return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
+     // При построении фрагмента this именно отсюда вызовется (.invoke() - вызов выполнения лямбды)
+     // GardenFragment() - вид садика
+     // PlantListFragment() - вид магазина
+     // подписи и иконки наверху нарисуются ранее через Mediator вызывающей программе HomeViewPagerFragment
     }
 }

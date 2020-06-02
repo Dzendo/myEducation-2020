@@ -30,10 +30,12 @@ import com.google.samples.apps.sunfloweras.databinding.FragmentGardenBinding
 import com.google.samples.apps.sunfloweras.utilities.InjectorUtils
 import com.google.samples.apps.sunfloweras.viewmodels.GardenPlantingListViewModel
 
+// Строит фрагмент садика на первом экране когда позовет ViewPager2
 class GardenFragment : Fragment() {
 
     private lateinit var binding: FragmentGardenBinding
 
+    // Разбирать как строится viewModel:
     private val viewModel: GardenPlantingListViewModel by viewModels {
         InjectorUtils.provideGardenPlantingListViewModelFactory(requireContext())
     }

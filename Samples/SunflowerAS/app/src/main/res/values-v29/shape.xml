@@ -26,7 +26,7 @@
         <item name="cornerSizeBottomLeft">@dimen/fab_corner_radius</item>
     </style>
 
-    <!-- Plus button on detail page -->
+    <!-- Plus button on detail page  Кнопка плюс на странице сведений -->
     <dimen name="fab_corner_radius">30dp</dimen>
 
 </resources>

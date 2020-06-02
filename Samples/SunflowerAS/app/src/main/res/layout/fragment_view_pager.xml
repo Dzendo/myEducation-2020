@@ -22,6 +22,9 @@
     <!--
      Note: even though the IDs for the CoordinatorLayout and the AppBarLayout unused in HomeViewPagerFragment, they are
      both required to preserve the toolbar scroll / collapse state when navigating to a new screen and then coming back.
+     Примечание: несмотря на то, что идентификаторы для CoordinatorLayout и AppBarLayout не используются в фрагменте Home ViewPager,
+     они необходимы для сохранения состояния прокрутки / сворачивания панели инструментов
+     при переходе на новый экран и последующем возврате.
     -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
@@ -68,6 +71,7 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <!-- Override tabIconTint attribute of style with selector -->
+            <!-- Переопределение атрибута содержимого вкладки стиля с помощью селектора -->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 style="@style/Widget.MaterialComponents.TabLayout.Colored"

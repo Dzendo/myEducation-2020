@@ -1,0 +1,140 @@
+				SunflowerAS
+Файлы сборки проекта для AS:
+-Samples/SunflowerAS/build.gradle
+-build.gradle + Локальные файлы
+
+Файлы для Android Телефона + стартовые
+-AndroidManifest 1 шт
+-Nav_Garden.xml - 1 шт
+-Activity + act.xml - 1 компл
+
+Котлин для работы (backend)
+-Fragments - 2+2 = 4 шт
+-ViewModels - 3 + 3 завода и еще 1 шт = 7 шт
+-Adapters 5 шт
+-Utilits 3 шт
+-Data - база данных Room 9 модулей кт
+ИТОГО 33 файла с Котлиным
+--------------------------------
+-Layout.xml 1act + 2navFrag + 2page + 2 item =  7 шт
+-Menu 2 шт
+-anim + animator = 5 шт
+-drawable = 12 шт
+-mipmap 22 шт =21 png + 1 vector
+Итого 48 XML
+---------------------------------
+Values:
+  shape
+  Strings
+  Styles
+штук 100
+--------------------------------
+-Asset - 1 шт магазин - перечень растений в Json
+
+Порядка 100 файлов
+***************************************************************************
+
+AndroidManifest
+1. имя пакета приложения  package="com.google.samples.apps.sunfloweras"
+2, разрешения интернета сети итд
+3. Иконка, Круговая иконка
+4. Имя - label
+5. Тема стиля
+6. Имя стартового модуля GardenActivity
+7. тема модуля - уточнение 5
+============================================================================
+GardenActivity
+Вызывается просто стартовый Layout activity_garden для навигации и все
+ setContentView<ActivityGardenBinding>(this,R.layout.activity_garden)
+Здесь самая сокращенная запись от:
+private lateinit var binding: ActivityMainBinding
+ override fun onCreate
+binding = DataBindingUtil.setContentView (this, R.layout.activity_main)
+Можно напихать слушателей но не надо, лучше в фрагменты
+----------------------------------------------------------------------------
+layout/activity_garden.xml - стартовый xml - обертка для навигации
+<layout - обернут для binding
+	<FrameLayout - пустой лайоут
+		<fragment для вызова навигации
+		android:name="androidx.navigation.fragment.NavHostFragment"
+		p:navGraph="@navigation/nav_garden"/> - имя навигационного XML
+Больше здесь ничего не надо в простейшем случае
+===============================================================================
+navigation/nav_garden.xml - Основной файл навигации управляется сверху NavHostFragment
+Какой из фрагментов стартовый:  app:startDestination="@id/view_pager_fragment">
+Содержит все фрагменты с их:
+- именами КТ файлов FRAGMENT  android:name="com.google.samples.apps.sunfloweras.PlantDetailFragment"
+- есть tools:layout="@layout/fragment_plant_detail - имя XML фрагмента для дизайна в AS(необязательно) 
+- actions переходов
+- Анимациями входа-выхода и переходов  
+- <argument - передаваемыми друг другу
+
+могут быть другие параметры:
+-----------------------------------------------------------------------------------
+ДАЛЕЕ NavHostFragment вызывает стартовый фрагмент по имени (@id/view_pager_fragment)
+Фрагмент зовет через com.google.samples.apps.sunfloweras.HomeViewPagerFragment (указан здесь же)
+Получив управление HomeViewPagerFragment.kt:
+- в примитиве создает ViewModel 
+- надувает через binding для высветки нужную XML
+- устанавливает меню, слушатели
+- проектирует обращения к NavHostFragment для переходов на другие фрагменты
+- может ставить LIFECYCLE and LIVEDATA ?? или прямо из XML в MODEL ??
+- Настраивает все реакции В-ИЗ ViewModel
+Когда с него потребуют ТО обращается к NavHostFragment для перехода (отдает управление)
+и передает ему куда идти и аргументы для передачи (остальное NavHostFragment возьмет из navigation/nav_garden.xml)
+-----------------------------------------------------------------------------------
+
+Так программа и крутится:     Сначала NavHostFragmen вызывает (передает управление) Стартовому Фрагменту
+- Фрагмент крутится и когда надо вызывает (передает управление) NavHostFragmen с указанием кого позвать
+- NavHostFragmen смотрит в navigation/nav_garden.xml и вызывает другой нужный фрагмент
+Конец - как выгрузится стартовый back или другим способом или бросили в фон
+
+=====================================================================================
+
+Конкретно в SunflowerAS в nav_garden.xml всего ДВА фрагмента HomeViewPagerFragment и PlantDetailFragment
+и один переход от первого к второму с Аргументом (обратно по back)
+
+первым зовется com.google.samples.apps.sunfloweras.HomeViewPagerFragment - Список магазина или моего сада
+Он ставит какие-то адаптеры 
+Надувает layout/fragment_view_pager.xml
+Устанавливает адаптер ViewPager2
+устанавливает и передает иконки и подписи в верхней строке
+Связывает основное поле view_pager типа androidx.viewpager2.widget.ViewPager2 с адаптером ViewPager2
+
+Наконец загружает надутый root через FragmentViewPagerBinding
+Далее при создании нужного фрагмента сработает адаптер а он уже позовет
+// GardenFragment() 	- вид садика
+// PlantListFragment() 	- вид магазина
+и будет в автомате их менять - какой экран позвал user
+
+-------------------------------------------------------------------------------------
+GardenFragment() - надувает fragment_garden.xml
+- Создает свою viewModel: GardenPlantingListViewModel by viewModels хитрую через factory
+
+
+PlantListFragment() - надувает fragment_plant_list.xml
+- Создает свою viewModel: PlantListViewModel by viewModels {
+        InjectorUtils.providePlantListViewModelFactory(this)}
+
+
+=================================================================================
+Второй фрагмент навигации PlantDetailFragment с связанным layout.fragment_plant_detail
+binding в XML вставлена viewModel и callback кот на самом деле + на кнопке FAB
+1. Построение XML перемудрено Нужна проще идея и стандартнее - лекции
+2. <-- имеет просто нарисованность и имя toolbar - что нестандартно и неверно
+3. Fab + имеет имя fab и функцию нажатия callback вроде через LiveData,
+	 но тогда зачем ее 
+
+Взялся переделывать XML - почти заработала 
+
+
+
+
+
+
+
+
+ 
+   
+
+
