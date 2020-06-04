@@ -17,13 +17,12 @@
 package com.google.samples.apps.sunfloweras
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.sunfloweras.adapters.GardenPlantingAdapter
 import com.google.samples.apps.sunfloweras.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunfloweras.databinding.FragmentGardenBinding
@@ -53,8 +52,26 @@ class GardenFragment : Fragment() {
             navigateToPlantListPage()
         }
 
+        // включить верхнее меню во фрагменте - тогда вызовется onCreateOptionsMenu и onOptionsItemSelected
+        setHasOptionsMenu(true)
+
         subscribeUi(adapter, binding)
         return binding.root
+    }
+    // Устанавливается значек(меню) фильтрации - рисование значка в квадратике справа наверху
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_plant_list, menu)
+    }
+    // реакция на нажатие на значк в квадратике справа наверху
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.filter_zone -> {
+               viewModel.clearGarden()
+                Snackbar.make(binding.root,R.string.garden_cleared, Snackbar.LENGTH_LONG).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {

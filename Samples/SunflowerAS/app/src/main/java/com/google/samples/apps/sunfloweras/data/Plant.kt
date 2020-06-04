@@ -21,23 +21,28 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Calendar
 import java.util.Calendar.DAY_OF_YEAR
-
+// Это по сути строчка из будущей таблицы SQL (аннотированный класс данных) наверное Plant
+// первый обязательный элемент построения ROOM
 @Entity(tableName = "plants")
 data class Plant(
-    @PrimaryKey @ColumnInfo(name = "id") val plantId: String,
-    val name: String,
-    val description: String,
-    val growZoneNumber: Int,
-    val wateringInterval: Int = 7, // how often the plant should be watered, in days
-    val imageUrl: String = ""
+    @PrimaryKey @ColumnInfo(name = "id") val plantId: String,   // Название на типа Латинское: "malus-pumila" == plant_id Garden
+    val name: String,                                           // Имя по простому: "Apple"
+    val description: String,                                    // Описание текст: Яблони культивируются во всем мире и являются
+    val growZoneNumber: Int,                                    // 3 или 2 или 9
+    val wateringInterval: Int = 7, // how often the plant should be watered, in days - как часто растение следует поливать, в днях
+    val imageUrl: String = ""  // Ссылка jpg картинки 4,25 мб и 4938х3264 пикселей
 ) {
 
     /**
      * Determines if the plant should be watered.  Returns true if [since]'s date > date of last
      * watering + watering Interval; false otherwise.
+     * Определяет, следует ли поливать растение. Возвращает true, если [since]'s date > дата последнего
+     * полив + интервал полива; в противном случае ложь.
      */
+    // здесь только форимуется ответ и ничего не записывается
     fun shouldBeWatered(since: Calendar, lastWateringDate: Calendar) =
         since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
 
+    // Хорошая функция для строки - нормальное имя - запомнить применять
     override fun toString() = name
 }

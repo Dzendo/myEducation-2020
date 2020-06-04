@@ -21,6 +21,7 @@ import java.util.Calendar
 
 /**
  * Type converters to allow Room to reference complex data types.
+ * Преобразователи типов позволяют Room ссылаться на сложные типы данных.
  */
 class Converters {
     @TypeConverter fun calendarToDatestamp(calendar: Calendar): Long = calendar.timeInMillis

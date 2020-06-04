@@ -24,6 +24,8 @@ import androidx.room.Query
 
 /**
  * The Data Access Object for the Plant class.
+ * Объект доступа к данным для класса Plant.
+ * DAO - определение пользовательского интерфейса для доступа к базе данных plants со строками Plant
  */
 @Dao
 interface PlantDao {
@@ -36,6 +38,7 @@ interface PlantDao {
     @Query("SELECT * FROM plants WHERE id = :plantId")
     fun getPlant(plantId: String): LiveData<Plant>
 
+    // Добавить весь список сразу (с заменой)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(plants: List<Plant>)
 }

@@ -18,12 +18,21 @@ package com.google.samples.apps.sunfloweras.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.sunfloweras.data.GardenPlantingRepository
 import com.google.samples.apps.sunfloweras.data.PlantAndGardenPlantings
+import kotlinx.coroutines.launch
 
 class GardenPlantingListViewModel internal constructor(
     gardenPlantingRepository: GardenPlantingRepository
 ) : ViewModel() {
     val plantAndGardenPlantings: LiveData<List<PlantAndGardenPlantings>> =
             gardenPlantingRepository.getPlantedGardens()
+
+    val _gardenPlantingRepository = gardenPlantingRepository
+    fun clearGarden(){
+        viewModelScope.launch {
+            _gardenPlantingRepository.clearGarden()
+        }
+    }
 }

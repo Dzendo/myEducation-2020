@@ -18,6 +18,7 @@ package com.google.samples.apps.sunfloweras.data
 
 /**
  * Repository module for handling data operations.
+ * Модуль репозитория для обработки операций с данными.
  */
 class PlantRepository private constructor(private val plantDao: PlantDao) {
 
@@ -29,7 +30,7 @@ class PlantRepository private constructor(private val plantDao: PlantDao) {
             plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)
 
     companion object {
-
+        // создание самого репозиторя (Static)  и базы данных
         // For Singleton instantiation
         @Volatile private var instance: PlantRepository? = null
 

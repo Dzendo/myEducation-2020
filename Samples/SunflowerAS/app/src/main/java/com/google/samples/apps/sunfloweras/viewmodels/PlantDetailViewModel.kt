@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
  * The ViewModel used in [PlantDetailFragment].
  */
 class PlantDetailViewModel(
-    plantRepository: PlantRepository,
+    val plantRepository: PlantRepository,
     private val gardenPlantingRepository: GardenPlantingRepository,
     private val plantId: String
 ) : ViewModel(){
@@ -34,14 +34,16 @@ class PlantDetailViewModel(
     val isPlanted = gardenPlantingRepository.isPlanted(plantId)
     val plant = plantRepository.getPlant(plantId)
 
-    // Переменная для возврата из этого экрана если нажали + т.е. добавили в садик
-    val navGo: MutableLiveData<Boolean> = MutableLiveData(false)
-
-    fun addPlantToGarden() {
-        viewModelScope.launch {
-            gardenPlantingRepository.createGardenPlanting(plantId)
-        }
-        // возврат из этого экрана нажали + т.е. добавили в садик и более здесь делать нечего
-        navGo.value = true
+    var isAddDelete: Boolean = true
+    fun doAddDeletePlantToGarden() {
+        if (!isAddDelete)
+            viewModelScope.launch {
+                gardenPlantingRepository.createGardenPlanting(plantId)
+            }
+        else
+            viewModelScope.launch {
+            val gardenPlanting = gardenPlantingRepository.getGardenPlanting(plantId)
+                gardenPlantingRepository.removeGardenPlanting(gardenPlanting)
+            }
     }
 }

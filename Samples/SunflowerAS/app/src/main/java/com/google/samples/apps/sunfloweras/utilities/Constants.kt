@@ -18,6 +18,7 @@ package com.google.samples.apps.sunfloweras.utilities
 
 /**
  * Constants used throughout the app.
+ * Константы, используемые во всем приложении.
  */
 const val DATABASE_NAME = "sunfloweras-db"
 const val PLANT_DATA_FILENAME = "plants.json"

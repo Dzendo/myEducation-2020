@@ -16,6 +16,8 @@
 
 package com.google.samples.apps.sunfloweras.data
 
+import androidx.lifecycle.LiveData
+
 class GardenPlantingRepository private constructor(
     private val gardenPlantingDao: GardenPlantingDao
 ) {
@@ -25,12 +27,17 @@ class GardenPlantingRepository private constructor(
         gardenPlantingDao.insertGardenPlanting(gardenPlanting)
     }
 
-    suspend fun removeGardenPlanting(gardenPlanting: GardenPlanting) {
+     suspend fun removeGardenPlanting(gardenPlanting: GardenPlanting) {
         gardenPlantingDao.deleteGardenPlanting(gardenPlanting)
     }
 
-    fun isPlanted(plantId: String) =
-            gardenPlantingDao.isPlanted(plantId)
+    // Вставил AS для удаления растения из садика и для комплекта (добавить в тесты)
+    suspend fun getGardenPlanting(plantId: String): GardenPlanting = gardenPlantingDao.getGardenPlanting(plantId)
+
+    // Вставил AS для очистки садика и для комплекта (добавить в тесты)
+    suspend fun clearGarden() = gardenPlantingDao.clearGarden()
+
+    fun isPlanted(plantId: String) = gardenPlantingDao.isPlanted(plantId)
 
     fun getPlantedGardens() = gardenPlantingDao.getPlantedGardens()
 

@@ -22,6 +22,8 @@ import androidx.room.Relation
 /**
  * This class captures the relationship between a [Plant] and a user's [GardenPlanting], which is
  * used by Room to fetch the related entities.
+ * Этот класс фиксирует связь между [растением] и [посадкой сада] пользователя, которая является
+ * используется комнатой для извлечения связанных сущностей.
  */
 data class PlantAndGardenPlantings(
     @Embedded
