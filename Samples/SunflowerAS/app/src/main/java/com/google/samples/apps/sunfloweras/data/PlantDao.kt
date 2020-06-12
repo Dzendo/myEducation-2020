@@ -26,6 +26,7 @@ import androidx.room.Query
  * The Data Access Object for the Plant class.
  * Объект доступа к данным для класса Plant.
  * DAO - определение пользовательского интерфейса для доступа к базе данных plants со строками Plant
+ * Участвует в абстрактном классе AppDatabase создания базы данных
  */
 @Dao
 interface PlantDao {

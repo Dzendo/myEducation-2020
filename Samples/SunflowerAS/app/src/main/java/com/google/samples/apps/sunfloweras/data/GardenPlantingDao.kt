@@ -15,7 +15,7 @@
  */
 
 package com.google.samples.apps.sunfloweras.data
-
+// Android Kotlin Fundamentals 06.1: создание базы данных комнат  5. Задача: создать DAO
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
@@ -27,6 +27,7 @@ import androidx.room.Transaction
  * The Data Access Object for the [GardenPlanting] class.
  * Объект доступа к данным для класса [садовая посадка].
  * DAO - определении пользовательского интерфейса для доступа к базе данных
+ * Участвует в абстрактном классе AppDatabase создания базы данных
  * GsrdenPlanting === garden_plantings со строками  GardenPlanting
  * suspend - значит будет вызываться в coroutines
  */
@@ -57,10 +58,10 @@ interface GardenPlantingDao {
     suspend fun insertGardenPlanting(gardenPlanting: GardenPlanting): Long
 
     // просто Удалить готовый объект-строку GardenPlanting в garden_plantings
-    // Delete ищет в бд запись по ключу. то ли id то ли key plantId ???? какименно
+    // Delete ищет в бд запись по ключу. то ли id то ли key plantId ???? как именно
     @Delete
     suspend fun deleteGardenPlanting(gardenPlanting: GardenPlanting)
-
+    // чтобы получить строку которую удалять применяю getGardenPlanting см. ниже
     /*
     Вот и все. Room сгенерирует весь необходимый код для вставки/замены/удаления GardenPlanting в базу данных.
     Когда вы вызываете insert() из своего кода Kotlin, Room в ыполняет запрос SQL для вставки объекта в базу данных.

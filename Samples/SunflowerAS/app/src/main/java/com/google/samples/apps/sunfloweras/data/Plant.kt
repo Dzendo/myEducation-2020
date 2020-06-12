@@ -21,8 +21,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Calendar
 import java.util.Calendar.DAY_OF_YEAR
-// Это по сути строчка из будущей таблицы SQL (аннотированный класс данных) наверное Plant
-// первый обязательный элемент построения ROOM
+
+// Это по сути строчка из будущей таблицы SQL plants (аннотированный класс данных Plant)
+// первый обязательный элемент построения ROOM таблицы объявдение @Entity data class
 @Entity(tableName = "plants")
 data class Plant(
     @PrimaryKey @ColumnInfo(name = "id") val plantId: String,   // Название на типа Латинское: "malus-pumila" == plant_id Garden
@@ -42,6 +43,9 @@ data class Plant(
     // здесь только форимуется ответ и ничего не записывается
     fun shouldBeWatered(since: Calendar, lastWateringDate: Calendar) =
         since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
+       // since.after(lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }) // То же самое через API
+    // abstract void add(int field, int value) - добавляет value к компоненту времени или даты, указанному в параметре field
+    // т.е. к дате lastWateringDate к его ДНЯМ добавить 7 и сравнивать
 
     // Хорошая функция для строки - нормальное имя - запомнить применять
     override fun toString() = name

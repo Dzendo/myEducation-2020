@@ -36,18 +36,21 @@ import java.util.Calendar
  * Объявление информации о столбце позволяет переименовывать переменные без реализации
  * миграция базы данных, так как имя столбца не изменится.
  */
-// Это по сути строчка из будущей таблицы SQL (аннотированный класс данных) наверное Garden
-// первый обязательный элемент построения ROOM
+
+// Это по сути строчка из будущей таблицы SQL garden_plantings (аннотированный класс данных garden_plantings)
+// первый обязательный элемент построения ROOM таблицы объявдение @Entity data class
 @Entity(
     tableName = "garden_plantings",     // имя таблицы
-    foreignKeys = [                     // внешние Ключи таблицы ????
+    foreignKeys = [                     // Внешние ключи позволяют связывать таблицы между собой.
         ForeignKey(entity = Plant::class, parentColumns = ["id"], childColumns = ["plant_id"])
+        // т.е. здесь (в Garden) могут быть только растения с (plant_id) лат названием имеющимся в Plant (id)
+    // Другие т.е. которых нет в Plant в Garden не добавятся; Также не даст удалить из Plant при посаженном в Garden
     ],
-    indices = [Index("plant_id")]  // индекс ???
+    indices = [Index("plant_id")]  // ндекс может повысить производительность таблицы, м.б. указан в @ColumnInfo
 )
 // Класс данных хранимых в строках таблицы с его полями
 data class GardenPlanting(
-        // Видимо имя растения которое передается при создании строчки и участвует в Index и ForeignKey
+        // Имя растения латинское которое передается при создании строчки и участвует в Index и ForeignKey
     @ColumnInfo(name = "plant_id") val plantId: String,  // видимо id из Plant имя тоже plantId в обоих
 
     /**
@@ -56,7 +59,7 @@ data class GardenPlanting(
      * Указывает, когда было посажено [растение]. Используется для отображения уведомлений, когда пришло время
      * чтобы собрать урожай с растения.
      */
-    @ColumnInfo(name = "plant_date") val plantDate: Calendar = Calendar.getInstance(),
+    @ColumnInfo(name = "plant_date") val plantDate: Calendar = Calendar.getInstance(),  // т.е. сегодня
 
     /**
      * Indicates when the [Plant] was last watered. Used for showing notification when it's
@@ -66,9 +69,13 @@ data class GardenPlanting(
      */
     @ColumnInfo(name = "last_watering_date")
     val lastWateringDate: Calendar = Calendar.getInstance()  // а через сколько поливать в Plant
-) {      //  первичный ключ Room авто создает идентификатор для каждого объекта.
+) {      //  первичный ключ Room авто создает идентификатор для каждого объекта. Здесь id - число Long
         // Это гарантирует, что идентификатор для каждого растения уникален.
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var gardenPlantingId: Long = 0
+    // заметить что id не входит в параметры, а просто переменная класса, но в базу пишется
+    // свойство id не  будет учитываться в реализациях функций toString(), equals(), hashCode() и copy(),
+    // и из него не будет создана только компонентная функция componentN().
+    // Даже если два объекта класса Person будут иметь разные значения свойств id, они будут считаться равными.
 }

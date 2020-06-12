@@ -26,8 +26,11 @@
         <variable
             name="viewModel"
             type="com.google.samples.apps.sunfloweras.viewmodels.PlantAndGardenPlantingsViewModel"/>
+        <variable
+            name="garden"
+            type="com.google.samples.apps.sunfloweras.data.GardenPlanting"/>
     </data>
-
+    <!-- внимание - это класс объявленный здесь в программе -->
     <com.google.samples.apps.sunfloweras.views.MaskedCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

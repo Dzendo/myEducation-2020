@@ -1,0 +1,2 @@
+rootProject.name = "Add_Template"
+include ':app'

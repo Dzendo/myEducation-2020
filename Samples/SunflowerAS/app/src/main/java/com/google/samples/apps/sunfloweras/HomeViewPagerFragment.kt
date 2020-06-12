@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.samples.apps.sunfloweras.adapters.MY_GARDEN_PAGE_INDEX
@@ -29,12 +28,22 @@ import com.google.samples.apps.sunfloweras.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunfloweras.adapters.SunflowerPagerAdapter
 import com.google.samples.apps.sunfloweras.databinding.FragmentViewPagerBinding
 
+/**
+Вызывается NavHostFragment как стартовый nav_garden.xml
+Работает через viewPager2 - грузит fragment_view_pager.xml
+Меняет через адаптер adapters/SunflowerPagerAdapter.kt два фрагмента:
+GardenFragment() - вид садика
+PlantListFragment() - вид магазина
+ViewPager2 построен на компоненте RecyclerView
+ вызов Деталей производит
+ Возврат назад производит
+ */
 class HomeViewPagerFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,   // Надуватель
         container: ViewGroup?,      // Контейнер фрагмента который будем надувать
-        savedInstanceState: Bundle? // передаваемые аргументы
+        savedInstanceState: Bundle? // передаваемые аргументы (здесь нет)
     ): View? {   // возвращает View?, т.е. binding.root, который надо засветить в этом фрагменте
 
         // Каким-то загадочным образом надуваем в binding layout/fragment_view_pager.xml сразу
@@ -42,19 +51,22 @@ class HomeViewPagerFragment : Fragment() {
         // равнозначно записи ниже с явным указанием XML, но короче через Binding
         //val binding: FragmentViewPagerBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_view_pager, container, false)
 
-        val tabLayout = binding.tabs        // Полоса для переключения под Sunflower
-        val viewPager = binding.viewPager   // сам квадрат внизу-поле для высветки фрагментов
+        val tabLayout = binding.tabs        // Полоса для переключения под SunflowerAS для пиктушек, названий и подчеркивания
+        val viewPager = binding.viewPager   // сам квадрат внизу-поле для высветки фрагментов типа ViewPager2
 
         // Используется Скольжение между фрагментами с помощью ViewPager2 - подключенная библиотека androidx
         // устанавливается для viewPager.adapter = SunflowerPagerAdapter(этого фрагмента) а это  ViewPager2
 
+        // Адптеру поля типа ViewPager2 устанавливается "наш" адаптер SunflowerPagerAdapter - в нем две страницы-фрагмента
         viewPager.adapter = SunflowerPagerAdapter(this)
+        // далее ViewPager2 сам будет следить и переключать нужную страницу
 
         // Set the icon and text for each tab - Установите значок и текст для каждой вкладки
+        // com.google.android.material.tabs.TabLayoutMediator - Посредник для связывания TabLayout с ViewPager2
         // в tabLayout загоняется Lambda установки  Иконки и подпись на место tab в зависимости от position
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setIcon(getTabIcon(position))
-            tab.text = getTabTitle(position)
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->   // т.е. ему передается binding.tabs и binding.viewPager он их связывает
+            tab.setIcon(getTabIcon(position))       // Иконка загоняется в tabs т.е. в спец  поле в xml
+            tab.text = getTabTitle(position)        // слова тоже в com.google.android.material.tabs.TabLayout
         }.attach()
         // т.е. приатачивается к TabLayout станд. библ. функция Mediator и ей декларируется что переключать и как
         // Когда там где-то под капотом будет переключаться viewPager 0-1 то по вызову сюда будет присваиваться
@@ -62,14 +74,17 @@ class HomeViewPagerFragment : Fragment() {
 
         // Установка toolbar вверху экрана(activity) с названием программы посередине из XML toolbar
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        // сам toolbar указан в XML и там же стоит что он будет сворачивания панелей инструментов, CollapsingToolbarLayout
 
+        // Когда все-все снарядили своей xml то и передали на высветку навхосту а он высветит в нужном месте
+        // когда начнет высвечивать, но придется вызвать адаптер, а он позовет нужный фрвгмент и будет счастье
         return binding.root
     }
     // возвращается ссылка на иконку 0-цветочек или 1-листочки
     private fun getTabIcon(position: Int): Int {
         return when (position) {
-            MY_GARDEN_PAGE_INDEX -> R.drawable.garden_tab_selector
-            PLANT_LIST_PAGE_INDEX -> R.drawable.plant_list_tab_selector
+            MY_GARDEN_PAGE_INDEX -> R.drawable.garden_tab_selector      // переключатель xml яркий/неяркий цветочек
+            PLANT_LIST_PAGE_INDEX -> R.drawable.plant_list_tab_selector // переключатель xml яркий/неяркий листочек
             else -> throw IndexOutOfBoundsException()
         }
     }

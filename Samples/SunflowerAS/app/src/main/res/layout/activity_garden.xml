@@ -18,17 +18,16 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- вставил из урока 3 - ничего не изменилось??? дело в теме-->
-    <androidx.drawerlayout.widget.DrawerLayout
+
+    <!-- вставил из урока 3 - ничего не изменилось - нужен для левого/правого бутерброда с выдвижным меню-->
+    <!--androidx.drawerlayout.widget.DrawerLayout -->
+    <!--FrameLayout  Исходный от SunF вместе с фрагментом
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"-->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
+            <!--fragment -->
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
@@ -36,6 +35,6 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_garden"/>
 
-    </FrameLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+    <!--/FrameLayout-->
+    <!--/androidx.drawerlayout.widget.DrawerLayout-->
 </layout>

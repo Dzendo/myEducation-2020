@@ -22,13 +22,15 @@ import androidx.room.Relation
 /**
  * This class captures the relationship between a [Plant] and a user's [GardenPlanting], which is
  * used by Room to fetch the related entities.
- * Этот класс фиксирует связь между [растением] и [посадкой сада] пользователя, которая является
+ * Этот класс фиксирует связь между [растением] и [посадкой сада] пользователя, которая
  * используется комнатой для извлечения связанных сущностей.
+ * Имеет свою ViewModel
  */
 data class PlantAndGardenPlantings(
-    @Embedded
+    @Embedded  // Определяет класс, экземпляры которого хранятся как неотъемлемая часть исходного объекта
     val plant: Plant,
 
+    // **********************  что-то сложное изучать *************************
     @Relation(parentColumn = "id", entityColumn = "plant_id")
     val gardenPlantings: List<GardenPlanting> = emptyList()
 )

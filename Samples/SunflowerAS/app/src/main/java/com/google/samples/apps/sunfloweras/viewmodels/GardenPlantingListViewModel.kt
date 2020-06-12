@@ -23,16 +23,16 @@ import com.google.samples.apps.sunfloweras.data.GardenPlantingRepository
 import com.google.samples.apps.sunfloweras.data.PlantAndGardenPlantings
 import kotlinx.coroutines.launch
 
+// создается в  GardenFragment через provideGardenPlantingListViewModelFactory
 class GardenPlantingListViewModel internal constructor(
-    gardenPlantingRepository: GardenPlantingRepository
+        private val gardenPlantingRepository: GardenPlantingRepository
 ) : ViewModel() {
     val plantAndGardenPlantings: LiveData<List<PlantAndGardenPlantings>> =
             gardenPlantingRepository.getPlantedGardens()
 
-    val _gardenPlantingRepository = gardenPlantingRepository
     fun clearGarden(){
         viewModelScope.launch {
-            _gardenPlantingRepository.clearGarden()
+            gardenPlantingRepository.clearGarden()
         }
     }
 }

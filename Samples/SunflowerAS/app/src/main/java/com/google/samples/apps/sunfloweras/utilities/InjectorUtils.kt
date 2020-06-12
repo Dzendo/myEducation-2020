@@ -27,19 +27,24 @@ import com.google.samples.apps.sunfloweras.viewmodels.PlantListViewModelFactory
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
+ * Статические методы используются для введения классов, необходимых для различных действий и фрагментов.
  */
 object InjectorUtils {
 
+    // вызывается из  функции providePlantListViewModelFactory и providePlantDetailViewModelFactory ниже
     private fun getPlantRepository(context: Context): PlantRepository {
         return PlantRepository.getInstance(
                 AppDatabase.getInstance(context.applicationContext).plantDao())
     }
-
+    // вызывается из следующей функции provideGardenPlantingListViewModelFactory и providePlantDetailViewModelFactory ниже
     private fun getGardenPlantingRepository(context: Context): GardenPlantingRepository {
         return GardenPlantingRepository.getInstance(
                 AppDatabase.getInstance(context.applicationContext).gardenPlantingDao())
+        // создает/получает базу данных вызывая getInstance а та зотет buildDatabase
+        // gardenPlantingDao говорит что нужна база именно садика
     }
 
+    // вызывается из GardenFragment при создании/подхвате viewModel через by viewModels
     fun provideGardenPlantingListViewModelFactory(
         context: Context
     ): GardenPlantingListViewModelFactory {
@@ -47,11 +52,12 @@ object InjectorUtils {
         return GardenPlantingListViewModelFactory(repository)
     }
 
+    // вызывается из PlantListFragment  при создании/подхвате viewModel через by viewModels
     fun providePlantListViewModelFactory(fragment: Fragment): PlantListViewModelFactory {
         val repository = getPlantRepository(fragment.requireContext())
         return PlantListViewModelFactory(repository, fragment)
     }
-
+    // вызывается из PlantDetailFragment при создании/подхвате viewModel через by viewModels
     fun providePlantDetailViewModelFactory(
         context: Context,
         plantId: String

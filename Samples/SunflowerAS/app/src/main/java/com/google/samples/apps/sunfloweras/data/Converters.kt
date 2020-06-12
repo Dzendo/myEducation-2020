@@ -22,6 +22,9 @@ import java.util.Calendar
 /**
  * Type converters to allow Room to reference complex data types.
  * Преобразователи типов позволяют Room ссылаться на сложные типы данных.
+ * Используются в файле AppDatabase.kt с аннотацией при создании баз данных к абстактному классу
+ * Также есть тестовый файл на эти конверторы
+ * Не нашел реального использования в текстах ПОКА Может быть сделаны для образца и заготовки
  */
 class Converters {
     @TypeConverter fun calendarToDatestamp(calendar: Calendar): Long = calendar.timeInMillis

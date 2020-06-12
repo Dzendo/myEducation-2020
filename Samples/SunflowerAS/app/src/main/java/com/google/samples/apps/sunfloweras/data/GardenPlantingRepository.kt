@@ -16,8 +16,15 @@
 
 package com.google.samples.apps.sunfloweras.data
 
-import androidx.lifecycle.LiveData
-
+/**
+ * Repository module for handling data operations.
+ * Модуль репозитория для обработки операций с данными.
+ * Работает полностью через DAO интерфейс
+ */
+/*
+Здесь в sunfloweras пристроен просто так прогонно, т.к. нет инета и нет кеширования
+Практически здесь повторяет DAO и через него обращается к ROOM - образец и реализует DAO
+ */
 class GardenPlantingRepository private constructor(
     private val gardenPlantingDao: GardenPlantingDao
 ) {
@@ -45,7 +52,7 @@ class GardenPlantingRepository private constructor(
 
         // For Singleton instantiation Для одноэлементный экземпляр
         @Volatile private var instance: GardenPlantingRepository? = null
-
+        // создание самого репозиторя (Static)  и базы данных через  private constructor
         fun getInstance(gardenPlantingDao: GardenPlantingDao) =
                 instance ?: synchronized(this) {
                     instance ?: GardenPlantingRepository(gardenPlantingDao).also { instance = it }

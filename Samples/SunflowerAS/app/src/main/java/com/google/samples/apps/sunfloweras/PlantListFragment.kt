@@ -31,6 +31,9 @@ import com.google.samples.apps.sunfloweras.databinding.FragmentPlantListBinding
 import com.google.samples.apps.sunfloweras.utilities.InjectorUtils
 import com.google.samples.apps.sunfloweras.viewmodels.PlantListViewModel
 
+// Строит фрагмент Plant на первом экране когда позовет ViewPager2 в поле, опреденное в ВТОРОЙ ФРАГМЕНТ
+// <androidx.viewpager2.widget.ViewPager2
+//            android:id="@+id/view_pager"
 class PlantListFragment : Fragment() {
 
     private val viewModel: PlantListViewModel by viewModels {
@@ -42,7 +45,7 @@ class PlantListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Надуваться будет fragment_plant_list.xml
+        // Надуваться будет fragment_plant_list.xml - вид для вывода в RecyclerView корточек list_item_plant.xml в две колонки
         val binding = FragmentPlantListBinding.inflate(inflater, container, false)
         context ?: return binding.root      // по моему если садика еще нет
 

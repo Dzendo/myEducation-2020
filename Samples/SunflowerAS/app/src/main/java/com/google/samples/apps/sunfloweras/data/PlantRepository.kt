@@ -19,6 +19,11 @@ package com.google.samples.apps.sunfloweras.data
 /**
  * Repository module for handling data operations.
  * Модуль репозитория для обработки операций с данными.
+ * Работает полностью через DAO интерфейс
+ */
+/*
+Здесь в sunfloweras пристроен просто так прогонно, т.к. нет инета и нет кеширования
+Практически здесь повторяет DAO и через него обращается к ROOM - образец и реализует DAO
  */
 class PlantRepository private constructor(private val plantDao: PlantDao) {
 
@@ -30,10 +35,10 @@ class PlantRepository private constructor(private val plantDao: PlantDao) {
             plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)
 
     companion object {
-        // создание самого репозиторя (Static)  и базы данных
+
         // For Singleton instantiation
         @Volatile private var instance: PlantRepository? = null
-
+        // создание самого репозиторя (Static)  и базы данных
         fun getInstance(plantDao: PlantDao) =
                 instance ?: synchronized(this) {
                     instance ?: PlantRepository(plantDao).also { instance = it }

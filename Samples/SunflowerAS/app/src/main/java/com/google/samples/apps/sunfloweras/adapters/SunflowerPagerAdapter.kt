@@ -21,9 +21,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.samples.apps.sunfloweras.GardenFragment
 import com.google.samples.apps.sunfloweras.PlantListFragment
 
+// Это на основе стандартного адаптера из androidx.viewpager2.adapter строит в фрагменте this
 const val MY_GARDEN_PAGE_INDEX = 0
 const val PLANT_LIST_PAGE_INDEX = 1
-// Это на основе стандартного адаптера из androidx.viewpager2.adapter строит в фрагменте this
+
 class SunflowerPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     /**
@@ -31,6 +32,7 @@ class SunflowerPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
      * Сопоставление индексов страниц ViewPager с их соответствующими фрагментами
      */
     // Вызывается и выполняется лямбда ниже в createFragment т.е. зовется нужный[0-1] фрагмент
+    // Определена MAP ( число to лямбда содержащая класс - фрагмент который вызывать)
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         MY_GARDEN_PAGE_INDEX to { GardenFragment() },
         PLANT_LIST_PAGE_INDEX to { PlantListFragment() }

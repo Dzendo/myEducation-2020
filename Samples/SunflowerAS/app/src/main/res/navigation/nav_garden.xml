@@ -14,6 +14,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<!-- navigation/nav_garden.xml - Основной файл навигации управляется сверху NavHostFragment
+Какой из фрагментов стартовый:  app:startDestination="@id/view_pager_fragment">
+Содержит все фрагменты с их:
+- именами КТ файлов FRAGMENT  android:name="com.google.samples.apps.sunfloweras.PlantDetailFragment"
+- есть tools:layout="@layout/fragment_plant_detail - имя XML фрагмента для дизайна в AS(необязательно)
+- actions переходов
+- Анимациями входа-выхода и переходов
+- <argument - передаваемыми друг другу
+
+могут быть другие параметры: -->
 
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"

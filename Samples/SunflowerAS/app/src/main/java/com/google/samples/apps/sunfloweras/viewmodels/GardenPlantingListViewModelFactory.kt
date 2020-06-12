@@ -22,7 +22,7 @@ import com.google.samples.apps.sunfloweras.data.GardenPlantingRepository
 
 /**
  * Factory for creating a [GardenPlantingListViewModel] with a constructor that takes a
- * [GardenPlantingRepository].
+ * [GardenPlantingRepository]. Фабрика для создания модели
  */
 class GardenPlantingListViewModelFactory(
     private val repository: GardenPlantingRepository

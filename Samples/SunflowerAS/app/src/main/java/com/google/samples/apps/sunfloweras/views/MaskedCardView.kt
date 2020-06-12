@@ -30,13 +30,15 @@ import android.graphics.RectF
 /**
  * A Card view that clips the content of any shape, this should be done upstream in card,
  * working around it for now.
+ * Вид карты, который зажимает содержимое любой формы, это должно быть сделано вверх по течению в карточке,
+ * пока что я работаю над этим.
  */
 class MaskedCardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = R.attr.materialCardViewStyle
 ) : MaterialCardView(context, attrs, defStyle) {
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi")  // Ограниченный Api
     private val pathProvider = ShapeAppearancePathProvider()
     private val path: Path = Path()
     private val shapeAppearance: ShapeAppearanceModel.Builder = ShapeAppearanceModel.builder(

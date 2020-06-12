@@ -118,7 +118,7 @@ class PlantDetailFragment : Fragment() {
         }       // это конец .apply к binding
         setHasOptionsMenu(true)     // Установить меню - реально только для action_share справа
 
-        var isAddDelete: Boolean? = plantDetailViewModel.isPlanted.value
+        //var isAddDelete: Boolean? = plantDetailViewModel.isPlanted.value
         // Изменяю вид значка и устаеавливаю удалять растение или добавлять наблюдая за посаженностью
         plantDetailViewModel.isPlanted.observe(viewLifecycleOwner, Observer {
             if (it) {

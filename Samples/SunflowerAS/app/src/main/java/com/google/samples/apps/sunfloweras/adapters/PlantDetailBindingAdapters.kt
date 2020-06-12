@@ -13,10 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// используется в fragment_garden.xml (не светить значек фильтра) и использовался в fragment_plant_detail.xml (светить значек +)
+/*
+чтобы использовать такую функцию надо:
+ binding.hasPlantings = !result.isNullOrEmpty()
+
+<data>
+        <variable
+                name="hasPlantings"
+                type="boolean" />
+    </data>
+
+ app:isGone="@{!hasPlantings}"
+ */
 
 package com.google.samples.apps.sunfloweras.adapters
 
 import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
@@ -26,6 +40,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.samples.apps.sunfloweras.R
+// из PlantListFragment для RecyclerView 07,1-5
+//  Android Kotlin Fundamentals 07.2.7: DiffUtil and data binding with RecyclerView
+// TODO: 7. Task: Create binding adapters
 
 @BindingAdapter("imageFromUrl")
 fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
@@ -38,13 +55,23 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
 }
 
 @BindingAdapter("isGone")
+fun bindIsGone(view: View, isGone: Boolean) {
+    view.visibility = if (isGone) {
+        View.GONE
+    } else {
+        View.VISIBLE
+    }
+}
+
+// был для FAB отключил AS для +-
+/*@BindingAdapter("isGone")
 fun bindIsGone(view: FloatingActionButton, isGone: Boolean?) {
     if (isGone == null || isGone) {
         view.hide()
     } else {
         view.show()
     }
-}
+}*/
 
 @BindingAdapter("renderHtml")
 fun bindRenderHtml(view: TextView, description: String?) {
@@ -64,3 +91,50 @@ fun bindWateringText(textView: TextView, wateringInterval: Int) {
 
     textView.text = quantityString
 }
+/*
+BindingAdapter применяется к методам, которые используются для манипулирования значениями how с помощью выражений
+* установите взгляды. Самый простой пример - иметь открытый статический метод, который принимает представление
+* и значение для установки:
+* <p><pre>
+ *<code>@BindingAdapter("android:bufferType")
+ * public static void setBufferType(TextView view, TextView.BufferType bufferType) {
+ *     view.setText(view.getText(), bufferType);
+ * }</code></pre>
+* В приведенном выше примере, когда android:bufferType используется в TextView, метод
+* вызывается setBufferType.
+* <P>в
+* Также можно взять ранее установленные значения, если старые значения перечислены первыми:
+* <p><pre>
+ *<code>@BindingAdapter("android:onLayoutChange")
+ * public static void setOnLayoutChangeListener(View view, View.OnLayoutChangeListener oldValue,
+ *                                              View.OnLayoutChangeListener newValue) {
+ *     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+ *         if (oldValue != null) {
+ *             view.removeOnLayoutChangeListener(oldValue);
+ *         }
+ *         if (newValue != null) {
+ *             view.addOnLayoutChangeListener(newValue);
+ *         }
+ *     }
+ * }</code></pre>
+* Если адаптер привязки может также принимать несколько атрибутов, он будет вызываться только тогда, когда все атрибуты будут совпадать.
+* атрибуты, связанные с адаптером привязки, имеют связанные с ними выражения привязки.
+* Это полезно, когда существуют необычные взаимодействия между атрибутами. Например:
+<p><pre>
+ *<code>@BindingAdapter({"android:onClick", "android:clickable"})
+ * public static void setOnClick(View view, View.OnClickListener clickListener,
+ *                               boolean clickable) {
+ *     view.setOnClickListener(clickListener);
+ *     view.setClickable(clickable);
+ * }</code></pre>
+* Порядок параметров должен совпадать с порядком атрибутов в значениях в таблице.
+* BindingAdapter.
+* <P>в
+* Адаптер привязки может дополнительно принять класс, расширяющий компонент DataBinding, в качестве первого
+* параметр также. Если это так, то ему будет передано значение, переданное во время привязки, либо
+* непосредственно в методе надувания или косвенно, используя значение из
+* {@link DataBindingUtil#getdefaultкомпонент()}.
+* <P>в
+* Если адаптер привязки является методом экземпляра, то сгенерированный компонент DataBinding Component будет иметь
+* геттер для получения экземпляра класса BindingAdapter, который будет использоваться для вызова метода.
+ */
