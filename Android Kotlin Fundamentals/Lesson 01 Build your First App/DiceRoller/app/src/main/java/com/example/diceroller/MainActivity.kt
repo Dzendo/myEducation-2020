@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -28,10 +29,14 @@ class MainActivity : AppCompatActivity() {
     private fun clearDice() {
         diceImage.setImageResource( R.drawable.empty_dice)
         diceImage2.setImageResource( R.drawable.empty_dice)
+        Toast.makeText(this, " clear button clicked",
+            Toast.LENGTH_SHORT).show()
     }
     private fun rollDice() {
         diceImage.setImageResource(getRandomDiceImage())
         diceImage2.setImageResource(getRandomDiceImage())
+        Toast.makeText(this, " roll button clicked",
+            Toast.LENGTH_SHORT).show()
     }
     private fun getRandomDiceImage(): Int {
         val randomInt = (1..6).random()
