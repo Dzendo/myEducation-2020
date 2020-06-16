@@ -24,7 +24,10 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-/*import androidx.databinding.DataBindingUtil
+
+/*import android.view.LayoutInflater
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -44,9 +47,22 @@ class GardenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView<ActivityGardenBinding>(this,R.layout.activity_garden)
         delayedInit()
+        setContentView<ActivityGardenBinding>(this,R.layout.activity_garden) // Tien
+
+        /* из документации создание binding AS
+        val binding1: ActivityGardenBinding = ActivityGardenBinding.inflate(layoutInflater)  // статических методов
+        setContentView(binding1.root)
+        val binding2: ActivityGardenBinding = ActivityGardenBinding.inflate(layoutInflater, viewGroup, false) // ViewGroup объект в дополнение
+        val viewRoot = LayoutInflater.from(this).inflate(R.layout.activity_garden, parent, false)
+        val binding3: ActivityGardenBinding = ActivityGardenBinding.bind(viewRoot) // макет был накачан - связать отдельно
+        val binding4: ViewDataBinding? = DataBindingUtil.bind(viewRoot)  //тип привязки не известен заранее
+
+        val listItemBinding1 = ListItemBinding.inflate(layoutInflater, viewGroup, false)
+        // or for Fragment, ListView, or RecyclerView adapter
+        val listItemBinding2 = DataBindingUtil.inflate(layoutInflater, R.layout.list_item, viewGroup, false)
+        // <data class="ContactItem"> дать свое имя и разместить в тек пакете
+         */
     }
     // Запланировать WorkManager по лекции  Android Kotlin Основы 09.2: WorkManager
     private fun delayedInit() {

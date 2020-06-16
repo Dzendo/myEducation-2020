@@ -23,8 +23,8 @@ plugins {
     // Adding the apply plugin statement for safeargs - генеритует GameFragmentDirections классы
 }
 android {
-    compileSdkVersion 'android-R'
-    buildToolsVersion '30.0.0 rc4'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
 
     defaultConfig {
         applicationId 'com.example.android.navigation'
