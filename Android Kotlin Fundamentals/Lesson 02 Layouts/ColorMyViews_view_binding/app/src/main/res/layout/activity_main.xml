@@ -6,8 +6,9 @@
     android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="makeColored"
     tools:context=".MainActivity">
-
+    <!--tools:viewBindingIgnore="true" отключает-->
     <TextView
         android:id="@+id/box_one_text"
         style="@style/WhiteBox"
@@ -16,6 +17,7 @@
         android:layout_marginLeft="@dimen/margin_width"
         android:layout_marginTop="@dimen/margin_width"
         android:layout_marginRight="@dimen/margin_width"
+        android:onClick="makeColored"
         android:text="@string/box_one"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -28,6 +30,7 @@
         android:layout_height="130dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:onClick="makeColored"
         android:text="@string/box_two"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/box_one_text" />
@@ -39,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:onClick="makeColored"
         android:text="@string/box_three"
         app:layout_constraintBottom_toTopOf="@+id/box_four_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +58,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:onClick="makeColored"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/box_four"
         app:layout_constraintBottom_toTopOf="@+id/box_five_text"
@@ -68,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:onClick="makeColored"
         android:text="@string/box_five"
         app:layout_constraintBottom_toBottomOf="@+id/box_two_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,11 +112,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:onClick="makeColored"
         android:text="@string/button_red"
         app:layout_constraintBaseline_toBaselineOf="@+id/yellow_button"
         app:layout_constraintEnd_toStartOf="@+id/yellow_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/yellow_button"
@@ -120,6 +128,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:onClick="makeColored"
         android:text="@string/button_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/green_button"
@@ -133,6 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:onClick="makeColored"
         android:text="@string/button_green"
         app:layout_constraintBaseline_toBaselineOf="@+id/yellow_button"
         app:layout_constraintEnd_toEndOf="parent"

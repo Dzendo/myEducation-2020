@@ -32,11 +32,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // The layout for this activity is a Data Binding layout so it needs to be inflated using
+        // Макет для этого действия является макетом привязки данных, поэтому его необходимо раздуть с помощью
         // DataBindingUtil.
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(
                 this, R.layout.activity_main)
 
         // The returned binding has references to all the Views with an ID.
+        // Возвращаемая привязка содержит ссылки на все представления с идентификатором.
         binding.observableFieldsActivityButton.setOnClickListener {
             startActivity(Intent(this, ObservableFieldActivity::class.java))
         }
