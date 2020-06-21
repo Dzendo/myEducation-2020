@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.android.navdriverwithbase.ui.basic.FirstFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.example.android.navdriverwithbase.ui.basic.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+    <activity
+        android:id="@+id/mainActivityBasic"
+        android:name="com.example.android.navdriverwithbase.MainActivityBasic"
+        android:label="Main Activity Basic"
+        tools:layout="@layout/activity_main_basic" />
+
+    <activity
+        android:id="@+id/mainActivityNDA"
+        android:name="com.example.android.navdriverwithbase.MainActivityNDA"
+        android:label="Main Activity NDA"
+        tools:layout="@layout/activity_main_nda" />
+    <fragment android:id="@+id/placeholder" />
+    <include app:graph="@navigation/mobile_navigation" />
+    <include app:graph="@navigation/nav_graph" />
+    <activity
+        android:id="@+id/mainActivityAll"
+        android:name="com.example.android.navdriverwithbase.MainActivityAll"
+        android:label="MainActivityAll" />
+    <activity
+        android:id="@+id/mainActivityEmpty"
+        android:name="com.example.android.navdriverwithbase.MainActivityEmpty"
+        android:label="activity_main_empty"
+        tools:layout="@layout/activity_main_empty" />
+</navigation>

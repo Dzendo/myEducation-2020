@@ -18,7 +18,6 @@ package com.example.android.navigation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -27,18 +26,25 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.android.navigation.databinding.ActivityMainBinding
 
+//import com.example.android.navigation.databinding.ActivityMainBinding
+
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout   // бутерброд
     private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("UNUSED_VARIABLE")
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        //@Suppress("UNUSED_VARIABLE")  // для датабиндинга через layout:
+        //val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+                val binding = ActivityMainBinding.inflate(layoutInflater) // ок работает
+                setContentView(binding.root)    //  viewBinding = true без layout 
+
+
         // В следующих шагах вы используете контроллер навигации, чтобы добавить кнопку Up (<-) в свое приложение:
         // 1. Свяжите NavController с панелью действий с помощью NavigationUI.setupWithNavController.
         // код, чтобы найти объект контроллера навигации:  (используя функцию расширения KTX)
         val navController = this.findNavController(R.id.myNavHostFragment)
         drawerLayout = binding.drawerLayout
+
         //код, чтобы связать контроллер навигации с панелью приложения:
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
 

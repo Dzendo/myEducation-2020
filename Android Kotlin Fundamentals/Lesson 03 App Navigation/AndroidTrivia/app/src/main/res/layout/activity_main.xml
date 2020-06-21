@@ -14,18 +14,20 @@
   ~ limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"-->
 
     <androidx.drawerlayout.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
+    <!--LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"-->
 
 
 
@@ -50,7 +52,7 @@
                 app:defaultNavHost="true" />
             <!-- Теперь этот хост навигации является хостом по умолчанию и будет перехватывать системную кнопку Назад.-->
 
-        </LinearLayout>
+        <!--/LinearLayout-->
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navView"
             android:layout_width="wrap_content"
@@ -60,4 +62,4 @@
             app:menu="@menu/navdrawer_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-</layout>
+<!--/layout-->

@@ -25,6 +25,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.android.navigation.databinding.FragmentGameBinding
+import com.example.android.navigation.GameFragmentDirections
+//build\generated\source\navigation-args\debug\com\example\android\navigation\GameFragmentDirections.java
 import kotlin.math.min
 
 class GameFragment : Fragment() {

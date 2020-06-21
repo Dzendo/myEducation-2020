@@ -22,6 +22,7 @@ class TitleFragment : Fragment() {
         //val binding = DataBindingUtil.inflate<FragmentTitleBinding>(inflater,
         val binding: FragmentTitleBinding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_title,container,false)
+       
 
         //The complete onClickListener with Navigation using createNavigateOnClickListener 1-ый вариант
         // binding.playButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment))
@@ -29,9 +30,9 @@ class TitleFragment : Fragment() {
         //The complete onClickListener with Navigation - 2-ый вариант
         binding.playButton.setOnClickListener { view: View ->
             view.findNavController()
-            //      .navigate(R.id.action_titleFragment_to_gameFragment) }
+                  .navigate(R.id.action_titleFragment_to_gameFragment) }
         // теперь используя идентификатор действия эквивалентным методом из соответствующего NavDirection класса 3-ый вариант
-                    .navigate(TitleFragmentDirections.actionTitleFragmentToGameFragment())}
+             //       .navigate(TitleFragmentDirections.actionTitleFragmentToGameFragment())}
 
         setHasOptionsMenu(true)     // Установка меню три точки для этого фрагмент
         Log.i("TitleFragment", "onCreateView called")
