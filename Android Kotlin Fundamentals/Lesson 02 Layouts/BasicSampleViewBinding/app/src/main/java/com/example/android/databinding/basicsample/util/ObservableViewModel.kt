@@ -25,7 +25,7 @@ import androidx.databinding.PropertyChangeRegistry
 /**
  * A ViewModel that is also an Observable, to be used with Data Binding.
  * ViewModel, который также является наблюдаемым, который будет использоваться с привязкой данных.
- *  В ProfileObservableViewModel как родительский класс
+ *  В ProfileObservableViewModel как родительский класс Подключен только в тестах
  */
 open class ObservableViewModel : ViewModel(), Observable {
 

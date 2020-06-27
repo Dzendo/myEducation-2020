@@ -26,10 +26,27 @@ import com.example.android.databinding.basicsample.databinding.ActivityMainBindi
 // N:\2020_GCAAD\Android Kotlin Fundamentals\Lesson 02 Layouts\BasicSampleViewBinding
 // \app\build\generated\data_binding_base_class_source_out\debug\out\com\example\android\databinding\basicsample\databinding
 /**
- * Shows a menu. Показывает меню.
+ * Shows a menu. Показывает меню. Итого в сухом остатке:
  */
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+    fun onClick(view: View) = when (view) {
+        binding.observableFieldsActivityButton -> startActivity<ObservableFieldActivity>()
+        binding.viewmodelActivityButton -> startActivity<ViewModelActivity>()
+        else -> startActivity<MainActivity>()
+    }
+}
+private inline fun <reified T: AppCompatActivity> AppCompatActivity.startActivity() =
+        startActivity(Intent(this,T::class.java))
+/*
+// ViewBinding этот модуль
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 // AS
 private inline fun <reified T: AppCompatActivity> AppCompatActivity.startActivity() =
         startActivity(Intent(this,T::class.java))
-
+*/
 // N:\2020_GCAAD\Android Kotlin Fundamentals\Lesson 02 Layouts\BasicSampleViewBinding\app\build\generated\data_binding_base_class_source_out\debug\out\com\example\android\databinding\basicsample\databinding
 
 /*

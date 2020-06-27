@@ -1,14 +1,17 @@
 package com.example.colormyviews_view_binding
 
 import android.R.color.*
-import android.graphics.Color
+import android.graphics.Color.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.colormyviews_view_binding.databinding.ActivityMainBinding
 //import kotlinx.android.synthetic.main.activity_main.*
 
-//  viewBinding  true - Можно включать вместе вроде с dataBinding  true
+//  viewBinding  true - Можно включать вместе с dataBinding  true
+// При этом обернутые в layout - будут dataBinding, не обернутые будут viewBinding
+// не обернутые с tools:viewBindingIgnore="true" будут без Binding
+// если применять этот стандарт то один и тот же текст годится и для viewBinding и dataBindin
 // .idea\modules\ColorMyViews_view_binding.iml
 // build\generated\data_binding_base_class_source_out\debug\out\com\example\colormyviews_view_binding\databinding\ActivityMainBinding.java
 
@@ -26,10 +29,33 @@ class MainActivity : AppCompatActivity() {
         // setListeners() // Отключил и поставил в XML android:onClick="makeColored"
     }
 
-    fun makeColored(view: View) = when (view.id) {
+    fun makeColored(view: View)  = binding.apply {
+        when (view) {
+            // Boxes using Color class colors for background
+            boxOneText -> view.setBackgroundColor(BLUE)
+            boxTwoText -> view.setBackgroundColor(GRAY)
+
+            // Boxes using Android color resources for background
+            boxThreeText -> view.setBackgroundResource(holo_green_light)
+            boxFourText -> view.setBackgroundResource(holo_green_dark)
+            boxFiveText -> view.setBackgroundResource(holo_green_light)
+
+            // Boxes using custom colors for background
+            redButton -> boxThreeText.setBackgroundResource(R.color.my_red)
+            yellowButton -> boxFourText.setBackgroundResource(R.color.my_yellow)
+            greenButton -> boxFiveText.setBackgroundResource(R.color.my_green)
+
+            labelText -> labelText.setBackgroundResource(R.color.white)
+            infoText -> infoText.setBackgroundResource(R.color.white)
+
+            else -> view.setBackgroundColor(DKGRAY)
+        }
+    }
+
+    fun makeColored_findById(view: View) = when (view.id) {
         // Boxes using Color class colors for background
-        R.id.box_one_text -> view.setBackgroundColor(Color.BLUE)
-        R.id.box_two_text -> view.setBackgroundColor(Color.GRAY)
+        R.id.box_one_text -> view.setBackgroundColor(BLUE)
+        R.id.box_two_text -> view.setBackgroundColor(GRAY)
 
         // Boxes using Android color resources for background
         R.id.box_three_text -> view.setBackgroundResource(holo_green_light)
@@ -44,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         R.id.label_text -> binding.labelText.setBackgroundResource(R.color.white)
         R.id.info_text -> binding.infoText.setBackgroundResource(R.color.white)
 
-        else -> view.setBackgroundColor(Color.DKGRAY)
+        else -> view.setBackgroundColor(DKGRAY)
     }
 
     private fun setListeners() = binding.apply {
@@ -70,6 +96,8 @@ class MainActivity : AppCompatActivity() {
             item.setOnClickListener { makeColored(it) }
         }
     }
+
+  
 }
 /*
 Привязка к представлению - это функция, которая позволяет легче писать код, взаимодействующий с представлениями.

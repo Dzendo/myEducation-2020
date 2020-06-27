@@ -24,7 +24,7 @@ import androidx.databinding.ObservableInt
 import com.example.android.databinding.basicsample.R
 import com.example.android.databinding.basicsample.data.ObservableFieldProfile
 import com.example.android.databinding.basicsample.databinding.ObservableFieldProfileBinding
-import com.example.android.databinding.basicsample.databinding.ViewmodelProfileBinding
+
 
 /**
  * This activity shows shows static data and lets the user increment the
@@ -42,8 +42,8 @@ class ObservableFieldActivity : AppCompatActivity() {
 
         //val bindingbas: ObservableFieldProfileBinding =
         //        DataBindingUtil.setContentView(this, R.layout.observable_field_profile)
-        val bindingbas: ObservableFieldProfileBinding =
-               setContentView(this, R.layout.observable_field_profile)
+        // val bindingbas: ObservableFieldProfileBinding =
+        //       setContentView(this, R.layout.observable_field_profile)
         val binding = setContentView<ObservableFieldProfileBinding>(this, R.layout.observable_field_profile)
         binding.user = observableFieldProfile  // переменной user в XML присвоить класс data с Диной
     }
@@ -56,7 +56,7 @@ class ObservableFieldActivity : AppCompatActivity() {
      * логика в деятельности, которая не идеальна. См. {@ссылку на модель представления деятельности} для лучшего
      * решение.
      */
-    fun onLike(view: View) {
+    fun onLike(unused: View) {
         observableFieldProfile.likes.set(observableFieldProfile.likes.get() + 1)
     }
 }

@@ -59,6 +59,16 @@ class ProfileLiveDataViewModel : ViewModel() {
         _likes.value = (_likes.value ?: 0) + 1
     }
 }
+ /* Слушатели могут принимать лямбды, поэтому в этом случае ViewModel имеет дело с событием, в обход активности.
+    <Button
+    android:id="@+id/like_button"
+    android:onClick="@{() -> viewmodel.onLike()}"
+  */
+ enum class Popularity {
+     NORMAL,
+     POPULAR,
+     STAR
+ }
 
 /**
  * As an alternative to LiveData, you can use Observable Fields and binding properties.
@@ -94,12 +104,6 @@ class ProfileObservableViewModel : ObservableViewModel() {
             }
         }
     }
-}
-
-enum class Popularity {
-    NORMAL,
-    POPULAR,
-    STAR
 }
 // расширяется на свойство increment() ObservableInt и используется выше в fun onLike() { likes.increment()
 private fun ObservableInt.increment() {

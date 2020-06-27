@@ -18,6 +18,7 @@
 <resources>
     <color name="colorPrimary">#aed581</color>
     <color name="colorPrimaryLight">#E1E2E1</color>
+    <color name="colorRun">#0526CC</color>
     <color name="colorPrimaryDark">#7da453</color>
     <color name="colorAccent">#add681</color>
     <color name="secondaryLightColor">#819ca9</color>
@@ -25,4 +26,5 @@
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
     <color name="disabledInputColor">#fffafafa</color>
+    <!--color name="disabledInputColor">#819ca9</color-->
 </resources>

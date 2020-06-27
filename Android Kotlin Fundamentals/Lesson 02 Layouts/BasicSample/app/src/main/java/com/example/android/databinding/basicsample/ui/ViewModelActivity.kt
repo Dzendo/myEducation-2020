@@ -17,6 +17,7 @@
 package com.example.android.databinding.basicsample.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil.setContentView
@@ -33,6 +34,7 @@ import com.example.android.databinding.basicsample.databinding.ViewmodelProfileB
  * @see com.example.android.databinding.basicsample.util.BindingAdapters
  */
 class ViewModelActivity : AppCompatActivity() {
+    //private lateinit var binding: ViewmodelProfileBinding
     //private val viewModel1: ProfileLiveDataViewModel by viewModels() - только для фрагментов??? SunFlower
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,8 @@ class ViewModelActivity : AppCompatActivity() {
        // val binding: ViewmodelProfileBinding =
        //         DataBindingUtil.setContentView(this, R.layout.viewmodel_profile)
         val binding = setContentView<ViewmodelProfileBinding>(this, R.layout.viewmodel_profile)
-
+        //binding = ViewmodelProfileBinding.inflate(LayoutInflater)
+        //setContentView(binding.root)
         // Bind layout with ViewModel Привязка макета с помощью ViewModel
         binding.viewmodel = viewModel
 

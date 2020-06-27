@@ -18,6 +18,7 @@ package com.example.android.databinding.basicsample.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.databinding.basicsample.databinding.ActivityMainBinding
 
@@ -25,6 +26,7 @@ import com.example.android.databinding.basicsample.databinding.ActivityMainBindi
  * Shows a menu. Показывает меню.
  */
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +35,12 @@ class MainActivity : AppCompatActivity() {
         // Макет для этого действия является макетом привязки данных, поэтому его необходимо раздуть с помощью
         // DataBindingUtil.
        // val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // The returned binding has references to all the Views with an ID.
         // Возвращаемая привязка содержит ссылки на все представления с идентификатором.
+       /*
         binding.observableFieldsActivityButton.setOnClickListener {
         //    startActivity(Intent(this, ObservableFieldActivity::class.java))
             startActivity<ObservableFieldActivity>()    
@@ -45,7 +48,13 @@ class MainActivity : AppCompatActivity() {
         binding.viewmodelActivityButton.setOnClickListener {
         //    startActivity(Intent(this, ViewModelActivity::class.java))
             startActivity<ViewModelActivity>()    
-        }
+        }*/
+    }
+
+    fun onClick(view: View) = when (view){
+        binding.observableFieldsActivityButton -> startActivity<ObservableFieldActivity>()
+        binding.viewmodelActivityButton -> startActivity<ViewModelActivity>()
+        else -> startActivity<MainActivity>()
     }
 }
 // AS

@@ -28,43 +28,50 @@ import com.example.android.databinding.twowaysample.R
 
 /**
  * A collection of [BindingAdapter]s used to create animations in the app
+ * Коллекция [Binding Adapter]s, используемых для создания анимации в приложении
  */
 object AnimationBindingAdapters {
 
-    private const val VERTICAL_BIAS_ANIMATION_DURATION = 900L
+    private const val VERTICAL_BIAS_ANIMATION_DURATION = 9000L  // 900
 
-    private const val BG_COLOR_ANIMATION_DURATION = 500L
+    private const val BG_COLOR_ANIMATION_DURATION = 5000L       // 500
 
     /**
      * Controls a background color animation.
+     * Управление цветной анимацией фона.
      *
-     * @param view one of the timers (work/rest)
-     * @param timerRunning whether the app timer is running
-     * @param activeStage whether this particular timer (work/rest) is active
+     * @param view one of the timers (work/rest) один из таймеров (работа / отдых)
+     * @param timerRunning whether the app timer is running работает ли таймер приложения
+     * @param activeStage whether this particular timer (work/rest) is active активен ли этот конкретный таймер (работа/отдых)
      */
     @BindingAdapter(value=["animateBackground", "animateBackgroundStage"], requireAll = true)
     @JvmStatic fun animateBackground(view: View, timerRunning: Boolean, activeStage: Boolean) {
         // If the timer is not running, don't animate and set the default color.
+        // Если таймер не работает, не анимируйте и не устанавливайте цвет по умолчанию.
         if (!timerRunning) {
             view.setBackgroundColor(
                     ContextCompat.getColor(view.context, R.color.disabledInputColor))
             // This tag prevents a glitch going from reset to started.
+            // Этот тег предотвращает сбой при переходе от сброса к запуску.
             view.setTag(R.id.hasBeenAnimated, false)
             return
         }
 
         // activeStage controls whether this particular timer (work or rest) is active.
+        // активная стадия определяет, активен ли данный конкретный таймер (работа или отдых).
         if (activeStage) {
-            // Start animation
-            animateBgColor(view, true)
+            // Start animation Запустить анимацию
+            animateBgColor(view, true)   // fun down
             // This tag prevents a glitch going from paused to started.
+            // Этот тег предотвращает сбой, переходящий от приостановки к запуску.
             view.setTag(R.id.hasBeenAnimated, true)
         } else {
             // Prevent "end" animation if animation never started
+            // Запретить анимацию" end", если анимация никогда не начиналась
             val hasItBeenAnimated = view.getTag(R.id.hasBeenAnimated) as Boolean?
-            if (hasItBeenAnimated == true) {  // this means false if null
-                // End animation
-                animateBgColor(view, false)
+            if (hasItBeenAnimated == true) {  // this means false if null это означает false, если null
+                // End animation Конец анимации
+                animateBgColor(view, false)  // fun down
                 view.setTag(R.id.hasBeenAnimated, false)
             }
         }
@@ -72,24 +79,26 @@ object AnimationBindingAdapters {
 
     /**
      * Controls an animation that moves a view up and down.
+     * Управляет анимацией, которая перемещает вид вверх и вниз.
      *
-     * @param view one of the timers (work/rest)
-     * @param timerRunning whether the app timer is running
-     * @param activeStage whether this particular timer (work/rest) is active
+     * @param view one of the timers (work/rest) один из таймеров (работа / отдых)
+     * @param timerRunning whether the app timer is running работает ли таймер приложения
+     * @param activeStage whether this particular timer (work/rest) is active активен ли этот конкретный таймер (работа/отдых)
      */
     @BindingAdapter(value=["animateVerticalBias", "animateVerticalBiasStage"],
             requireAll = true)
     @JvmStatic fun animateVerticalBias(view: View, timerRunning: Boolean, activeStage: Boolean) {
         // Change the vertical bias of the View depending on the current state
+        // Изменение вертикального смещения вида в зависимости от текущего состояния
         when {
-            timerRunning && activeStage -> animateVerticalBias(view, 0.6f) // Workout
-            timerRunning && !activeStage -> animateVerticalBias(view, 0.4f) // Rest
+            timerRunning && activeStage -> animateVerticalBias(view, 0.7f) // Workout fun down
+            timerRunning && !activeStage -> animateVerticalBias(view, 0.3f) // Rest fun down
             else -> animateVerticalBias(view, 0.5f) // Idle
         }
     }
 
     private fun animateBgColor(view: View, tint: Boolean) {
-        val colorRes = ContextCompat.getColor(view.context, R.color.colorPrimaryLight)
+        val colorRes = ContextCompat.getColor(view.context, R.color.colorRun)
         val color2Res = ContextCompat.getColor(view.context, R.color.disabledInputColor)
         val animator = if (tint)
             ObjectAnimator.ofObject(view,

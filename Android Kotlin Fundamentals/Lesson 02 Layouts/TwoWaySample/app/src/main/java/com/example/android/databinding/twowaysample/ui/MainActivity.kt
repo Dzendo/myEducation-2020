@@ -24,6 +24,7 @@ import androidx.databinding.ObservableInt
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.databinding.twowaysample.BR
 import com.example.android.databinding.twowaysample.R
@@ -34,7 +35,7 @@ import com.example.android.databinding.twowaysample.databinding.IntervalTimerBin
 // Константа - имя сохраняемых настроек Preferences
 const val SHARED_PREFS_KEY = "timer"
 
-/**
+/** Весь пример двухсторонней привязки создан на [Observable] [ViewModel] а не на LiveData полях - так вот устаревши
  * This activity only takes care of binding a ViewModel to the layout. All UI calls are delegated
  * to the Data Binding library or Binding Adapters ([BindingAdapters]).
  * Это действие заботится только о привязке ViewModel к макету. Все вызовы пользовательского интерфейса делегируются
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                         getSharedPreferences(SHARED_PREFS_KEY, Context.MODE_PRIVATE) ?: return
                 // Берем редактор Preferences и записываем туда пару ключ-Int
                 sharedPref.edit().apply {
-                    putInt(getString(prefsKey), (observable as ObservableInt).get())
+                    putInt(getString(prefsKey), observable.get())
                     commit() // используйте apply() вместо commit()
                     // Если вы не используете значение, возвращаемое из commit() и вы используете commit() из основного потока,
                 }

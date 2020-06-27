@@ -23,8 +23,11 @@ import androidx.databinding.BindingMethods
 /**
  * `app:srcCompat` is an attribute used by the support library to integrate vector drawables. This
  * BindingMethod binds the attribute to the setImageDrawable method in the ImageView class.
+ * "app: src Compat' - это атрибут, используемый библиотекой поддержки для интеграции векторных чертежей. Этот
+ * Метод привязки связывает атрибут с методом setImageDrawable в классе ImageView.
  *
  * Binding methods have to be applied to any class in your project. Even an empty one.
+ * * Методы привязки должны быть применены к любому классу в вашем проекте. Даже пустой.
  *
  * This is equivalent to:
  * ```

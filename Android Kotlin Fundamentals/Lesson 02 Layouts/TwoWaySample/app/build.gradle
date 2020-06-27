@@ -59,7 +59,7 @@ dependencies {
     //implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.2"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.0"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"

@@ -65,10 +65,8 @@ class ObservableFieldActivity : AppCompatActivity() {
 // ИТОГО В СУхОМ ОСТАТКЕ: Плохой вариант  и не держит поворот телефона (без viewModel)
 class ObservableFieldActivity : AppCompatActivity() {
     private val observableFieldProfile = ObservableFieldProfile("Дина", "Дурыкина")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val binding =  ObservableFieldProfileBinding.inflate(layoutInflater)
         binding.user = observableFieldProfile  // переменной user в XML присвоить класс data с Диной
         setContentView(binding.root)

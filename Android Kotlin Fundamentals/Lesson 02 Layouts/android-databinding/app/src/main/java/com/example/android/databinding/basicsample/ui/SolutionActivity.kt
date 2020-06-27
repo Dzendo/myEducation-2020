@@ -34,7 +34,7 @@ class SolutionActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProvider(this).get(SimpleViewModelSolution::class.java)
     }
-
+    //private val viewModel: GardenPlantingListViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
