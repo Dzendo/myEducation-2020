@@ -25,6 +25,7 @@ import com.example.android.navigationadvancedsample.R
 
 /**
  * Shows "Done".
+ * Показывает "Готово".
  */
 class Registered : Fragment() {
     override fun onCreateView(

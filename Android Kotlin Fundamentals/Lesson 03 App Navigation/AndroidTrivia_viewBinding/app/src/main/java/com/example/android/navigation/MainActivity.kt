@@ -22,9 +22,54 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.example.android.navigation.databinding.ActivityMainBinding
+//import kotlinx.android.synthetic.main.activity_main.*
+
+/**
+ * LAUNCHER ViewBinding Save-args drawerLayout
+ * Организует в XML место для фрагиентов навигации
+ * CTRL/O - все ovveride fun
+ *
+ * Options Menus
+ * Bottom Navigation
+ * Navigation View
+ * Navigation Drawer
+ *
+ * Action Bar
+ * Toolbar
+ * Collapsing Toolbar
+ *
+ */
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var navController: NavController
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater) // ок работает
+        setContentView(binding.root)    //  viewBinding = true без layout
+        navController = this.findNavController(R.id.myNavHostFragment)// Переделать в Binding если возможно
+        NavigationUI.setupWithNavController(binding.navdrawerNavView, navController) // Запускает в работу переход по пунктам шторки по именам
+        NavigationUI.setupActionBarWithNavController(this,navController, binding.navdrawerLayout)
+        // первый аргумент ставит navController в BAR, а второй ставит наверх бутерброд и <--
+        // запретить навигационный жест, если он не включен в пункт назначения запуска
+        navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
+            if (nd.id == nc.graph.startDestination)
+                binding.navdrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            else
+                binding.navdrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        }
+        // Ставит нижнее меню с тремя фрагментами и больше ничего не надо - все работает
+        binding.bottomNavView.setupWithNavController(navController)
+    }
+    // Включает работу бутерброда и <-- (без этого светятся, но не работают)
+    override fun onSupportNavigateUp(): Boolean = NavigationUI.navigateUp(navController, binding.navdrawerLayout)
+}
+// Если с бутербродом ничего не делать - шторка слева будет выдвигаться все равно
 
 /*
 class MainActivity : AppCompatActivity() {
@@ -81,17 +126,14 @@ class MainActivity : AppCompatActivity() {
 }
 */
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var drawerLayout: DrawerLayout
-     private lateinit var navController: NavController
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater) // ок работает
-        setContentView(binding.root)    //  viewBinding = true без layout
-        drawerLayout = binding.drawerLayout
-        navController = this.findNavController(R.id.myNavHostFragment)
-        NavigationUI.setupActionBarWithNavController(this,navController, drawerLayout)
-        NavigationUI.setupWithNavController(binding.navView, navController)
-    }
-    override fun onSupportNavigateUp(): Boolean = NavigationUI.navigateUp(navController, drawerLayout)
-}
+/*
+ val navView: BottomNavigationView = findViewById(R.id.nav_view)
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+ */

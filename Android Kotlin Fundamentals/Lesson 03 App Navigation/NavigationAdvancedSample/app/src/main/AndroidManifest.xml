@@ -20,13 +20,13 @@
           package="com.example.android.navigationadvancedsample">
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:allowBackup="true">
         <activity android:name="com.example.android.navigationadvancedsample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,6 +34,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- This is added to handle a deep link -->
+
+            <!--fragment в файле list.xml
+                android:id="@+id/userProfile"
+                android:name="com.example.android.navigationadvancedsample.listscreen.UserProfile"
+                android:label="@string/title_detail"
+                tools:layout="@layout/fragment_user_profile">
+            <deepLink
+                android:id="@+id/deepLink"
+                app:uri="www.example.com/user/{userName}" Person 2
+                android:autoVerify="true"/-->
             <nav-graph android:value="@navigation/list" />
         </activity>
     </application>

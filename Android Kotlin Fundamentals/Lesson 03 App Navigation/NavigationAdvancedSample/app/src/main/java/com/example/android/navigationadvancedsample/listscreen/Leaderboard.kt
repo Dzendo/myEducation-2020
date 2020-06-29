@@ -30,12 +30,14 @@ import com.example.android.navigationadvancedsample.R
 
 /**
  * Shows a static leaderboard with multiple users.
+ * Показывает статическую таблицу лидеров с несколькими пользователями.
  */
 class Leaderboard : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        // Раздуть макет для этого фрагмента
         val view = inflater.inflate(R.layout.fragment_leaderboard, container, false)
 
         val viewAdapter = MyAdapter(Array(10) { "Person ${it + 1}" })
@@ -43,9 +45,13 @@ class Leaderboard : Fragment() {
         view.findViewById<RecyclerView>(R.id.leaderboard_list).run {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
+            // используйте этот параметр для повышения производительности,
+            // если вы знаете, что нет изменения in content не изменяйте размер макета RecyclerView
             setHasFixedSize(true)
 
             // specify an viewAdapter (see also next example)
+            // укажите viewAdapter (см. Также следующий пример)
+            // adapter RecyclerView = val viewAdapter
             adapter = viewAdapter
 
         }
@@ -61,13 +67,18 @@ class MyAdapter(private val myDataset: Array<String>) :
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
+    // Укажите ссылку на представления для каждого элемента данных
+    // Сложные элементы данных могут нуждаться в более чем одном представлении для каждого элемента, и
+    // вы предоставляете доступ ко всем представлениям для элемента данных в держателе представлений.
+    // Каждый элемент данных в этом случае является просто строкой, которая отображается в текстовом представлении.
     class ViewHolder(val item: View) : RecyclerView.ViewHolder(item)
 
 
     // Create new views (invoked by the layout manager)
+    // Создание новых представлений (вызывается менеджером компоновки)
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
-        // create a new view
+        // create a new view создание нового представления
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_view_item, parent, false)
 
@@ -76,9 +87,12 @@ class MyAdapter(private val myDataset: Array<String>) :
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    // Заменить содержимое представления (вызывается диспетчером компоновки)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        // - получить элемент из вашего набора данных в этой позиции
+        // - заменить содержимое представления этим элементом
         holder.item.findViewById<TextView>(R.id.user_name_text).text = myDataset[position]
 
         holder.item.findViewById<ImageView>(R.id.user_avatar_image)
@@ -94,6 +108,7 @@ class MyAdapter(private val myDataset: Array<String>) :
     }
 
     // Return the size of your dataset (invoked by the layout manager)
+    // Возвращает размер набора данных (вызывается менеджером компоновки)
     override fun getItemCount() = myDataset.size
 
     companion object {

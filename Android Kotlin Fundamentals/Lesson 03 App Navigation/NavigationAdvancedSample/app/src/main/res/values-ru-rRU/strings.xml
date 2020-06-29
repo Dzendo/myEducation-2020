@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Навигация Расширенный Образец</string>
+    <string name="select_an_avatar">Выберите Аватар</string>
+    <string name="name">Имя</string>
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
+    <string name="sign_up">подписывать</string>
+    <string name="profile_name_1">Али Коннорс</string>
+    <string name="profile_image">Изображение профиля</string>
+    <string name="user_points">10 000 очков</string>
+    <string name="rank">Ранг</string>
+    <string name="wins">Побед</string>
+    <string name="losses">Потери</string>
+    <string name="welcome">Добро\nпожаловать!</string>
+    <string name="about_description">Этот пример демонстрирует навигацию с использованием нижней навигации. Состояние и задний стек трех различных экранов сохраняются.</string>
+    <string name="done">Готово</string>
+    <string name="title_home">Домой</string>
+    <string name="title_register">Регистация</string>
+    <string name="title_registered">Зарегистрированный</string>
+    <string name="title_list">Таблица лидеров</string>
+    <string name="title_detail">Профиль</string>
+    <string name="cd_home">Домой</string>
+    <string name="cd_list">Список</string>
+    <string name="cd_form">Форма</string>
+</resources>

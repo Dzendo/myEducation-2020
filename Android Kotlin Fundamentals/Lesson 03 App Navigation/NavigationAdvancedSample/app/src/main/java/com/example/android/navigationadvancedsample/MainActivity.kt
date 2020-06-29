@@ -26,17 +26,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * An activity that inflates a layout that has a [BottomNavigationView].
+ * Activity, которое раздувает макет с [Нижним навигационным видом].
  */
 class MainActivity : AppCompatActivity() {
 
+    // ВНИМАНИЕ! Контроллер объвляется LiveData
     private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null) {   // т.е. при новом старте:
             setupBottomNavigationBar()
-        } // Else, need to wait for onRestoreInstanceState
+        } // Else, нужно дождаться need to wait for onRestoreInstanceState
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -44,26 +46,46 @@ class MainActivity : AppCompatActivity() {
         // Now that BottomNavigationBar has restored its instance state
         // and its selectedItemId, we can proceed with setting up the
         // BottomNavigationBar with Navigation
+        // Теперь эта нижняя панель навигации восстановила свое состояние экземпляра
+        // и его selectedItemId, мы можем приступить к настройке
+        // Нижняя панель навигации с навигацией
+        // т.е. после восстановления после прибивания:
         setupBottomNavigationBar()
     }
 
     /**
      * Called on first creation and when restoring state.
+     * Вызывается при первом создании и при восстановлении состояния.
+     * восстанавливает ссылку на нижнее меню material.bottomnavigation.BottomNavigationView
+     * восстанавливает navGraphIds список фрагментов из файла навигации navigation.form - регистрация
+     * Создает на него controller для нижней навигации
      */
     private fun setupBottomNavigationBar() {
+        // Это view material.bottomnavigation.BottomNavigationView откуда просто зовется
+        // menu/bottom_nav.xml где и есть три статичных пункта - первый из них и стартует
+        // думаю что этот контроллер и включает Home как первый Navigation start фрагмент ????
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         val navGraphIds = listOf(R.navigation.home, R.navigation.list, R.navigation.form)
 
-        // Setup the bottom navigation view with a list of navigation graphs
-        val controller = bottomNavigationView.setupWithNavController(
-            navGraphIds = navGraphIds,
-            fragmentManager = supportFragmentManager,
-            containerId = R.id.nav_host_container,
-            intent = intent
-        )
 
+        // Setup the bottom navigation view with a list of navigation graphs
+        // Настройка Нижнего навигационного представления со списком навигационных графиков
+        // Этот контроллер заведует нижним переключением
+        val controller = bottomNavigationView.setupWithNavController(  // Это Своя функция отдает LiveData<NavController>
+            navGraphIds = navGraphIds,   // т.е. ходить будем по разным навигациям
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.nav_host_container,  // основной контейнер для фрагментов в Main
+            intent = intent                         // Он не содержит navconroller and Host
+        )
+        //  Стандартно бывает , но не здесь а здесь нижний BAR из трех navigation
+        //  android:name="androidx.navigation.fragment.NavHostFragment"
+        //  app:defaultNavHost="true"
+        //  app:navGraph="@navigation/mobile_navigation"
+
+        // Этот слушатель должен менять Контроллнры разных навигационных XML
         // Whenever the selected controller changes, setup the action bar.
+        // Всякий раз, когда выбранный контроллер изменяется, настройте панель действий.
         controller.observe(this, Observer { navController ->
             setupActionBarWithNavController(navController)
         })

@@ -24,6 +24,31 @@ Check out the Проверьте это
 [UI tests](https://github.com/googlesamples/android-architecture-components/tree/master/NavigationAdvancedSample/app/src/androidTest/java/com/example/android/navigationadvancedsample)
 to learn about specific scenarios. чтобы узнать о конкретных сценариях.
 
+Перевел все комментарии и Strings на русский под локализацию
+Первое что вижу:
+- Binding ек используется - нет в Gradle binding = yes
+- SaveArgs не используется  - нет плагина
+
+Main.kt
+Не нужно звать заполнения после востановления - ничего не восстанавливается
+Только как кривая заготовка сохранения - восстановления параметров программы
+Основной фрагмент куда загржают в layout/activity_main.xml не имеет Он не содержит navconroller and Host
+Видимо управляется setupBottomNavigationBar из которого грузится три различных Navigation
+Start: MainActivity + activity_main + setupBottomNavigationBar (своя) + Observe(liveDatacontroller)) с трудом
+Кривота казанская - не демонстрирует ничего кроме умения товарища выкручиваться нестандартными методами
+Насоздана куча функций и ими заткнуты стандартные переходы
+LiveData притыркнута чтобы была - видимо требовали с него
+Сделан пример 16 месяцев назад - начало 2019 года
+Делался с 2017 года
+Это не лучшие а ъудшие практики по архитектуре
+причем на этом же идет частично описание дока на навигацию
+НЕ использовать как образец
+Можно использовать как прикол выкручивания
+Пои этом обновлены библиотеки до Android Studio 4.0.0 т.е. июнь 2020 года
+
+
+
+
 
 
 

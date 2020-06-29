@@ -25,6 +25,7 @@ import com.example.android.navigationadvancedsample.R
 
 /**
  * Shows "About"
+ * Показывает "О приложении"
  */
 class About : Fragment() {
     override fun onCreateView(

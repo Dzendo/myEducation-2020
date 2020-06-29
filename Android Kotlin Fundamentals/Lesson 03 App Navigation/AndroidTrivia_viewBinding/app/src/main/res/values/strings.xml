@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android Trivia</string>
+    <string name="app_name">Android Trivia binding</string>
     <string name="game_over">Game Over</string>
     <string name="try_again">Try Again?</string>
     <string name="position">Position</string>

@@ -28,6 +28,7 @@ import com.example.android.navigationadvancedsample.listscreen.MyAdapter.Compani
 
 /**
  * Shows a profile screen for a user, taking the name from the arguments.
+ * Показывает экран профиля пользователя, беря имя из аргументов.
  */
 class UserProfile : Fragment() {
 

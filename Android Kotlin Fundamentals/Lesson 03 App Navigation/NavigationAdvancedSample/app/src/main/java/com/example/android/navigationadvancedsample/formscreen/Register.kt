@@ -28,12 +28,15 @@ import com.example.android.navigationadvancedsample.R
 
 /**
  * Shows a register form to showcase UI state persistence. It has a button that goes to [Registered]
+ * Показывает регистрационную форму для демонстрации персистентности состояния пользовательского интерфейса.
+ * У него есть кнопка, которая идет в [Registered]
  */
 class Register : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        // Раздуть макет для этого фрагмента
         val view = inflater.inflate(R.layout.fragment_register, container, false)
 
         view.findViewById<Button>(R.id.signup_btn).setOnClickListener {

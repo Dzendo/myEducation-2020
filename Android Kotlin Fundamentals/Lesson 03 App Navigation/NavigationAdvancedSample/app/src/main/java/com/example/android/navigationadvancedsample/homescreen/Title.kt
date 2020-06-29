@@ -27,6 +27,7 @@ import com.example.android.navigationadvancedsample.R
 
 /**
  * Shows the main title screen with a button that navigates to [About].
+ * Показывает главный титульный экран с кнопкой, которая переходит к [о программе].
  */
 class Title : Fragment() {
     override fun onCreateView(

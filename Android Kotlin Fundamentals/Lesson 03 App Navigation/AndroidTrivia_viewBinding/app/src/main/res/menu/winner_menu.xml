@@ -15,7 +15,8 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/share"
@@ -24,4 +25,5 @@
         android:title="@string/share"
         android:visible="true"
         app:showAsAction="ifRoom" />
+    <!--должен отображаться на панели если есть место -->
 </menu>

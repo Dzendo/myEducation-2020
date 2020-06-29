@@ -14,7 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
+<!-- На этот навигационный график нет ссылок ни из одного файла макета
+ (ожидается, что он будет найден по крайней мере в одном файле макета
+  с атрибутом NavHostFragment with app:navGraph="@navigation/form"). -->
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

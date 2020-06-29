@@ -21,11 +21,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.android.navigation.databinding.FragmentGameBinding
-import com.example.android.navigation.GameFragmentDirections
+//import com.example.android.navigation.GameFragmentDirections
 //build\generated\source\navigation-args\debug\com\example\android\navigation\GameFragmentDirections.java
 import kotlin.math.min
 
@@ -63,6 +62,7 @@ class GameFragment : Fragment() {
                     answers = listOf("!!<layout>", "<binding>", "<data-binding>", "<dbinding>"))
     )
 
+    private lateinit var binding: FragmentGameBinding
     lateinit var currentQuestion: Question
     lateinit var answers: MutableList<String>
     private var questionIndex = 0
@@ -73,56 +73,23 @@ class GameFragment : Fragment() {
 
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента
-        val binding = DataBindingUtil.inflate<FragmentGameBinding>(
-                inflater, R.layout.fragment_game, container, false)
-
-        // Shuffles the questions and sets the question index to the first question.
-        // Перетасовывает вопросы и устанавливает индекс вопроса на первый вопрос.
-        randomizeQuestions()
+       // binding = DataBindingUtil.inflate<FragmentGameBinding>(
+       //         inflater, R.layout.fragment_game, container, false)
+        binding = FragmentGameBinding.inflate( inflater, container, false)
 
         // Bind this fragment class to the layout
         // Привязать этот фрагмент класса к макету т.е к dataBinding game в XML
         binding.game = this
 
+        // Shuffles the questions and sets the question index to the first question.
+        // Перетасовывает вопросы и устанавливает индекс вопроса на первый вопрос.
+        randomizeQuestions()
+
         // Set the onClickListener for the submitButton
-        // // Установить onClickListener на кнопку Submit
-        binding.submitButton.setOnClickListener @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-        { view: View ->
-               // Do nothing if nothing is checked (id == -1)
-            val answerIndex = when (binding.questionRadioGroup.checkedRadioButtonId) {
-                    R.id.firstAnswerRadioButton  ->  0
-                    R.id.secondAnswerRadioButton ->  1
-                    R.id.thirdAnswerRadioButton  ->  2
-                    R.id.fourthAnswerRadioButton ->  3
-                    else -> -1
-            }
-            if (answerIndex == -1) returnTransition
-                // The first answer in the original question is always the correct one, so if our
-                // answer matches, we have the correct answer.
-                // Первый ответ в исходном вопросе всегда является правильным, так что если наш
-                // ответ совпадает, у нас есть правильный ответ.
-            if (answers[answerIndex] != currentQuestion.answers[0])
-                // Game over! A wrong answer sends us to the gameOverFragment.
-                // Игра окончена! Неправильный ответ отсылает нас к gameOverFragment.
-                // view.findNavController().navigate(R.id.action_gameFragment_to_gameOverFragment)
-                // NavDirection классы генеритуются safe-args-gradle-plugin
-                // Using directions to navigate to the GameOverFragment  теперь с плагином
-            view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameOverFragment())
+        // Установить onClickListener на кнопку Submit
+        //binding.submitButton.setOnClickListener @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+        //{ view: View -> onClickSubmitButton(view) }
 
-                    // Advance to the next question
-                    // Переходим к следующему вопросу
-            if (++questionIndex >= numQuestions)
-                    // We've won!  Navigate to the gameWonFragment.
-                    // Мы победили! Перейдите к gameWonFragment.
-                    // view.findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
-                    // Using directions to navigate to the GameWonFragment теперь с плагином
-            view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment(numQuestions,questionIndex))
-                            //.navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment()) // без Bundle
-
-            currentQuestion = questions[questionIndex]
-            setQuestion()
-            binding.invalidateAll()
-        }
         return binding.root
     }
 
@@ -149,4 +116,73 @@ class GameFragment : Fragment() {
         answers.shuffle()
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_android_trivia_question, questionIndex + 1, numQuestions)
     }
+
+    // Set the onClickListener for the submitButton
+    fun onClickSubmitButton(view: View) {
+        // Do nothing if nothing is checked (id == -1)
+        val answerIndex = when (binding.questionRadioGroup.checkedRadioButtonId) {
+            R.id.firstAnswerRadioButton  ->  0
+            R.id.secondAnswerRadioButton ->  1
+            R.id.thirdAnswerRadioButton  ->  2
+            R.id.fourthAnswerRadioButton ->  3
+            else -> -1
+        }
+        if (answerIndex == -1) returnTransition
+        // The first answer in the original question is always the correct one
+        if (answers[answerIndex] != currentQuestion.answers[0])
+        // Game over! A wrong answer sends us to the gameOverFragment.
+        // NavDirection классы генеритуются safe-args-gradle-plugin
+            view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameOverFragment())
+
+        // Advance to the next question
+        if (++questionIndex >= numQuestions)
+        // We've won!  Navigate to the gameWonFragment.
+        // Using directions to navigate to the GameWonFragment теперь с плагином
+            view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment(numQuestions,questionIndex))
+
+        currentQuestion = questions[questionIndex]
+        setQuestion()
+        binding.invalidateAll()
+    }
 }
+
+
+// Set the onClickListener for the submitButton
+// // Установить onClickListener на кнопку Submit Исходный текст
+/* binding.submitButton.setOnClickListener @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+ { view: View ->
+        // Do nothing if nothing is checked (id == -1)
+     val answerIndex = when (binding.questionRadioGroup.checkedRadioButtonId) {
+             R.id.firstAnswerRadioButton  ->  0
+             R.id.secondAnswerRadioButton ->  1
+             R.id.thirdAnswerRadioButton  ->  2
+             R.id.fourthAnswerRadioButton ->  3
+             else -> -1
+     }
+     if (answerIndex == -1) returnTransition
+         // The first answer in the original question is always the correct one, so if our
+         // answer matches, we have the correct answer.
+         // Первый ответ в исходном вопросе всегда является правильным, так что если наш
+         // ответ совпадает, у нас есть правильный ответ.
+     if (answers[answerIndex] != currentQuestion.answers[0])
+         // Game over! A wrong answer sends us to the gameOverFragment.
+         // Игра окончена! Неправильный ответ отсылает нас к gameOverFragment.
+         // view.findNavController().navigate(R.id.action_gameFragment_to_gameOverFragment)
+         // NavDirection классы генеритуются safe-args-gradle-plugin
+         // Using directions to navigate to the GameOverFragment  теперь с плагином
+     view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameOverFragment())
+
+             // Advance to the next question
+             // Переходим к следующему вопросу
+     if (++questionIndex >= numQuestions)
+             // We've won!  Navigate to the gameWonFragment.
+             // Мы победили! Перейдите к gameWonFragment.
+             // view.findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+             // Using directions to navigate to the GameWonFragment теперь с плагином
+     view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment(numQuestions,questionIndex))
+                     //.navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment()) // без Bundle
+
+     currentQuestion = questions[questionIndex]
+     setQuestion()
+     binding.invalidateAll()
+ }*/
