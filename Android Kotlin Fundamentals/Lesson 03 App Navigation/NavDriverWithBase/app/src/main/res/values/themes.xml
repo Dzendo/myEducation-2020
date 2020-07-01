@@ -22,4 +22,7 @@
     <style name="Theme.NavDriverWithBase.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.NavDriverWithBase.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Bottom_Navigation_Activity" parent="Theme.NavDriverWithBase"/>
+
 </resources>
