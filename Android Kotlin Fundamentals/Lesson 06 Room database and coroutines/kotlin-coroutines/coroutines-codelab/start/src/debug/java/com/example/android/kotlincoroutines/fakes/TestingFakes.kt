@@ -27,6 +27,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import okhttp3.Request
+import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,7 +46,7 @@ class TitleDaoFake(initialTitle: String) : TitleDao {
      */
     private val insertedForNext = Channel<Title>(capacity = Channel.BUFFERED)
 
-    override fun insertTitle(title: Title) {
+    override suspend fun insertTitle(title: Title) {
         insertedForNext.offer(title)
         _titleLiveData.value = title
     }
@@ -91,7 +92,7 @@ class TitleDaoFake(initialTitle: String) : TitleDao {
  * Testing Fake implementation of MainNetwork
  */
 class MainNetworkFake(var result: String) : MainNetwork {
-    override fun fetchNextTitle() = MakeCompilerHappyForStarterCode() // TODO: replace with `result`
+    override suspend fun fetchNextTitle() = result //MakeCompilerHappyForStarterCode() // TODO: replace with `result`
 }
 
 /**
@@ -100,7 +101,7 @@ class MainNetworkFake(var result: String) : MainNetwork {
 class MainNetworkCompletableFake() : MainNetwork {
     private var completable = CompletableDeferred<String>()
 
-    override fun fetchNextTitle() = MakeCompilerHappyForStarterCode() // TODO: replace with `completable.await()`
+    override suspend fun fetchNextTitle() = completable.await() //MakeCompilerHappyForStarterCode() // TODO: replace with `completable.await()`
 
     fun sendCompletionToAllCurrentRequests(result: String) {
         completable.complete(result)
@@ -117,8 +118,9 @@ class MainNetworkCompletableFake() : MainNetwork {
 typealias MakeCompilerHappyForStarterCode = FakeCallForRetrofit<String>
 
 /**
- * This class only exists to make the starter code compile. Remove after refactoring retrofit to use
- * suspend functions.
+ * This class only exists to make the starter code compile. Remove after refactoring retrofit to use suspend functions.
+ * Этот класс существует только для того, чтобы заставить начальный код компилироваться.
+ * Удалить после рефакторинга retrofit для использования функций приостановки.
  */
 class FakeCallForRetrofit<T> : Call<T> {
     override fun enqueue(callback: Callback<T>) {
@@ -143,6 +145,22 @@ class FakeCallForRetrofit<T> : Call<T> {
 
     override fun request(): Request {
         TODO("Not implemented")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return super.toString()
+    }
+
+    override fun timeout(): Timeout {
+        TODO("Not yet implemented")
     }
 
 }

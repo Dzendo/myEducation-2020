@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         // Show a snackbar whenever the [ViewModel.snackbar] is updated a non-null value
         viewModel.snackbar.observe(this) { text ->
             text?.let {
-                Snackbar.make(binding.rootLayout, text, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.rootLayout, text, Snackbar.LENGTH_LONG).show()
                 viewModel.onSnackbarShown()
             }
         }

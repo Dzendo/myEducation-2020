@@ -15,6 +15,6 @@
   -->
 
 <resources>
-    <string name="app_name">Kotlin Coroutines</string>
-    <string name="click_to_start">Click to start</string>
+    <string name="app_name">Kotlin Coroutines Started</string>
+    <string name="click_to_start">Click to start \n Нажми для старта</string>
 </resources>

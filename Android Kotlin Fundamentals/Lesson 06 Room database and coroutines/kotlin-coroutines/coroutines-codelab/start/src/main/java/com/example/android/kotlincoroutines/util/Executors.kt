@@ -20,5 +20,21 @@ import java.util.concurrent.Executors
 
 /**
  * An executor service that can run [Runnable]s off the main thread.
+ * Executorservice, который может запускать [Runnable]s вне основного потока.
+ * BACKGROUND ExecutorService(определенный в util/Executor.kt) для запуска в фоновом потоке.
  */
 val BACKGROUND = Executors.newFixedThreadPool(2)
+
+/*
+Объект, который выполняет отправлено Runnable задачи.
+Этот интерфейс предоставляет способ отсоединения отправки задачи от механика того, как будет выполняться каждая задача,
+включая детали потока использование, планирование и т.д.
+Один Executor обычно используется вместо явного создания потоков.
+Например, вместо того, чтобы вызывающий new Thread(new RunnableTask()).start() для каждого из набора задач,
+которые вы можете использовать:
+Executor executor = anExecutor();
+ executor.execute(new RunnableTask1());
+ executor.execute(new RunnableTask2());
+ ...
+
+ */

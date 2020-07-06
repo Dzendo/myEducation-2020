@@ -19,8 +19,12 @@ package com.example.android.kotlincoroutines.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.kotlincoroutines.util.BACKGROUND
 import com.example.android.kotlincoroutines.util.singleArgViewModelFactory
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -37,6 +41,8 @@ import com.example.android.kotlincoroutines.util.singleArgViewModelFactory
  * репозиторий @param источник данных, из которого эта модель представления будет извлекать результаты.
  *
  * * MainViewModel обрабатывает события onMainViewClicked и будет общаться с MainActivity использованиемLiveData.
+ * MainViewModel представляет состояние экрана и обрабатывает события.
+ * Он скажет хранилищу обновить заголовок, когда пользователь нажимает на экран.
  */
 class MainViewModel(private val repository: TitleRepository) : ViewModel() {
 
@@ -124,14 +130,30 @@ class MainViewModel(private val repository: TitleRepository) : ViewModel() {
     /**
      * Wait one second then update the tap count.
      * Подождите одну секунду, а затем обновите количество нажатий.
+     * Поскольку sleep блокирует текущий поток, он заморозил бы пользовательский интерфейс, если бы он был вызван в основном потоке.
+     * Через одну секунду после того, как пользователь щелкает по основному виду, он запрашивает снэк-бар.
+     * Это можно увидеть, удалив фоновую информацию из кода и снова запустив ее.
+     * Загрузочный счетчик не будет отображаться, и через секунду все «перейдет» в конечное состояние.
+     * справочно val BACKGROUND = Executors.newFixedThreadPool(2)  java.util.concurrent.Executors
      */
     private fun updateTaps() {
-        // TODO: Convert updateTaps to use coroutines
-        tapCount++
-        BACKGROUND.submit {
-            Thread.sleep(1_000)
-            _taps.postValue("${tapCount} taps")
+        // TODO: Convert updateTaps to use coroutines 5.
+        // launch a coroutine in viewModelScope
+        // запуск сопрограммы в view ModelScope
+        viewModelScope.launch {
+            tapCount++
+            // suspend this coroutine for one second приостановите эту сопрограмму на одну секунду
+            delay(10_000)    // delay является suspend функцией
+            // resume in the main dispatcher резюме в главном диспетчере
+            // _snackbar.value can be called directly from main thread может быть вызван непосредственно из основного потока
+            _taps.postValue("Итого $tapCount taps viewModelScope.launch")
         }
+
+        /*tapCount++
+        BACKGROUND.submit {   // BACKGROUND ExecutorService(определенный в util/Executor.kt) для запуска в фоновом потоке.
+            Thread.sleep(10_000)
+            _taps.postValue("Всего  ${tapCount} BACKGROUND taps")
+        }*/
     }
 
     /**
@@ -145,19 +167,101 @@ class MainViewModel(private val repository: TitleRepository) : ViewModel() {
     /**
      * Refresh the title, showing a loading spinner while it refreshes and errors via snackbar.
      * Обновите заголовок, показав загрузочный счетчик, пока он обновляется и ошибки через снэк-бар.
+     *  val title = repository.title
+     *  Эта функция вызывается каждый раз, когда пользователь нажимает на экран,
+     *  и это заставит хранилище обновить заголовок и записать новый заголовок в базу данных.
      */
-    fun refreshTitle() {
-        // TODO: Convert refreshTitle to use coroutines
-        _spinner.value = true
-        repository.refreshTitleWithCallbacks(object : TitleRefreshCallback {
+    fun refreshTitle1() {
+        // TODO: Convert refreshTitle to use coroutines 7.
+        // начните с запуска новой сопрограммы в viewModelScope
+        // Это будет использовать, Dispatchers.Main который в порядке
+        //  Несмотря на то, что refreshTitle он сделает сетевой запрос и запрос к базе данных,
+        //  он может использовать сопрограммы для предоставления главного безопасного интерфейса.
+        //  Это означает, что будет безопасно вызывать его из основного потока.
+        viewModelScope.launch {
+            try {
+                _spinner.value = true
+                repository.refreshTitle()               // ВОТ ОН САМ ВЫЗОВ refreshTitleфункция приостановки т.к.delay(500) suspend
+            } catch (error: TitleRefreshError) {        // Если он получает ошибку, он
+                _snackBar.value = error.message         // показывает снэк-бар
+            } finally {                                 // всегда в конце
+                _spinner.value = false                  // очищает счетчик
+            }
+        }
+        // Поскольку мы используем viewModelScope, когда пользователь отходит от этого экрана,
+        // работа, запущенная этой сопрограммой, будет автоматически отменена.
+        // Это означает, что он не будет делать дополнительные сетевые запросы или запросы к базе данных.
+
+
+        /*
+        // Эта реализация использует обратный вызов, чтобы сделать несколько вещей:
+        _spinner.value = true  // Прежде чем начать запрос, он отображает загрузочный счетчик
+        repository.refreshTitleWithCallbacks(object : TitleRefreshCallback { //  Создает новый объект, который реализует TitleRefreshCallback.
             override fun onCompleted() {
-                _spinner.postValue(false)
+                _spinner.postValue(false)  // Когда он получает результат, он очищает загрузочный счетчик
+// обратный вызов не прошел title.
+// Поскольку мы записываем все заголовки в Room базу данных,
+// пользовательский интерфейс обновляет текущий заголовок, наблюдая за LiveData обновлением Room.
             }
 
-            override fun onError(cause: Throwable) {
-                _snackBar.postValue(cause.message)
-                _spinner.postValue(false)
+            override fun onError(cause: Throwable) {  // Если он получает ошибку, он
+                _snackBar.postValue(cause.message)    // показывает снэк-бар и
+                _spinner.postValue(false)       // очищает счетчик
             }
-        })
+        })*/
+    }
+
+    fun refreshTitle() {
+        launchDataLoad {
+            repository.refreshTitle()
+        }
+    }
+// Использование сопрограмм в функциях высшего порядка
+// Чтобы построить эту абстракцию, launchDataLoad требуется аргумент, block который является лямбда-приостановкой.
+// Приостановить лямбду позволяет вызывать функции приостановки.
+// Вот как Kotlin внедряет компиляторы сопрограмм, launch и runBlocking мы использовали его в этом коде.
+    private fun launchDataLoad(block: suspend () -> Unit): Job {
+        return viewModelScope.launch {
+            try {
+                _spinner.value = true
+                block()
+            } catch (error: TitleRefreshError) {
+                _snackBar.value = error.message
+            } finally {
+                _spinner.value = false
+            }
+        }
     }
 }
+
+
+/* private fun updateTaps() { viewModelScope.launch {
+Этот код делает то же самое, ожидая одну секунду, прежде чем показывать закусочную.
+Тем не менее, есть некоторые важные различия:
+
+1. viewModelScope.launch запустит сопрограмму в viewModelScope.
+ Это означает, что когда работа, которую мы передали, viewModelScope будет отменена,
+  все сопрограммы в этой работе / области будут отменены.
+   Если пользователь покинул Activity перед delay возвратом,
+    эта сопрограмма будет автоматически отменена при onCleared вызове после уничтожения ViewModel.
+2. Так как viewModelScope имеет диспетчер по умолчанию Dispatchers.Main,
+ эта сопрограмма будет запущена в главном потоке.
+  Позже мы увидим, как использовать разные темы.
+3. Функция delay является suspend функцией.
+ Это показано в Android Studio значком в левом желобе.
+  Даже если эта сопрограмма выполняется в основном потоке, delay она не будет блокировать поток в течение одной секунды.
+   Вместо этого диспетчер запланирует возобновление сопрограммы через одну секунду при следующем утверждении.
+ */
+
+/*
+При создании сопрограммы из не-сопрограммы начните с запуска .
+
+Таким образом, если они выдают неперехваченное исключение,
+ оно будет автоматически передано неперехваченным обработчикам исключений
+  (которые по умолчанию завершают работу приложения).
+   Сопрограмма начали с async не сгенерирует исключение в вызывающем до вызова await.
+    Тем не менее, вы можете вызывать только await из сопрограммы, так как это функция приостановки.
+
+Оказавшись внутри сопрограммы, вы можете использовать запуск или асинхронный запуск дочерних сопрограмм.
+ Используйте, launch когда у вас нет результата, чтобы вернуться, и async когда у вас есть.
+ */
