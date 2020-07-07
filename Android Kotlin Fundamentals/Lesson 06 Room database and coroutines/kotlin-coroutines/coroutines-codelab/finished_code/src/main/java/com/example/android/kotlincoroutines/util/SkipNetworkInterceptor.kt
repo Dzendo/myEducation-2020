@@ -21,6 +21,7 @@ import okhttp3.*
 
 /**
  * A list of fake results to return.
+ * Список поддельных результатов для возврата.
  */
 private val FAKE_RESULTS = listOf(
         "Hello, coroutines!",
@@ -32,6 +33,7 @@ private val FAKE_RESULTS = listOf(
 
 /**
  * This class will return fake [Response] objects to Retrofit, without actually using the network.
+ * Этот класс будет возвращать поддельные объекты [Response] для модернизации, фактически не используя сеть.
  */
 class SkipNetworkInterceptor : Interceptor {
     private var lastResult: String = ""
@@ -41,11 +43,13 @@ class SkipNetworkInterceptor : Interceptor {
 
     /**
      * Return true iff this request should error.
+     * Верните true, если этот запрос должен привести к ошибке.
      */
     private fun wantRandomError() = attempts++ % 5 == 0
 
     /**
      * Stop the request from actually going out to the network.
+     *  Остановите фактический выход запроса в сеть.
      */
     override fun intercept(chain: Interceptor.Chain): Response {
         pretendToBlockForNetworkRequest()
@@ -58,13 +62,16 @@ class SkipNetworkInterceptor : Interceptor {
 
     /**
      * Pretend to "block" interacting with the network.
+     * Притворитесь, что" блокируете " взаимодействие с сетью.
      *
      * Really: sleep for 500ms.
+     *  Действительно: спите в течение 500 мс.
      */
     private fun pretendToBlockForNetworkRequest() = Thread.sleep(500)
 
     /**
      * Generate an error result.
+     * Генерируйте результат ошибки.
      *
      * ```
      * HTTP/1.1 500 Bad server day
@@ -87,6 +94,7 @@ class SkipNetworkInterceptor : Interceptor {
 
     /**
      * Generate a success response.
+     * Генерировать успешный ответ.
      *
      * ```
      * HTTP/1.1 200 OK

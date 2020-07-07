@@ -24,8 +24,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 'android-R'
-    buildToolsVersion '30.0.0 rc4'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
 
     defaultConfig {
         applicationId "com.example.android.gdgfinderf"
@@ -52,10 +52,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    // Enables data binding.
-    buildFeatures {
-        dataBinding = true
-    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -65,6 +62,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // Enables data binding.
+    buildFeatures {
+        dataBinding = true
     }
 }
 

@@ -18,14 +18,22 @@ package com.example.android.trackrecycledview
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.trackrecycledview.databinding.ActivityMainBinding
+
 // Мой вариант с стартового 7 со всеми комметариямии - работает правильно
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
+        setContentView(ActivityMainBinding.inflate(layoutInflater).root)
+        //setContentView(R.layout.activity_main)
+        /*
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+                this, R.layout.activity_main)
+       val binding = ActivityMainBinding.inflate(layoutInflater)
+       setContentView(binding.root)
+         */
     }
 }
 /*

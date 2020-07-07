@@ -21,11 +21,13 @@
      в том числе макеты, и это хорошая идея, чтобы использовать его.
      See: https://developer.android.com/training/improving-layouts/reusing-layouts -->
 
-<merge
+<!--merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"-->
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -33,4 +35,4 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/navigation" />
 
-</merge>
+<!--/merge-->

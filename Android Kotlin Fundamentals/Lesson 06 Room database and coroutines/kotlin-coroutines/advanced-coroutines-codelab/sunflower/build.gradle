@@ -5,8 +5,9 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
+        //viewBinding = true
     }
     defaultConfig {
         minSdkVersion min_sdk_version
@@ -32,3 +33,4 @@ dependencies {
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
 }
+

@@ -28,12 +28,16 @@ import com.example.android.kotlincoroutines.R
 import com.google.android.material.snackbar.Snackbar
 
 /**
+ * MainActivity отображает пользовательский интерфейс, регистрирует прослушиватели щелчков и может отображать Snackbar.
+ * Он передает события MainViewModel и обновляет экран на основе LiveData в MainViewModel.
  * Show layout.activity_main and setup data binding.
+ * * Показать макет.activity_main и привязка данных настройки.
  */
 class MainActivity : AppCompatActivity() {
 
     /**
      * Inflate layout.activity_main and setup data binding.
+     * Надуть макет.activity_main и привязка данных настройки.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,17 +50,22 @@ class MainActivity : AppCompatActivity() {
         val spinner: ProgressBar = findViewById(R.id.spinner)
 
         // Get MainViewModel by passing a database to the factory
+        // titles_db из com\example\android\kotlincoroutines\main\MainDatabase.kt
+        // Получить MainViewModel, передав базу данных на фабрику, которая лежит в нем же Static
         val database = getDatabase(this)
         val repository = TitleRepository(getNetworkService(), database.titleDao)
         val viewModel = ViewModelProvider(this, MainViewModel.FACTORY(repository))
                 .get(MainViewModel::class.java)
+        // Для построения viewModel из MainViewModel вызывается MainViewModel.FACTORY(repository) - зачетно
 
         // When rootLayout is clicked call onMainViewClicked in ViewModel
+        // При разметке rootlayout кнопки вызова на главном экране нажал в модель представления
         rootLayout.setOnClickListener {
             viewModel.onMainViewClicked()
         }
 
         // update the title when the [MainViewModel.title] changes
+        // обновите заголовок, когда [MainViewModel.название] изменения
         viewModel.title.observe(this) { value ->
             value?.let {
                 title.text = it

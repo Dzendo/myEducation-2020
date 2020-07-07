@@ -24,8 +24,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 'android-R'
-    buildToolsVersion '30.0.0 rc4'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
     defaultConfig {
         applicationId "com.example.android.gdgfinderu"
         minSdkVersion 22
@@ -119,6 +119,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$version_play_services"
 
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2-beta01' // 1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-beta01' //3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2-rc01' // 1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-rc01' //3.2.0'
 }

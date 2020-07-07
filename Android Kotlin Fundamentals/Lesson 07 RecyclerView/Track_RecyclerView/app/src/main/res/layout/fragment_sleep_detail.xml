@@ -32,7 +32,8 @@
             app:sleepImage="@{sleepDetailViewModel.night}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Смайлик качества сна" />
 
         <!-- TextViewдля оценки качества -->
         <TextView
@@ -47,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/quality_image"
             app:sleepQualityString="@{sleepDetailViewModel.night}" />
 
-        <!-- extViewдля оценки качества -->
+        <!-- TextView для оценки качества -->
         <TextView
             android:id="@+id/sleep_length"
             android:layout_width="wrap_content"
@@ -60,7 +61,7 @@
             app:layout_constraintTop_toBottomOf="@+id/quality_string"
             app:sleepDurationFormatted="@{sleepDetailViewModel.night}" />
 
-        <!-- Buttonдля закрытия фрагмента детализации. -->
+        <!-- Button для закрытия фрагмента детализации. -->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

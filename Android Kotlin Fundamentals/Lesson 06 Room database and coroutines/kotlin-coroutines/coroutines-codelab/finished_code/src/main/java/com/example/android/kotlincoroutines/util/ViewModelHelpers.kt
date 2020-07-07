@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 
 /**
  * Convenience factory to handle ViewModels with one parameter.
+ * Удобство завода, чтобы справиться с просмотром моделей с одним параметром.
  *
  * Make a factory:
  * ```
@@ -37,6 +38,8 @@ import androidx.lifecycle.ViewModelProvider
  * @param constructor A function (A) -> T that returns an instance of the ViewModel (typically pass
  * the constructor)
  * @return a function of one argument that returns ViewModelProvider.Factory for ViewModelProviders
+ * @ param constructor функция (A) - > T, которая возвращает экземпляр ViewModel (обычно передает конструктор)
+ * @ возвращает функцию одного аргумента, возвращающую ViewModelProvider.Фабрика для поставщиков ViewModel
  */
 fun <T : ViewModel, A> singleArgViewModelFactory(constructor: (A) -> T):
         (A) -> ViewModelProvider.NewInstanceFactory {

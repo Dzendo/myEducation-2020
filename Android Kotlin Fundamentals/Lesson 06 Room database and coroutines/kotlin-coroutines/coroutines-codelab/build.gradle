@@ -20,7 +20,7 @@ buildscript {
     ext {
 
         // global variables
-        kotlin_version = '1.4-M2' //'1.3.72'
+        kotlin_version = '1.4-M3' //'1.3.72'
 
         // local variables (use def)
         def androidx_test_version = '1.2.0'
@@ -114,7 +114,7 @@ buildscript {
         maven { url = "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0-beta02'
+        classpath 'com.android.tools.build:gradle:4.2.0-alpha03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

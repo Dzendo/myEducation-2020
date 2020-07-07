@@ -24,8 +24,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 'android-R'
-    buildToolsVersion '30.0.0 rc4'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
     defaultConfig {
         applicationId "com.example.android.gdgfinders"
         minSdkVersion 22

@@ -44,7 +44,7 @@ private val ITEM_VIEW_TYPE_ITEM = 1
 
 
 // Стартовый код 07,3 Grid
-class SleepNightAdapter(val clickListener: SleepNightListener):
+class SleepNightAdapter(private val clickListener: SleepNightListener):
         //ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
         ListAdapter<DataItem, RecyclerView.ViewHolder>(SleepNightDiffCallback()) {
 // Измените конструктор SleepNightAdapter класса, чтобы получить val clickListener: SleepNightListener.
@@ -72,6 +72,9 @@ class SleepNightAdapter(val clickListener: SleepNightListener):
                holder.bind(nightItem.sleepNight, clickListener)
            }
        }
+       // Как вариант переписал: по моему так можно если внутри нет заголовка
+       //if (holder is ViewHolder)
+       // (holder as ViewHolder).bind((getItem(position) as DataItem.SleepNightItem).sleepNight, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder{

@@ -30,17 +30,24 @@ import androidx.room.RoomDatabase
 
 /**
  * Title represents the title fetched from the network
+ * Заголовок представляет собой заголовок, извлеченный из сети
+ * MainDatabase реализует базу данных с помощью номера , который сохраняет и загружает Title.
  */
 @Entity
 data class Title constructor(val title: String, @PrimaryKey val id: Int = 0)
 
 /***
  * Very small database that will hold one title
+ * Очень маленькая база данных, которая будет содержать один заголовок
  */
+// add the suspend modifier to the existing insertTitle
 @Dao
 interface TitleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTitle(title: Title)
+    // Room сделает ваш запрос главным образом безопасным и автоматически выполнит его в фоновом потоке.
+    // Однако это также означает, что вы можете вызывать этот запрос только из сопрограммы.
+    // suspend  И - это все, что вам нужно сделать, чтобы использовать сопрограммы в комнате. Довольно изящный.
 
     @get:Query("select * from Title where id = 0")
     val titleLiveData: LiveData<Title?>
@@ -48,16 +55,20 @@ interface TitleDao {
 
 /**
  * TitleDatabase provides a reference to the dao to repositories
+ * Очень маленькая база данных, которая будет содержать один заголовок
  */
 @Database(entities = [Title::class], version = 1, exportSchema = false)
 abstract class TitleDatabase : RoomDatabase() {
     abstract val titleDao: TitleDao
 }
 
+// Адрес БД лежит в КОРНЕ МОДУЛЯ
 private lateinit var INSTANCE: TitleDatabase
 
 /**
  * Instantiate a database from a context.
+ * Создайте экземпляр базы данных из контекста.
+ * Заметим что get межит в корне модуля
  */
 fun getDatabase(context: Context): TitleDatabase {
     synchronized(TitleDatabase::class) {
