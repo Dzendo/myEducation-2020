@@ -1,7 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <!-- 7.8.1. В list_item_sleep_night, добавьте представления ConstraintLayoutдля построения дизайна ниже -->
+
+   <!-- 7.8.2. Добавить Добавить ImageView и установить его id в quality_image: -->
+    <ImageView
+        android:id="@+id/quality_image"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_sleep_5" />
+
+    <!-- 7.8.3. Добавьте TextView справа от quality_image и установите для его id значение sleep_length: -->
+    <TextView
+        android:id="@+id/quality_string"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/sleep_length"
+        app:layout_constraintStart_toStartOf="@+id/sleep_length"
+        app:layout_constraintTop_toBottomOf="@+id/sleep_length"
+        tools:text="Excellent!!!" />
+
+    <!--7.8.4. Добавьте TextView справа от quality_image и установите для его id значение sleep_length: -->
+    <TextView
+        android:id="@+id/sleep_length"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/quality_image"
+        app:layout_constraintTop_toTopOf="@+id/quality_image"
+        tools:text="Wednesday" />
+    <!-- 7.8.11. Внутри класса SleepNightAdapter создайте ViewHolder класс, который расширяется RecyclerView.ViewHolder.-->
+    <!-- 7.8.12. Используйте findViewById для поиска просмотров. -->
+    <!-- 7.8.13. Обновите SleepNightAdapter для использования ViewHolder: -->
+    <!-- 7.8.14. Измените тип возвращаемого значения onCreateViewHolder () на ViewHolder и надуйте list_item_sleep_nightвместо text_item_view: -->
+    <!-- 7.8.15. Обновление на BindViewHolder. чтобы отображать ресурсы значков вместо цветов.-->
+    <!-- 7.8.16. Запустите приложение, и вы должны увидеть список в стиле! -->
 </androidx.constraintlayout.widget.ConstraintLayout>

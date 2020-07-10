@@ -145,8 +145,17 @@ fun formatNights(nights: List<SleepNight>, resources: Resources): Spanned {
 
 /**
  * ViewHolder that holds a single [TextView].
+ * ViewHolder, который содержит один [TextView].
  *
  * A ViewHolder holds a view for the [RecyclerView] as well as providing additional information
  * to the RecyclerView such as where on the screen it was last drawn during scrolling.
+ * Держатель вида содержит представление для [RecyclerView], а также предоставляет дополнительную информацию
+ * к RecyclerView, например, где на экране он был в последний раз нарисован во время прокрутки.
  */
 class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
+// Существует как простейшая заглушка для первого вызова
+// RecyclerView без него не может просто подставить textView
+// ViewHolder дает что именно где и как надо отображать RecyclerView
+// еще через его методы доступ ко всей информации о элементе отображения
+// номер, позиция, итд
+
