@@ -107,4 +107,17 @@ class SleepTrackerFragment : Fragment() {
 
         return binding.root
     }
+
+/*
+    Советы по отладке
+Если ваше приложение компилируется, но не работает, вот несколько вещей, которые нужно проверить:
+
+Убедитесь, что вы добавили хотя бы одну ночь сна.
+Вы называете notifyDataSetChanged()в SleepNightAdapter?
+Попробуйте установить точку останова, чтобы убедиться, что она вызывается.
+Вы зарегистрировали наблюдателя sleepTrackerViewModel.nights в SleepTrackerFragment?
+Вы установили адаптер SleepTrackerFragment с помощью binding.sleepList.adapter = adapter?
+Содержит ли data в SleepNightAdapter себе непустой список?
+Попробуйте установить точку останова в установщике и getItemCount().
+     */
 }

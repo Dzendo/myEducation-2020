@@ -16,6 +16,7 @@
 
 package com.example.android.trackmysleepquality.sleeptracker
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -51,7 +52,12 @@ class SleepNightAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
     override fun onBindViewHolder(holder:  TextItemViewHolder, position: Int) {
     val item = data[position]
     holder.textView.text = item.sleepQuality.toString()  // просто номера пока
+    when {
+        item.sleepQuality <= 1 ->  holder.textView.setTextColor(Color.RED)
+        item.sleepQuality >= 4 ->  holder.textView.setTextColor(Color.GREEN)
+        else ->  holder.textView.setTextColor(Color.BLACK)
     }
+}
     // 5. Для адаптера требуется этот метод, но мы не будем его здесь заполнять
     // 6. !! Добавлен в Utils.kt class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
     // 7. Убедитесь, что код компилируется и запускается без ошибок. элементы еще не появятся на экране
