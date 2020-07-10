@@ -55,11 +55,13 @@ class PlantListFragment : Fragment() {
         context ?: return binding.root
 
         // show the spinner when [MainViewModel.spinner] is true
+        // показать блесны, когда [MainViewModel.пряха] верно
         viewModel.spinner.observe(viewLifecycleOwner) { show ->
             binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
         }
 
         // Show a snackbar whenever the [ViewModel.snackbar] is updated a non-null value
+        // Показывать закусочную всякий раз, когда [ViewModel.снэк-бар] обновляется ненулевым значением
         viewModel.snackbar.observe(viewLifecycleOwner) { text ->
             text?.let {
                 Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).show()
@@ -108,6 +110,7 @@ class PlantListFragment : Fragment() {
 
 /**
  * Factory for creating a [PlantListViewModel] with a constructor that takes a [PlantRepository].
+ * Фабрика для создания [Plant List ViewModel] с конструктором, который принимает [хранилище растений].
  */
 @FlowPreview
 @ExperimentalCoroutinesApi

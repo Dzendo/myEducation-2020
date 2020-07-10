@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+//import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.trackrecycledview.R
 import com.example.android.trackrecycledview.database.SleepDatabase
 import com.example.android.trackrecycledview.databinding.FragmentSleepDetailBinding
-import com.example.android.trackrecycledview.sleepdetail.SleepDetailFragmentArgs
-import com.example.android.trackrecycledview.sleepdetail.SleepDetailFragmentDirections
+//import com.example.android.trackrecycledview.sleepdetail.SleepDetailFragmentArgs
+//import com.example.android.trackrecycledview.sleepdetail.SleepDetailFragmentDirections
 
 
 /**
@@ -43,7 +43,7 @@ class SleepDetailFragment : Fragment() {
                 inflater, R.layout.fragment_sleep_detail, container, false)
 
         val application = requireNotNull(this.activity).application
-        val arguments = SleepDetailFragmentArgs.fromBundle(arguments!!)
+        val arguments = SleepDetailFragmentArgs.fromBundle(requireArguments())  // AS (arguments!!)
 
         // Create an instance of the ViewModel Factory.
         // Создайте экземпляр фабрики ViewModel.
@@ -62,11 +62,12 @@ class SleepDetailFragment : Fragment() {
         // дайте объекту привязки ссылку на него.
         binding.sleepDetailViewModel = sleepDetailViewModel
 
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = viewLifecycleOwner // AS this
 
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
         // Добавьте наблюдателя в переменную состояния для навигации при нажатии значка качества.
-        sleepDetailViewModel.navigateToSleepTracker.observe(this, Observer {
+        // AS this
+        sleepDetailViewModel.navigateToSleepTracker.observe(viewLifecycleOwner) {
             if (it == true) { // Observed state is true.
                 this.findNavController().navigate(
                         SleepDetailFragmentDirections.actionSleepDetailFragmentToSleepTrackerFragment())
@@ -76,7 +77,7 @@ class SleepDetailFragment : Fragment() {
                 // имеет изменение конфигурации.
                 sleepDetailViewModel.doneNavigating()
             }
-        })
+        }
 
         return binding.root
     }

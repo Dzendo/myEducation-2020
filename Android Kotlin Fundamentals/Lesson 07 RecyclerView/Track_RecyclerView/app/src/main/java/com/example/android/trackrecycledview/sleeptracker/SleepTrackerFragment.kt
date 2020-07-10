@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+//import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -93,7 +93,7 @@ class SleepTrackerFragment : Fragment() {
         // Пересоздать лоя слушателя щелчков
         // Отображение тоста при нажатии на предмет
         val adapter = SleepNightAdapter(SleepNightListener { nightId ->
-            Toast.makeText(context, "${nightId}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "$nightId", Toast.LENGTH_LONG).show()
             //  вызывать обработчик щелчков onSleepNighClicked()
             sleepTrackerViewModel.onSleepNightClicked(nightId)
         })
@@ -112,28 +112,28 @@ class SleepTrackerFragment : Fragment() {
 
         // Сказать адаптеру, какие данные он должен адапритовать:
         // добавляем наблюдателя к списку ночей из ViewModel , но только тогда, когда элемент на экране
-        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner) {
             it?.let {
                 //adapter.data = it   // присвойте значение адаптеру data Без Дифф первая версия
                // adapter.submitList(it)  // с использованием дифф 07,2 задача 5
                 adapter.addHeaderAndSubmitList(it)  // 07.5 заголовок
             }
-        })
+        }
 
         // Specify the current activity as the lifecycle owner of the binding.
         // This is necessary so that the binding can observe LiveData updates.
         // Укажите текущее действие в качестве владельца жизненного цикла привязки.
         // Это необходимо для того, чтобы привязка могла наблюдать за текущими обновлениями данных.
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // Add an Observer on the state variable for showing a Snackbar message
         // when the CLEAR button is pressed.
         // Добавьте наблюдателя в переменную состояния для отображения сообщения о снэк-баре
         // при нажатии кнопки Очистить.
-        sleepTrackerViewModel.showSnackBarEvent.observe(this, Observer {
+        sleepTrackerViewModel.showSnackBarEvent.observe(viewLifecycleOwner) {
             if (it == true) { // Observed state is true.
                 Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
+                        requireActivity().findViewById(android.R.id.content),
                         getString(R.string.cleared_message),
                         Snackbar.LENGTH_SHORT // How long to display the message.
                 ).show()
@@ -143,11 +143,11 @@ class SleepTrackerFragment : Fragment() {
                 // имеет изменение конфигурации.
                 sleepTrackerViewModel.doneShowingSnackbar()
             }
-        })
+        }
 
         // Add an Observer on the state variable for Navigating when STOP button is pressed.
         // Добавьте наблюдателя в переменную состояния для навигации при нажатии кнопки STOP..
-        sleepTrackerViewModel.navigateToSleepQuality.observe(this, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner) { night ->
             night?.let {
                 // We need to get the navController from this, because button is not ready, and it
                 // just has to be a view. For some reason, this only matters if we hit stop again
@@ -171,11 +171,11 @@ class SleepTrackerFragment : Fragment() {
                 // имеет изменение конфигурации.
                 sleepTrackerViewModel.doneNavigating()
             }
-        })
+        }
 
         // Add an Observer on the state variable for Navigating when and item is clicked.
         // Добавьте наблюдателя в переменную состояния для навигации при нажатии на элемент и.
-        sleepTrackerViewModel.navigateToSleepDetail.observe(this, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepDetail.observe(viewLifecycleOwner) { night ->
             night?.let {
                                                 // action_sleep_tracker_fragment_to_sleepDetailFragment
                 this.findNavController().navigate(
@@ -183,7 +183,7 @@ class SleepTrackerFragment : Fragment() {
                               .actionSleepTrackerFragmentToSleepDetailFragment(night))
                 sleepTrackerViewModel.onSleepDetailNavigated()
             }
-        })
+        }
 
         // 07.3: GridLayout с RecyclerView
         /* Конструктор принимает до четырех аргументов: контекст, который является ,

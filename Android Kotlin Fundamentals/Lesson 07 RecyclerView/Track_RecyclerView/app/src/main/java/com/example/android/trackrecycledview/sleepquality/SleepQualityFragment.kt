@@ -85,7 +85,7 @@ class SleepQualityFragment : Fragment() {
 
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
         // Добавьте наблюдателя в переменную состояния для навигации при нажатии значка качества.
-        sleepQualityViewModel.navigateToSleepTracker.observe(this, Observer {
+        sleepQualityViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
             if (it == true) { // Observed state is true. - Наблюдаемое состояние истинно.
                 this.findNavController().navigate(
                         SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())

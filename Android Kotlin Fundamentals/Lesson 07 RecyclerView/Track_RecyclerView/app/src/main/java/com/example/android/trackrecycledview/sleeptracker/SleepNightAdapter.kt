@@ -39,8 +39,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // 07.5 Заголовок
-private val ITEM_VIEW_TYPE_HEADER = 0
-private val ITEM_VIEW_TYPE_ITEM = 1
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ITEM = 1
 
 
 // Стартовый код 07,3 Grid
@@ -75,17 +75,17 @@ class SleepNightAdapter(private val clickListener: SleepNightListener):
        // Как вариант переписал: по моему так можно если внутри нет заголовка
        //if (holder is ViewHolder)
        // (holder as ViewHolder).bind((getItem(position) as DataItem.SleepNightItem).sleepNight, clickListener)
-    }
+   }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
     //override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //return ViewHolder.from(parent)
-        return when (viewType) {
-            ITEM_VIEW_TYPE_HEADER -> TextViewHolder.from(parent)
-            ITEM_VIEW_TYPE_ITEM -> ViewHolder.from(parent)
-            else -> throw ClassCastException("Unknown viewType ${viewType}")
-        }
+    when (viewType) {
+      ITEM_VIEW_TYPE_HEADER -> TextViewHolder.from(parent)
+      ITEM_VIEW_TYPE_ITEM -> ViewHolder.from(parent)
+      else -> throw ClassCastException("Unknown viewType $viewType")
     }
+
     // Вместо того, чтобы использовать submitList(), предоставленный ListAdapter,
     // для отправки вашего списка, вы будете использовать эту функцию,
     // чтобы добавить заголовок, а затем отправить список.

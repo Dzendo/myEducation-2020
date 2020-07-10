@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * The Data Access Object for the Plant class.
+ * Объект доступа к данным для класса растений.
  */
 @Dao
 interface PlantDao {

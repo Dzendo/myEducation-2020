@@ -25,6 +25,7 @@ import com.example.android.advancedcoroutines.PlantDao
 
 /**
  * The Room database for this app
+ * База данных номеров для этого приложения
  */
 @Database(entities = [Plant::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -32,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        // For Singleton instantiation
+        // For Singleton instantiation Для одноэлементный экземпляр
         @Volatile private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {

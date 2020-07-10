@@ -213,8 +213,8 @@ class SleepTrackerViewModel(
      */
     fun onStart() {
         uiScope.launch {
-            // Create a new night, which captures the current time,
-            // and insert it into the database.
+            // Create a new night, which captures the current time, and insert it into the database.
+            // Создайте новую ночь, которая фиксирует текущее время, и вставьте ее в базу данных.
             val newNight = SleepNight()
 
             insert(newNight)
@@ -232,14 +232,19 @@ class SleepTrackerViewModel(
             // In Kotlin, the return@label syntax is used for specifying which function among
             // several nested ones this statement returns from.
             // In this case, we are specifying to return from launch().
+            // В Kotlin синтаксис return@label используется для указания того, какая функция среди
+            // несколько вложенных объектов, из которых возвращается этот оператор.
+            // В этом случае мы указываем, чтобы вернуться из запуска ().
             val oldNight = tonight.value ?: return@launch
 
             // Update the night in the database to add the end time.
+            // Обновите ночь в базе данных, чтобы добавить время окончания.
             oldNight.endTimeMilli = System.currentTimeMillis()
 
             update(oldNight)
 
             // Set state to navigate to the SleepQualityFragment.
+            // Установите состояние для перехода к фрагменту качества сна.
             _navigateToSleepQuality.value = oldNight
         }
     }
@@ -250,13 +255,15 @@ class SleepTrackerViewModel(
      */
     fun onClear() {
         uiScope.launch {
-            // Clear the database table.
+            // Clear the database table. Очистите таблицу базы данных.
             clear()
 
             // And clear tonight since it's no longer in the database
+            // И ясно сегодня вечером, так как его больше нет в базе данных
             tonight.value = null
 
             // Show a snackbar message, because it's friendly.
+            // Покажите сообщение закусочной, потому что это дружелюбно.
             _showSnackbarEvent.value = true
         }
     }

@@ -17,16 +17,16 @@
 package com.example.android.trackmysleepquality.sleepdetail
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+//import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+//import kotlinx.coroutines.CoroutineScope
+//import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+//import kotlinx.coroutines.launch
+//import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for SleepQualityFragment.

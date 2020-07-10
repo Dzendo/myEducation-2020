@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
     Адаптер соединяет ваши данные с RecyclerView.
     Он адаптирует данные так, чтобы их можно было отображать в ViewHolder.
     А RecyclerView использует адаптер, чтобы выяснить, как отображать данные на экране.
+7. Соеденить все это в правильной комбинации
+   Data(LIVE) -> An adapter ->  RecyclerView(XML) + layout manager(list,grid...) + item of data (xml) + view holder +  
+   class SleepNightListener - отдельно для реагирования на щелчки по элементам
+   А еще в это вмешивается ViewModel, Room, LiveData,...@BindingAdapter,
+   классы An adapter + view holder в файле SleepNightAdapter.kt и там же SleepNightListener и вся морока с заголовком
+   
  */
 
 /*

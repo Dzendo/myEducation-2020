@@ -19,7 +19,7 @@
 
     <!-- App title and fragment titles -->
     <!-- Название приложения и названия фрагментов -->
-    <string name="app_name">Track Recycler My Sleep Quality</string>
+    <string name="app_name">Track RecyclerView My Sleep Quality</string>
     <string name="sleep_tracker_fragment">SleepTrackerFragment</string>
     <string name="sleep_quality_fragment">SleepQualityFragment</string>
 

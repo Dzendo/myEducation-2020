@@ -53,7 +53,7 @@ class SleepDetailFragment : Fragment() {
                 inflater, R.layout.fragment_sleep_detail, container, false)
 
         val application = requireNotNull(this.activity).application
-        val arguments = SleepDetailFragmentArgs.fromBundle(arguments!!)
+        val arguments = SleepDetailFragmentArgs.fromBundle(requireArguments())  // (arguments!!) AS
 
         // Create an instance of the ViewModel Factory.
         // Создайте экземпляр фабрики ViewModel.
@@ -72,11 +72,12 @@ class SleepDetailFragment : Fragment() {
         // дайте объекту привязки ссылку на него.
         binding.sleepDetailViewModel = sleepDetailViewModel
 
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = viewLifecycleOwner //  AS this
 
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
         // Добавьте наблюдателя в переменную состояния для навигации при нажатии значка качества.
-        sleepDetailViewModel.navigateToSleepTracker.observe(this, Observer {
+        // this, AS
+        sleepDetailViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {  
             if (it == true) { // Observed state is true.
                 this.findNavController().navigate(
                         SleepDetailFragmentDirections.actionSleepDetailFragmentToSleepTrackerFragment())

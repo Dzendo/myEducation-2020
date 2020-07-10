@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         tools:context=".sleepdetail.SleepDetailFragment">
 
-        <!-- ImageViewдля качества сна -->
+        <!-- ImageView для качества сна -->
         <ImageView
             android:id="@+id/quality_image"
             android:layout_width="@dimen/icon_size"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="Смайлик качества сна" />
 
-        <!-- TextViewдля оценки качества -->
+        <!-- TextView для оценки качества -->
         <TextView
             android:id="@+id/quality_string"
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/quality_image"
             app:sleepQualityString="@{sleepDetailViewModel.night}" />
 
-        <!-- TextView для оценки качества -->
+        <!-- TextView для оценки длительности сна -->
         <TextView
             android:id="@+id/sleep_length"
             android:layout_width="wrap_content"

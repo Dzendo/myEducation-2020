@@ -36,9 +36,11 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         // Передача каждого идентификатора меню в виде набора идентификаторов, поскольку каждый
         // меню следует рассматривать как пункты назначения верхнего уровня.
-        appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        //appBarConfiguration = AppBarConfiguration(setOf(
+        //        R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        // setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 

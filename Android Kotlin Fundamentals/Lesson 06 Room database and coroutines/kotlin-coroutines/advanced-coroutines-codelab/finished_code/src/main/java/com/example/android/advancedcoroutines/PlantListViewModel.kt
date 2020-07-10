@@ -37,8 +37,10 @@ import kotlinx.coroutines.launch
 
 /**
  * The [ViewModel] for fetching a list of [Plant]s.
+ * [ViewModel] для извлечения списка [Plant]s.
  *
  * The @ExperimentalCoroutinesApi and @FlowPreview indicate that experimental APIs are being used.
+ * @ExperimentalCoroutinesApi и @FlowPreview указывают на то, что используются экспериментальные API.
  */
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -48,16 +50,22 @@ class PlantListViewModel internal constructor(
 
     /**
      * Request a snackbar to display a string.
+     * Запросите снэк-бар, чтобы отобразить строку.
      *
      * This variable is private because we don't want to expose [MutableLiveData].
+     * Эта переменная является частной, потому что мы не хотим выставлять [изменяемые живые данные].
      *
      * MutableLiveData allows anyone to set a value, and [PlantListViewModel] is the only
      * class that should be setting values.
+     * Изменяемые данные в реальном маштабе позволяет любому пользователю задать значение,
+     * а [модель представления списка растений] является единственным класс,
+     * который должен устанавливать значения.
      */
     private val _snackbar = MutableLiveData<String?>()
 
     /**
      * Request a snackbar to display a string.
+     * Запросите снэк-бар, чтобы отобразить строку.
      */
     val snackbar: LiveData<String?>
         get() = _snackbar
@@ -65,17 +73,20 @@ class PlantListViewModel internal constructor(
     private val _spinner = MutableLiveData<Boolean>(false)
     /**
      * Show a loading spinner if true
+     * Показать загрузочный прядильщик, если true
      */
     val spinner: LiveData<Boolean>
         get() = _spinner
 
     /**
      * The current growZone selection.
+     * Текущая расти выбора часового пояса.
      */
     private val growZone = MutableLiveData<GrowZone>(NoGrowZone)
 
     /**
      * A list of plants that updates based on the current filter.
+     * Список растений, который обновляется на основе текущего фильтра.
      */
     val plants: LiveData<List<Plant>> = growZone.switchMap { growZone ->
         if (growZone == NoGrowZone) {
