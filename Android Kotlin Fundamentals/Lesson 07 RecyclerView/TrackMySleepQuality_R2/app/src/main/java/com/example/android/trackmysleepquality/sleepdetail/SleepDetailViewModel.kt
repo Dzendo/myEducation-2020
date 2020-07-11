@@ -46,12 +46,16 @@ class SleepDetailViewModel(
     private val viewModelJob = Job()
 
     private val night = MediatorLiveData<SleepNight>()
+    //private val night: LiveData<SleepNight>
+
 
     fun getNight() = night
 
     init {
         night.addSource(database.getNightWithId(sleepNightKey), night::setValue)
+       // night=database.getNightWithId(sleepNightKey)
     }
+
 
     /**
      * Variable that tells the fragment whether it should navigate to [SleepTrackerFragment].

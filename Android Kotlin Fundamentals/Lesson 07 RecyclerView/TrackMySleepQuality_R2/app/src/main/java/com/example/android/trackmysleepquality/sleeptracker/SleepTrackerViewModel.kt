@@ -102,6 +102,11 @@ class SleepTrackerViewModel(
      */
 
     private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+
+
+    private val _navigateToSleepDataQuality = MutableLiveData<Long>()
+    val navigateToSleepDataQuality
+        get() = _navigateToSleepDataQuality
     /**
      * Call this immediately after calling `show()` on a toast.
      *
@@ -235,4 +240,16 @@ class SleepTrackerViewModel(
         super.onCleared()
         viewModelJob.cancel()
     }
+    //07.4.5 Задача: обрабатывать щелчки элементов
+    // Шаг 1: навигация по клику
+    // функцию обработчика щелчков.
+    fun onSleepNightClicked(id: Long){
+        _navigateToSleepDataQuality.value = id
+    }
+    // Определите метод для вызова после завершения навигации приложения
+    fun onSleepDataQualityNavigated() {
+        _navigateToSleepDataQuality.value = null
+    }
+    // Откройте SleepTrackerFragment.kt и прокрутите вниз до кода,
+    // который создает адаптер и определяет SleepNightListener отображение тоста
 }
