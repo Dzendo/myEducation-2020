@@ -152,7 +152,7 @@ fun formatNights(nights: List<SleepNight>, resources: Resources): Spanned {
  * Держатель вида содержит представление для [RecyclerView], а также предоставляет дополнительную информацию
  * к RecyclerView, например, где на экране он был в последний раз нарисован во время прокрутки.
  */
-class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
+//class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
 // Существует как простейшая заглушка для первого вызова
 // RecyclerView без него не может просто подставить textView
 // ViewHolder дает что именно где и как надо отображать RecyclerView
