@@ -16,6 +16,7 @@
 
 package com.example.android.trackmysleepquality.sleeptracker
 
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.R
-import com.example.android.trackmysleepquality.TextItemViewHolder
 import com.example.android.trackmysleepquality.convertDurationToFormatted
 import com.example.android.trackmysleepquality.convertNumericQualityToString
 import com.example.android.trackmysleepquality.database.SleepNight
@@ -60,24 +60,8 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
     // обновите представления, ViewHolder чтобы отображать ресурсы значков вместо цветов.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = data[position]
-    val res = holder.itemView.context.resources
-    holder.sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
-    holder.quality.text = convertNumericQualityToString(item.sleepQuality, res)
-
-    holder.qualityImage.setImageResource(when (item.sleepQuality) {
-        0 -> R.drawable.ic_sleep_0
-        1 -> R.drawable.ic_sleep_1
-        2 -> R.drawable.ic_sleep_2
-        3 -> R.drawable.ic_sleep_3
-        4 -> R.drawable.ic_sleep_4
-        5 -> R.drawable.ic_sleep_5
-        else -> R.drawable.ic_sleep_active
-    })
-    when {
-        item.sleepQuality <= 1 ->  holder.quality.setTextColor(Color.RED) // red
-        item.sleepQuality >= 4 ->  holder.quality.setTextColor(Color.GREEN) // green
-        else -> holder.quality.setTextColor(Color.BLACK) // black
-    }
+// 9.1 Реорганизовать логику в onBind()отдельную функцию с именем bind () :
+    holder.bind(item)
     // 7.8.16. Запустите приложение, и вы должны увидеть список в стиле!
 }
     // 5. Для адаптера требуется этот метод, но мы не будем его здесь заполнять
@@ -85,22 +69,64 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
     // 7. Убедитесь, что код компилируется и запускается без ошибок. элементы еще не появятся на экране
     // 7.8.14. Измените тип возвращаемого значения onCreateViewHolder () на ViewHolderи надуйте list_item_sleep_nightвместо text_item_view:
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // 11. In SleepNightAdapter, onCreateViewHolder(), inflate the text_item_view layout and return the ViewHolder.
-        // задача - выдавать вид каждый раз когда просят сюда, parent: ViewGroup - какой тип надо
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater
-            .inflate(R.layout.list_item_sleep_night, parent, false)
-        return ViewHolder(view)
+        // 10.1 рефакторинг, инкапсулировав логику для создания ViewHolder в метод с именем from (),
+        // который мы затем поместим в объект-компаньон в классе ViewHolder
+        return ViewHolder.from(parent)
     }
 
     // 7.8.11. Внутри класса SleepNightAdapter создайте ViewHolder класс, который расширяется RecyclerView.ViewHolder.
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // 7.8.12. Используйте findViewById для поиска просмотров.
         val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
         val quality: TextView = itemView.findViewById(R.id.quality_string)
         val qualityImage: ImageView = itemView.findViewById(R.id.quality_image)
 
+        // 9.1.1 В новой bind()функции конвертируйте holder параметр в получатель.
+        // 9.1.2 Вырежьте всю bind() функцию и вставьте ее в ViewHolder класс,
+        // затем удалите ее View Holder и private модификаторы.
+        // 9.1.3. Вырежьте строку val res = holder.itemView.context.resources из onBindViewHolder()
+        // и вставьте ее в функцию bind (), затем удалите параметр res из bind ().
+        // 9.1.4 Создайте и запустите приложение и убедитесь, что оно работает точно так же, как и раньше.
+        fun bind(item: SleepNight) {
+            val res = itemView.context.resources
+            sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
+            quality.text = convertNumericQualityToString(item.sleepQuality, res)
+
+            qualityImage.setImageResource(
+                when (item.sleepQuality) {
+                    0 -> R.drawable.ic_sleep_0
+                    1 -> R.drawable.ic_sleep_1
+                    2 -> R.drawable.ic_sleep_2
+                    3 -> R.drawable.ic_sleep_3
+                    4 -> R.drawable.ic_sleep_4
+                    5 -> R.drawable.ic_sleep_5
+                    else -> R.drawable.ic_sleep_active
+                })
+            when {
+                item.sleepQuality <= 1 -> quality.setTextColor(Color.RED) // red
+                item.sleepQuality >= 4 -> quality.setTextColor(Color.GREEN) // green
+                else -> quality.setTextColor(Color.BLACK) // black
+            }
+        }
+        companion object {
+            //10.1 Инкапсулируйте логику для создания ViewHolder.
+            //10.2 Переместить from код в companion object.
+            //10.3 Измените ViewHolder объявление класса на private constructor:
+            //10.4 Наконец, измените оператор возврата в onBindViewHolder
+            // на return ViewHolder.from(parent).
+            //10.5 Запустите приложение и убедитесь, что оно работает точно так же, как и до рефакторинга.
+            fun from(parent: ViewGroup): ViewHolder {
+                // 11. In SleepNightAdapter, onCreateViewHolder(), inflate the text_item_view layout and return the ViewHolder.
+                // задача - выдавать вид каждый раз когда просят сюда, parent: ViewGroup - какой тип надо
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater
+                    .inflate(R.layout.list_item_sleep_night, parent, false)
+                return ViewHolder(view)
+            }
+        }
     }
+
+
 }
 // 13. in SleepTrackerFragment, create a new SleepNightAdapter, and use binding to associate it with the RecyclerView:
 //binding.sleepList.adapter = adapter
@@ -117,3 +143,6 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
 //<!-- 7.8.14. Измените тип возвращаемого значения onCreateViewHolder () на ViewHolder и надуйте list_item_sleep_nightвместо text_item_view: -->
 //<!-- 7.8.15. Обновление на BindViewHolder. чтобы отображать ресурсы значков вместо цветов.-->
 //<!-- 7.8.16. Запустите приложение, и вы должны увидеть список в стиле! -->
+
+// 9. и 10. Рефакторинг кода с выносом Bind и From в class ViewHolder и его инкапсулирование
+// После этого адаптер просто адаптирует (зовет) class ViewHolder с его методами
