@@ -16,18 +16,14 @@
 
 package com.example.android.trackmysleepquality.sleeptracker
 
-import android.content.res.Resources
-import android.graphics.Color
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.R
-import com.example.android.trackmysleepquality.convertDurationToFormatted
-import com.example.android.trackmysleepquality.convertNumericQualityToString
 import com.example.android.trackmysleepquality.database.SleepNight
+import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 
 /**
  * Цель этого адартеоа - составить список сна ночью и адаптировать его во что-то,
@@ -42,24 +38,11 @@ import com.example.android.trackmysleepquality.database.SleepNight
 // 1. Создайте класс SleepNightAdapter. (пока от TextItemViewHolder)
 //class SleepNightAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
 //  7.8.13. Обновите SleepNightAdapter для использования ViewHolder:
-class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
+class SleepNightAdapter: ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
     // 2. Определите источник данных. (Recycler не будет исп эти данные напрямую)
-    var data = listOf<SleepNight>()
-            // 12. add a custom setter to data that calls notifyDataSetChanged()
-            // and tell Kotlin to save the new value by setting field = value.
-        set(value) { // При приеме новых данных сразу известить RecyclerView
-            field = value
-            notifyDataSetChanged()  // запросит и перерисует новые данные (грубо - весь список)
-        }
-    // 3. Переопределить getItemCount() - размер данных
-    override fun getItemCount(): Int = data.size
-// 4. Функция должна извлечь элемент из списка данных и
-// установить holder.textView.text в item.sleepQuality.toString(). (дает элемент для позиции)
-    // 7.8.15. Обновление на BindViewHolder.
-    //Измените onBindViewHolder его holder: ViewHolder на параметр и
-    // обновите представления, ViewHolder чтобы отображать ресурсы значков вместо цветов.
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = data[position]
+    val item = getItem(position)
 // 9.1 Реорганизовать логику в onBind()отдельную функцию с именем bind () :
     holder.bind(item)
     // 7.8.16. Запустите приложение, и вы должны увидеть список в стиле!
@@ -75,11 +58,8 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
     }
 
     // 7.8.11. Внутри класса SleepNightAdapter создайте ViewHolder класс, который расширяется RecyclerView.ViewHolder.
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // 7.8.12. Используйте findViewById для поиска просмотров.
-        val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
-        val quality: TextView = itemView.findViewById(R.id.quality_string)
-        val qualityImage: ImageView = itemView.findViewById(R.id.quality_image)
+    class ViewHolder private constructor(val binding: ListItemSleepNightBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
         // 9.1.1 В новой bind()функции конвертируйте holder параметр в получатель.
         // 9.1.2 Вырежьте всю bind() функцию и вставьте ее в ViewHolder класс,
@@ -88,25 +68,8 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
         // и вставьте ее в функцию bind (), затем удалите параметр res из bind ().
         // 9.1.4 Создайте и запустите приложение и убедитесь, что оно работает точно так же, как и раньше.
         fun bind(item: SleepNight) {
-            val res = itemView.context.resources
-            sleepLength.text = convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
-            quality.text = convertNumericQualityToString(item.sleepQuality, res)
-
-            qualityImage.setImageResource(
-                when (item.sleepQuality) {
-                    0 -> R.drawable.ic_sleep_0
-                    1 -> R.drawable.ic_sleep_1
-                    2 -> R.drawable.ic_sleep_2
-                    3 -> R.drawable.ic_sleep_3
-                    4 -> R.drawable.ic_sleep_4
-                    5 -> R.drawable.ic_sleep_5
-                    else -> R.drawable.ic_sleep_active
-                })
-            when {
-                item.sleepQuality <= 1 -> quality.setTextColor(Color.RED) // red
-                item.sleepQuality >= 4 -> quality.setTextColor(Color.GREEN) // green
-                else -> quality.setTextColor(Color.BLACK) // black
-            }
+            binding.sleep = item
+            binding.executePendingBindings()  // попоросить привязку выполнить сразу
         }
         companion object {
             //10.1 Инкапсулируйте логику для создания ViewHolder.
@@ -119,14 +82,20 @@ class SleepNightAdapter: RecyclerView.Adapter<SleepNightAdapter.ViewHolder>() {
                 // 11. In SleepNightAdapter, onCreateViewHolder(), inflate the text_item_view layout and return the ViewHolder.
                 // задача - выдавать вид каждый раз когда просят сюда, parent: ViewGroup - какой тип надо
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater
-                    .inflate(R.layout.list_item_sleep_night, parent, false)
-                return ViewHolder(view)
+                val binding = ListItemSleepNightBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }
+}
+class SleepNightDiffCallback : DiffUtil.ItemCallback<SleepNight>() {
+    override fun areItemsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
+        return oldItem.nightId == newItem.nightId
+    }
 
-
+    override fun areContentsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
+       return oldItem == newItem  // проверит все поля т.к. data class SleepNight
+    }
 }
 // 13. in SleepTrackerFragment, create a new SleepNightAdapter, and use binding to associate it with the RecyclerView:
 //binding.sleepList.adapter = adapter
