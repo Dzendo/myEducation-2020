@@ -35,10 +35,10 @@ class DetailFragment : Fragment() {
         //@Suppress("UNUSED_VARIABLE")
         val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         // Эта строка получает выбранный MarsProperty объект из Safe Args.
-        val marsProperty = DetailFragmentArgs.fromBundle(arguments!!).selectedProperty
+        val marsProperty = DetailFragmentArgs.fromBundle(requireArguments()).selectedProperty
         // Обратите внимание на использование оператора ненулевого утверждения Котлина (!!).
         // Если этого selectedProperty не произошло, произошло что-то ужасное,
         // и вы действительно хотите, чтобы код выдал нулевой указатель.

@@ -16,6 +16,7 @@
 
 package com.example.android.trackmysleepquality.sleeptracker
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -66,9 +67,16 @@ class SleepTrackerFragment : Fragment() {
 
         binding.sleepTrackerViewModel = sleepTrackerViewModel
 
+        val nStolbov =when (resources.configuration.orientation){
+            Configuration.ORIENTATION_PORTRAIT ->  3
+            Configuration.ORIENTATION_LANDSCAPE ->  5
+            else ->  3
+        }
         // Говорит можно объявить и в RecyclerView XML
-        val manager = GridLayoutManager(activity, 3)
+        val manager = GridLayoutManager(activity, nStolbov)
         binding.sleepList.layoutManager = manager
+
+
 
         // 25 растяжка заголовка на три столбца:
         //25.1 Создайте SpanSizeLookup.
@@ -76,7 +84,7 @@ class SleepTrackerFragment : Fragment() {
             //25,2 Используйте Alt-Enter, чтобы переопределить метод getSpanSize.
             override fun getSpanSize(position: Int): Int =  when (position) {
                 // 25,3 Верните правильный размер диапазона для каждой позиции.
-                0 -> 3
+                0 -> nStolbov
                 else -> 1
             }
         }

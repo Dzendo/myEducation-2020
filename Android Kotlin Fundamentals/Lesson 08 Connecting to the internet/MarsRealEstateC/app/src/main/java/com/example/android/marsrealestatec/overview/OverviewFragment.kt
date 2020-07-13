@@ -64,7 +64,7 @@ class OverviewFragment : Fragment() {
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         // Позволяет привязке данных наблюдать живые данные с жизненным циклом этого фрагмента
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         // Giving the binding access to the OverviewViewModel
         // Предоставление привязке доступа к OverviewViewModel
@@ -80,7 +80,7 @@ class OverviewFragment : Fragment() {
         })
 
         // чтобы наблюдать navigatedToSelectedProperty из модели обзорного вида
-        viewModel.navigateToSelectedProperty.observe(this, Observer {
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             // Наблюдатель проверяет, не является ли MarsProperty- it в лямбде - не нулевым, и если это так,
             // он получает контроллер навигации из фрагмента с помощью findNavController()
             if ( null != it ) {

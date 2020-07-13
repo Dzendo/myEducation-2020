@@ -73,7 +73,7 @@ class OverviewFragment : Fragment() {
         // Обратите внимание на навигацию по выбранным свойствам в реальном времени и перейдите, когда она не равна нулю
         // После перехода, вызова отображение детали в комплекте (), так что в ViewModel готов
         // для другого навигационного события.
-        viewModel.navigateToSelectedProperty.observe(this, Observer {
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
                 // Необходимо найти навигационный контроллер из фрагмента

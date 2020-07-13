@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.android.navandbot.ui.FirstFragment"
+        android:name="com.example.android.navandbot.ui.base.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.android.navandbot.ui.SecondFragment"
+        android:name="com.example.android.navandbot.ui.base.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -61,5 +61,15 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentRecyclerListLayout"
+        android:name="com.example.android.navandbot.ui.recycler.list.FragmentRecyclerListLayout"
+        android:label="fragment_recycler_list_layout_list"
+        tools:layout="@layout/fragment_recycler_list_layout_list" />
+    <fragment
+        android:id="@+id/fragmentRecyclerGridLayout"
+        android:name="com.example.android.navandbot.ui.recycler.grid.FragmentRecyclerGridLayout"
+        android:label="fragment_recycler_grid_layout_list"
+        tools:layout="@layout/fragment_recycler_grid_layout_list" />
 
 </navigation>
