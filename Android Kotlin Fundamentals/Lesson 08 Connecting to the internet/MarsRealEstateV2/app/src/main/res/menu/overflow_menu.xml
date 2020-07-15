@@ -16,7 +16,11 @@
   ~ limitations under the License.
   ~
   -->
-
+<!-- Приложение MarsRealEstate имеет существующее меню переполнения,
+ которое предоставляет три доступных параметра:
+ показывать все свойства,
+ показывать только аренду и
+ показывать только свойства для продажи -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/show_all_menu"
@@ -28,3 +32,4 @@
         android:id="@+id/show_buy_menu"
         android:title="@string/show_buy" />
 </menu>
+    <!--  обработки выбора пунктов меню. в overview/OverviewFragment.kt. -->

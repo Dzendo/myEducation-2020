@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.marsrealestate.databinding.FragmentDetailBinding
 
@@ -31,10 +32,20 @@ class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        @Suppress("UNUSED_VARIABLE")
+       // @Suppress("UNUSED_VARIABLE")
         val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = viewLifecycleOwner// this
+
+// 15.5.2 создать marsProperty переменную из DetailFragmentArgs аргументов, а затем использовать ее для создания DetailViewModelFactory
+        val marsProperty = DetailFragmentArgs.fromBundle(requireArguments()).selectedProperty
+        val viewModelFactory = DetailViewModelFactory(marsProperty, application)
+// 15.5.3 Используйте фабрику, чтобы создать DetailViewModel и привязать ее к viewModel:
+        //val viewModel = ViewModelProvider(
+        //    this, viewModelFactory).get(DetailViewModel::class.java)
+        val viewModel : DetailViewModel by viewModels { viewModelFactory  }
+        binding.viewModel = viewModel
+// 15.5.4 Создайте и запустите приложение и щелкните изображение, чтобы открыть экран сведений
         return binding.root
     }
 }

@@ -16,11 +16,15 @@
   ~ limitations under the License.
   ~
   -->
-
+<!-- 15.1.3  добавить <data>блок и объявить viewModel <variable> -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.android.marsrealestate.detail.DetailViewModel" />
+    </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,7 +43,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                tools:src="@tools:sample/backgrounds/scenic"
+                app:imageUrl="@{viewModel.selectedProperty.imgSrcUrl}"/>
+            <!-- 15.1.4 добавьте app:imageUrl атрибут, который связывает с imgSrcUrl для selectedProperty -->
 
             <TextView
                 android:id="@+id/property_type_text"
@@ -50,7 +56,10 @@
                 android:textSize="39sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_photo_image"
-                tools:text="To Rent" />
+                tools:text="To Rent"
+                android:text="@{viewModel.displayPropertyType}"/>
+            <!-- 15.1.5 android:text="@{viewModel.selectedProperty.type}" -->
+            <!-- 15.6.3 android:text="@{viewModel.displayPropertyType}" -->
 
             <TextView
                 android:id="@+id/price_value_text"
@@ -61,7 +70,10 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/property_type_text"
-                tools:text="$100,000" />
+                tools:text="$100,000"
+                android:text="@{viewModel.displayPropertyPrice}"/>
+            <!-- 15.1.5 преобразованный в строковое значение цена "@{String.valueOf(viewModel.selectedProperty.price)}" -->
+            <!-- 15.6.3 android:text="@{viewModel.displayPropertyPrice}" -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

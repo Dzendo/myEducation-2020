@@ -22,7 +22,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/overviewFragment">
-
+    <!--  График навигации StartDestination указывает на overviewFragment,
+         поэтому фрагмент обзора создается при запуске приложения -->
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.example.android.marsrealestate.overview.OverviewFragment"
@@ -38,6 +39,10 @@
         android:name="com.example.android.marsrealestate.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
+        <!-- 15.4.2 Этот аргумент называется selectedProperty типом MarsProperty. -->
+        <argument
+            android:name="selectedProperty"
+            app:argType="com.example.android.marsrealestate.network.MarsProperty"/>
     </fragment>
 
 </navigation>

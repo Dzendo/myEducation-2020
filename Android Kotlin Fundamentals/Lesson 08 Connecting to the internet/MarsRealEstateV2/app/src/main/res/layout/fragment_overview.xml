@@ -21,6 +21,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--  Он импортирует OverviewViewModel и затем связывает ответ от ViewModel к TextView -->
     <data>
         <variable
             name="viewModel"
@@ -31,14 +32,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.android.marsrealestate.MainActivity">
-        <TextView
+        <!-- 12.2 Давайте реализуем Адаптер RecyclerView в нашем приложении, чтобы показать наш список фотографий марсохода. -->
+        <!-- 12.1.5 замените TextView с RecyclerView, используя GridLayoutManager для отображения элементов в сетке 2 колонки -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photos_grid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:padding="6dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:listData="@{viewModel.properties}"
+            app:spanCount="2"
+            tools:itemCount="16"
+            tools:listitem="@layout/grid_view_item" />
+        <!-- 12.2.8  привязать из BindingAdapters.kt адаптер listData привязки к viewModel.properties: -->
+        <!-- 12.2.10 добавьте атрибут к, RecyclerView чтобы установить clipToPadding в false: -->
+
+        <!--13.5 добавьте status_image ImageView к ConstraintLayout. -->
+        <ImageView
+            android:id="@+id/status_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.response}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:marsApiStatus="@{viewModel.status}" />
+        <!-- 13.5 Также включите атрибут для marsApiStatus привязки адаптера привязки к viewModel.status: -->
+
+        <!-- 11.1.5 В fragment_overview.xml изменении TextView привязки к viewModel.property.imgSrcUrl. -->
+        <!--  отображается URL-адрес первого изображения Марса в 11.2,.. отобразим это изображение с помощью Glide.-->
+        <!--TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.property.imgSrcUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" /-->
+        <!--до 11.1.5  android:text="@{viewModel.response}" выводила количество-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Real Estate on Mars V2</string>
+    <string name="show_rent">Аренда</string>
+    <string name="show_buy">Покупка</string>
+    <string name="type_rent">Аренда</string>
+    <string name="type_sale">Продажа</string>
+    <string name="show_all" translatable="false">Все</string>
+</resources>
