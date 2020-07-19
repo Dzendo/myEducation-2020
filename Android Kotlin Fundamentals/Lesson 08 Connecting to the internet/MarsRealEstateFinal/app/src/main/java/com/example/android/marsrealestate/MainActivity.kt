@@ -19,15 +19,27 @@ package com.example.android.marsrealestate
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.setContentView
+import com.example.android.marsrealestate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     /**
-     * Our MainActivity is only responsible for setting the content view that contains the
-     * Navigation Host.
+     * STANDART FINALY CODELABS INTERNET + RecyclerView 15.07.2020
+     * Our MainActivity is only responsible for setting the content view that contains the Navigation Host.
+     *  Наша основная деятельность связана только с настройкой представления контента, содержащего Навигационный Хост.
+     * N:\2020_GCAAD\Android Kotlin Fundamentals\Lesson 08 Connecting to the internet\MarsRealEstateFinal\app\build\generated\data_binding_base_class_source_out\debug\out\com\example\android\marsrealestate\databinding
+     * <androidx.fragment.app.FragmentContainerView/>
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //setContentView(ActivityMainBinding.inflate(layoutInflater).root)
+        //val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+        //    this, R.layout.activity_main)
+        //val binding1 = ActivityMainBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+
     }
 }

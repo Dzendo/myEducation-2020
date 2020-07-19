@@ -23,7 +23,7 @@ plugins {
 }
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.0'
+    buildToolsVersion '30.0.1'
     defaultConfig {
         applicationId "com.example.android.devbytevieweru"
         minSdkVersion 22
@@ -69,6 +69,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version_kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$version_kotlin"  // AS
+    implementation 'com.google.android.material:material:1.1.0'
 
 
     // Support libraries

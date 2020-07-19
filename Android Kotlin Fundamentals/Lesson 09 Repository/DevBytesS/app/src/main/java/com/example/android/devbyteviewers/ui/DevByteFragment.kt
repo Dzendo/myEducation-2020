@@ -154,7 +154,7 @@ class DevByteFragment : Fragment() {
 
         // Observer for the network error.
         // Наблюдатель для ошибки сети.
-        viewModel.eventNetworkError.observe(this, Observer<Boolean> { isNetworkError ->
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
             if (isNetworkError) onNetworkError()
         })
 
@@ -201,7 +201,7 @@ class VideoClick(val block: (DevByteVideo) -> Unit) {
 
 /**
  * RecyclerView Adapter for setting up data binding on the items in the list.
- * RecyclerView Adapter for setting up data binding on the items in the list.
+ * Адаптер RecyclerView для настройки привязки данных к элементам списка.
  */
 class DevByteAdapter(val callback: VideoClick) : RecyclerView.Adapter<DevByteViewHolder>() {
 

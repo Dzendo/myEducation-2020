@@ -92,6 +92,7 @@ fun NetworkVideoContainer.asDatabaseModel(): List<DatabaseVideo> {
                 updated = it.updated,
                 thumbnail = it.thumbnail)
     }
+}
     /* Первый вариант Udacity - простейший
     fun NetworkVideoContainer.asDatabaseModel(): Array<DatabaseVideo> {
     return videos.map {
@@ -104,4 +105,3 @@ fun NetworkVideoContainer.asDatabaseModel(): List<DatabaseVideo> {
        }.toTypedArray()
     }
      */
-}

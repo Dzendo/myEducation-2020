@@ -24,7 +24,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.0'
+    buildToolsVersion '30.0.1'
     defaultConfig {
         applicationId "com.example.android.devbyteviewerw"
         minSdkVersion 22
@@ -81,7 +81,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.0'
 
     // constraint layout
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'  // 1.1.3
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta8'  // 1.1.3
 
     // navigation
     def nav_version = '2.3.0'

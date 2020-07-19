@@ -5,5 +5,5 @@
     <string name="show_buy">Покупка</string>
     <string name="type_rent">Аренда</string>
     <string name="type_sale">Продажа</string>
-    <string name="show_all" translatable="false">Все</string>
+    <string name="show_all" >Все</string>
 </resources>

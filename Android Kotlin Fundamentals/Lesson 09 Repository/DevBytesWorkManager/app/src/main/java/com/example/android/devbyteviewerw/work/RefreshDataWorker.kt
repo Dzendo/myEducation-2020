@@ -43,4 +43,15 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters) :
 
         return Result.success()
     }
+   /* override suspend fun doWork(): Payload {
+        val database = getDatabase(applicationContext)
+        val repository = VideosRepository(database)
+
+        return try {
+            repository.refreshVideos()
+            Payload(Result.SUCCESS)
+        } catch (e: HttpException) {
+            Payload(Result.RETRY)
+        }
+    }*/
 }
