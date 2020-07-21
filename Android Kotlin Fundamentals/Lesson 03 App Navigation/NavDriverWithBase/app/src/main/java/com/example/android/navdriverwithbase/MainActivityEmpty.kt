@@ -28,6 +28,4 @@ class MainActivityEmpty : AppCompatActivity() {
         binding.buttonNda -> startActiv<MainActivityNDA>()
         else -> startActiv<MainActivityEmpty>()
     }
-
-
 }

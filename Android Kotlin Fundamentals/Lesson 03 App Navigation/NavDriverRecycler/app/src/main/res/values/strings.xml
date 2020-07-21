@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Nav423</string>
+    <string name="navigation_drawer_open">Открыт navigation drawer</string>
+    <string name="navigation_drawer_close">Закрыт navigation drawer</string>
+    <string name="nav_header_title">Android Studio 4.2.alpha 4</string>
+    <string name="nav_header_subtitle">Почта android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header Заголовок</string>
+    <string name="action_settings">Настройки</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+</resources>

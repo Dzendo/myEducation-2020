@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
@@ -21,8 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:onClick="rollDice"
-            android:text="@string/roll_label"
-            tools:ignore="OnClick" />
+            android:text="@string/roll_label"  />
 
         <Button
             android:id="@+id/clear_button"
@@ -31,8 +31,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical"
             android:onClick="clearDice"
-            android:text="@string/clear_label"
-            tools:ignore="OnClick" />
+            android:text="@string/clear_label" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

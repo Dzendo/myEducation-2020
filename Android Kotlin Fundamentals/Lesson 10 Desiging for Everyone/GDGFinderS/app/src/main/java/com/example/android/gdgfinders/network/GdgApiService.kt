@@ -29,7 +29,8 @@ import retrofit2.http.GET
 // with the given URL (app crashing), use the alternative.
 // Альтернативный URL-адрес для сервера с недавних снимков. Если у вас возникли проблемы
 // с заданным URL-адресом (сбой приложения) используйте альтернативу.
-private const val BASE_URL = "https://developers.google.com/community/gdg/groups/"
+//private const val BASE_URL = "https://developers.google.com/community/gdg/groups/"
+private const val BASE_URL = "https://gdg.community.dev/"
 
 interface GdgApiService {
     @GET("directory.json")

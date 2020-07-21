@@ -15,8 +15,7 @@
     android:layout_height="match_parent"
     android:background="#2196F3"
     tools:context=".MainActivityBind"
-    android:orientation="vertical">
-    <!--android:orientation="@{mainBind.orientation}"-->
+    android:orientation="@{mainBind.orientation}">
     <!--android:orientation="@={mainBind.orient}"-->
     <!--android:orientation="vertical"-->
     <!--android:orientation="@={mainBinding.requestedOrientation}"-->

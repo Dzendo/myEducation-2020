@@ -33,7 +33,7 @@ class MainActivityBind : AppCompatActivity() {
                 LinearLayoutCompat.VERTICAL // binding
             else
                 LinearLayoutCompat.HORIZONTAL // binding
-            binding.rootLayout.orientation = orientation
+           // binding.rootLayout.orientation = orientation  //   сам XML берет
 /*
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             binding.rootLayout.orientation = LinearLayoutCompat.VERTICAL // binding

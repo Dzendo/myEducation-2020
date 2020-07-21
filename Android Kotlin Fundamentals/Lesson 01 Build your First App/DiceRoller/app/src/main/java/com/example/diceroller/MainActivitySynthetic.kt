@@ -24,8 +24,9 @@ class MainActivitySynthetic : AppCompatActivity() {
          else
             root_layout.orientation = LinearLayoutCompat.HORIZONTAL // synthetic
 
-       // roll_button.setOnClickListener { rollDice() }
-        //clear_button.setOnClickListener { clearDice() }
+        // roll_button.setOnClickListener { rollDice() }
+        // clear_button.setOnClickListener { clearDice() }
+        // Стоит прямой вызов из XML onClick из MainActivity средствами XML
 
     }
    fun clearDice(view: View) {

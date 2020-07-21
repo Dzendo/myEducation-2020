@@ -2,61 +2,57 @@ package com.example.diceroller
 
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.databinding.DataBindingUtil
 import com.example.diceroller.databinding.ActivityBindBinding
 import timber.log.Timber
+import kotlin.properties.Delegates
 
 
 class MainActivityBind : AppCompatActivity() {
     private lateinit var binding: ActivityBindBinding
-    var orient : String= "Orient"
+    var orient by Delegates.notNull<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+       orient = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            LinearLayoutCompat.VERTICAL
+        else
+            LinearLayoutCompat.HORIZONTAL
         // setContentView<ActivityBindBinding>(this,R.layout.activity_bind)
         //binding = DataBindingUtil.setContentView (this, R.layout.activity_bind)
-        binding = setContentView(this,R.layout.activity_bind)
-
+        //binding = setContentView(this,R.layout.activity_bind)
+        binding = ActivityBindBinding.inflate(layoutInflater)
+        
+        binding.mainBind = this  // !!!!! ПЕРЕДАТЬ В XML ССЫЛКУ НА ЭТОТ MAIN ОБЯЗАТЕЛЬНО
+        
         Timber.i( "onCreate Timber")
         Log.i("MainActivity", "onCreate Log")
 
-
+        /* Можно и так но сейчас строится вверху и вызывается из XML
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-            binding.rootLayout.orientation = LinearLayoutCompat.VERTICAL // binding
+           binding.rootLayout.orientation = LinearLayoutCompat.VERTICAL // binding
          else
             binding.rootLayout.orientation = LinearLayoutCompat.HORIZONTAL // binding
-
-        //binding.nameText.text = "Стартовали"
-        Toast.makeText(this, binding.nameText.text,
-                Toast.LENGTH_SHORT).show()
-
-        binding.rollButton.setOnClickListener { rollDice() }
-        binding.clearButton.setOnClickListener { clearDice() }
+        */
+        
+       // binding.rollButton.setOnClickListener { rollDice() }
+       // binding.clearButton.setOnClickListener { clearDice() }
+        // Вызов нажатия стоит в XML методами binding
+        
+        return setContentView(binding.root)
 
     }
-   //fun clearDice(view: View) {
-   private fun clearDice() {
+   fun clearDice() {
+   //private fun clearDice() {
       binding.diceImage.setImageResource( R.drawable.empty_dice)
       binding.diceImage2.setImageResource( R.drawable.empty_dice)
-       binding.nameText.text = "Почистили"
-       //Toast.makeText(this, " clear button clicked",
-       Toast.makeText(this, binding.nameText.text,
-            Toast.LENGTH_SHORT).show()
-
     }
-    //fun rollDice(view: View) {
-    private fun rollDice() {
+    fun rollDice() {
+    //private fun rollDice() {
       binding.diceImage.setImageResource(getRandomDiceImage())
       binding.diceImage2.setImageResource(getRandomDiceImage())
-        binding.nameText.text = "Ва Банк"
-        Toast.makeText(this, binding.nameText.text,
-            Toast.LENGTH_SHORT).show()
-
     }
     private fun getRandomDiceImage(): Int = when ((1..6).random()) {
             1 -> R.drawable.dice_1

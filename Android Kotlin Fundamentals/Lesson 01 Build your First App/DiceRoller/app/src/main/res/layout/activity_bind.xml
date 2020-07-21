@@ -8,15 +8,14 @@
             name="mainBind"
             type="com.example.diceroller.MainActivityBind" />
     </data>
-<androidx.appcompat.widget.LinearLayoutCompat
 
+<androidx.appcompat.widget.LinearLayoutCompat
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2196F3"
     tools:context=".MainActivityBind"
-    android:orientation="vertical">
-    <!--android:orientation="@={mainBind.orient}"-->
+    android:orientation="@{mainBind.orient}">
     <!--android:orientation="vertical"-->
     <!--android:orientation="@={mainBinding.requestedOrientation}"-->
 
@@ -25,30 +24,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/name_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:text="@{mainBind.orient}"
-            android:textAlignment="center" />
 
         <Button
             android:id="@+id/roll_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/roll_label"/>
+            android:text="@string/roll_label"
+            android:onClick="@{() -> mainBind.rollDice()}"/>
             <!--android:onClick="rollDice"
             tools:ignore="OnClick" /-->
-        <!-- @{() -> callback.add(viewModel.plant)} -->
+        <!-- @{() -> mainBind.rollDice()} -->
 
         <Button
             android:id="@+id/clear_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:text="@string/clear_label"/>
+            android:text="@string/clear_label"
+            android:onClick="@{() -> mainBind.clearDice()}"/>
             <!--android:onClick="clearDice"
             tools:ignore="OnClick" /-->
 
