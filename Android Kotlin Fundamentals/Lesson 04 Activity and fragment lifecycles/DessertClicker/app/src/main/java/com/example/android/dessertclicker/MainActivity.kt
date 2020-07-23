@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         // Use Data Binding to get reference to the views
         // Используйте привязку данных для получения ссылки на представления
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+        
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }

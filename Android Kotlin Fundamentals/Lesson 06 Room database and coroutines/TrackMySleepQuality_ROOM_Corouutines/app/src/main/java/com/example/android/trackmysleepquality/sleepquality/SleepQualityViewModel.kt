@@ -34,7 +34,7 @@ class SleepQualityViewModel(
     //Внутри SleepQualityViewModel класса определите Job и uiScope
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private val uiScope1 = CoroutineScope(Dispatchers.Main) // +  Job() добавляет сама
+    //private val uiScope1 = CoroutineScope(Dispatchers.Main) // +  Job() добавляет сама
     // Чтобы вернуться к SleepTrackerFragment использованию того же шаблона,
     // что и выше, объявите _navigateToSleepTracker - флаг возврата обратно для фрагмента
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
