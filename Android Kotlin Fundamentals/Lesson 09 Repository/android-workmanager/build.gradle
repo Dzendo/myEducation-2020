@@ -22,7 +22,7 @@ buildscript {
     versions.minSdk = 28
     versions.targetSdk = 30
     versions.kotlin = '1.4-M3'
-    versions.work = "2.3.4"
+    versions.work = "2.4.0"
 
     repositories {
         google()
@@ -30,7 +30,7 @@ buildscript {
         maven { url = "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha04'
+        classpath 'com.android.tools.build:gradle:4.2.0-alpha05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }
