@@ -1,0 +1,43 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.android.gdgfinders">
+
+    <!-- In order for our app to access the Internet, we need to define this permission. -->
+    <!-- Для того, чтобы наше приложение получило доступ к интернету, нам нужно определить это разрешение. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- To access the location we need to ask for permission -->
+    <!-- Чтобы получить доступ к этому месту, нам нужно попросить разрешения -->
+    <!-- see https://developer.android.com/training/location/retrieve-current.html -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/AppTheme"
+            android:supportsRtl="true"
+            tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <!-- android:supportsRtl="true" - разрешение на поддержку языков справа-налево -->
+        <!-- Везде использовать вместо left - start  и вместо Right - End -->
+
+        <activity android:name="com.example.android.gdgfinders.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+
+    </application>
+    <!-- В res/values папке preloaded_fonts.xml файл, в котором перечислены все загружаемые шрифты для этого приложения-->
+    <!-- Этот тег сообщает Google Play Services, что это приложение хочет использовать загруженные шрифты -->
+    <!-- поставщик шрифтов загружает шрифт из Интернета, если шрифт еще не доступен на устройстве -->
+</manifest>
