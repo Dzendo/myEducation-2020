@@ -25,16 +25,25 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
+//  https://andre-max.github.io/gdg-json/each_chapter.json
+//  https://andre-max.github.io/gdg-json/chapter_region.json
+
+//  https://gdg.community.dev/api/chapter_region?chapters=true
+//  https://gdg.community.dev/api/chapter_region
+
+// private const val BASE_URL = "https://gdg.community.dev/"
+// @GET("directory.json")
+
 // The alternative URL is for a server with a recent snapshot. If you are having problems
 // with the given URL (app crashing), use the alternative.
 // Альтернативный URL-адрес для сервера с недавних снимков. Если у вас возникли проблемы
 // с заданным URL-адресом (сбой приложения) используйте альтернативу.
 //private const val BASE_URL = "https://developers.google.com/community/gdg/groups/"
-private const val BASE_URL = "https://gdg.community.dev/"
+private const val BASE_URL = "https://gdg.community.dev/api/"
 
 interface GdgApiService {
-    @GET("directory.json")
 
+    @GET("chapter_region?chapters=true")
     fun getChapters():
     // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
     // Адаптер вызова сопрограммы позволяет нам возвращать отложенное задание с результатом

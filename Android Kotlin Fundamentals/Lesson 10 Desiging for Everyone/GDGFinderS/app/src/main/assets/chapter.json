@@ -1,0 +1,27 @@
+[
+  {
+    "id": 5,
+    "order": 1,
+    "title": "North America"
+  },
+  {
+    "id": 4,
+    "order": 2,
+    "title": "South America"
+  },
+  {
+    "id": 2,
+    "order": 3,
+    "title": "Europe, Middle East & North Africa"
+  },
+  {
+    "id": 1,
+    "order": 4,
+    "title": "Africa (Sub-Saharan)"
+  },
+  {
+    "id": 3,
+    "order": 5,
+    "title": "Asia"
+  }
+]
