@@ -24,6 +24,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.samples.apps.sunfloweras.databinding.ActivityGardenBinding
 
 /*import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
@@ -33,7 +34,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 */
-import com.google.samples.apps.sunfloweras.databinding.ActivityGardenBinding
 import com.google.samples.apps.sunfloweras.workers.SeedDatabaseWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +49,7 @@ class GardenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         delayedInit()
         setContentView<ActivityGardenBinding>(this,R.layout.activity_garden) // Tien
+       // setContentView<ActivityGardenBinding>(applicationContext)
 
         /* из документации создание binding AS
         val binding1: ActivityGardenBinding = ActivityGardenBinding.inflate(layoutInflater)  // статических методов

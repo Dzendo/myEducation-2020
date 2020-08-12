@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sunflower">
         <activity
-            android:name="com.google.samples.apps.sunfloweras.GardenActivity"
+            android:name=".GardenActivity"
             android:theme="@style/Theme.Sunflower.NoActionBar">
             <!--android:theme="@style/Theme.Sunflower.NoActionBar"-->
             <intent-filter>

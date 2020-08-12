@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2018, The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!-- viewBinding = true без layout -->
+<!--layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/navdrawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- android:fitsSystemWindows="true"-->
+<!-- именно эта обертка необходима для стрелки назад и м.б. для выдвижное мен. -->
+
+    <!-- пришлось поставить т.к. добавлено сюда нижнее меню -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+    <!--  (04) Add a fragment tag for the titleFragment in the LinearLayout
+         Use @+id/titleFragment for the android:id
+         Use com.example.android.navigation.TitleFragment for the android:name
+         Use match_parent for the layout_height and layout_width -->
+    <!--fragment
+        android:id="@+id/titleFragment"
+        android:name="com.example.android.navigation.TitleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        /-->
+    <!-- The NavHostFragment within the activity_main layout
+    Переключаем фрагмент на НАВИГАТОР и указываем на какой @navigation/navigation-->
+    <fragment
+        android:id="@+id/myNavHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation" />
+    <!-- Теперь этот хост навигации является хостом по умолчанию и будет перехватывать системную кнопку Назад.-->
+
+        <!-- Нижнее навигационное меню точнее место для него и ссылка на то что будет в меню -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav_view"
+            app:menu = "@menu/bottom_nav_menu"
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Бутерброд Должен стоять последним иначе не вызывает содержимое -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navdrawer_nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/navdrawer_menu" />
+    <!-- android:fitsSystemWindows="true"-->
+    <!-- именно эта обертка дает выдвижное мен. -->
+</androidx.drawerlayout.widget.DrawerLayout>
+    <!--/layout-->

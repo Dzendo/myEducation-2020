@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Real Estate on Mars V2</string>
+
+    <string name="show_all" translatable="false">Show all</string>
+    <string name="show_rent" translatable="false">Rent</string>
+    <string name="show_buy" translatable="false">Buy</string>
+    <string name="type_rent" translatable="false">Rent</string>
+    <string name="type_sale" translatable="false">Sale</string>
+    <string name="display_type" translatable="false">For %s</string>
+    <string name="display_price_monthly_rental" translatable="false">$%,.0f/month</string>
+    <string name="display_price" translatable="false">$%,.0f</string>
+</resources>
