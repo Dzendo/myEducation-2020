@@ -1,0 +1,48 @@
+<CoordinatorLayout>
+    <AppbarLayout/>
+    <scrollableView/>
+    <FloatingActionButton/>
+</CoordinatorLayout>
+
+Значение: scroll в данном случае присутствует почти во всех элементах view, если бы этот параметр не был указан ни в одном из элементов AppbarLayout, он остался бы неизменным, позволяя прокручиваемому контенту проходить позади него.
+
+Со значением: snap, мы избегаем попадания в полу-анимационного-состояния, это значит, что анимация всегда скрывает или отображает полный размер view.
+
+LinearLayout который содержит заголовок и подзаголовок будет всегда отображен при прокручивании вверх, (enterAlways значение), и TabLayout будет видим всегда так как на него не установлен ни один флаг.
+
+<AppBarLayout>
+    <CollapsingToolbarLayout
+        app:layout_scrollFlags="scroll|snap"
+        />
+
+    <Toolbar
+        app:layout_scrollFlags="scroll|snap"
+        />
+
+    <LinearLayout
+        android:id="+id/title_container"
+        app:layout_scrollFlags="scroll|enterAlways"
+        />
+
+    <TabLayout /> <!-- no flags -->
+</AppBarLayout>
+
+Флаги AppbarLayout
+
+SCROLL_FLAG_ENTER_ALWAYS: При использовании флага, view будет прокручиваться вниз не зависимо от других прокручиваемых view.
+SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED: Дополнительный флаг для 'enterAlways', который изменяет возвращаемый view к изначально прокручиваемому, при исчезновении высоты.
+SCROLL_FLAG_EXIT_UNTIL_COLLAPSED: При выходе, view будет прокручен до тех пор пока не исчезнет.
+SCROLL_FLAG_SCROLL: Элемент view будет прокручиваться в направлении события прокрутки.
+SCROLL_FLAG_SNAP: В конце прокрутки, если view видим только частично, он будет докручен до его ближайшего края.
+
+CoordinatorLayout Behaviors
+
+SwipeDismissBehavior
+
+Custom Behaviors
+
+Child и dependency
+
+child это элемент который усиливает поведение, dependency — тот кто будет обслуживать его как тригер для взаимодействия с child элементом. Посмотрим на пример, child — элемент ImageView, а dependency это Toolbar, таким образом, если Toolbar движется, ImageView тоже движется.
+
+

@@ -56,7 +56,7 @@ MediatorLiveData дает возможность собирать данные �
 Вы объединяете их в один и подписываетесь только на него.
      */
     private val night = MediatorLiveData<SleepNight>()
-    //private val night: LiveData<SleepNight>
+    //private val night1: LiveData<SleepNight> = TODO()
 
 
     fun getNight() = night
