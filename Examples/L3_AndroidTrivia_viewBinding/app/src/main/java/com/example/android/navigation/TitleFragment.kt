@@ -46,6 +46,7 @@ class TitleFragment : Fragment() {
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        // super.onActivityCreated(savedInstanceState)
         Log.i("TitleFragment", "onActivityCreated called")
     }
     override fun onStart() {
