@@ -22,7 +22,7 @@ plugins {
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion '30.0.1'
+    buildToolsVersion '30.0.2'
     defaultConfig {
         applicationId "com.example.android.databinding.twowaysample"
         minSdkVersion rootProject.minSdkVersion

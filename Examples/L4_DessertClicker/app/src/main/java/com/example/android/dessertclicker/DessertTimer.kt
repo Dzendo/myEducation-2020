@@ -17,6 +17,7 @@
 package com.example.android.dessertclicker
 
 import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -58,7 +59,7 @@ class DessertTimer(lifecycle: Lifecycle) : LifecycleObserver {
      * [Handler] - это класс, предназначенный для обработки очереди сообщений (известный как [android.ос.Сообщение]s)
      * или действия (известные как [Runnable] s)
      */
-    private var handler = Handler()
+    private var handler = Handler(Looper.myLooper()!!)
     private lateinit var runnable: Runnable
     init {
         // метод для подключения объекта жизненного цикла, переданного от владельца (действия)

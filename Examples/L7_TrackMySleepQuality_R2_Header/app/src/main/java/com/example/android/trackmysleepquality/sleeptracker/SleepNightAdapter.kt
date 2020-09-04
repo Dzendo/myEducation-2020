@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Цель этого адартеоа - составить список сна ночью и адаптировать его во что-то,
+ * Цель этого адаптера - составить список сна ночью и адаптировать его во что-то,
  * что переработчик может использовать для отображения на экране
  */
 //23,6 Затем, чтобы выяснить, какой тип представления вернуть, добавьте проверку,
@@ -45,7 +45,7 @@ private val ITEM_VIEW_TYPE_ITEM = 1
 //23,3 Обновите объявление SleepNightAdapter для поддержки любого типа держателя представления.
 //class SleepNightAdapter:
 //    ListAdapter<SleepNight, RecyclerView.ViewHolder>(SleepNightDiffCallback())
-//23,4 Теперь давайте обновимся, ListAdapterчтобы содержать список DataItem вместо списка SleepNight:
+//23,4 Теперь давайте обновимся, ListAdapter чтобы содержать список DataItem вместо списка SleepNight:
 class SleepNightAdapter(private val clickListener: SleepNightListener):
     ListAdapter<DataItem, RecyclerView.ViewHolder>(SleepNightDiffCallback()) {
 

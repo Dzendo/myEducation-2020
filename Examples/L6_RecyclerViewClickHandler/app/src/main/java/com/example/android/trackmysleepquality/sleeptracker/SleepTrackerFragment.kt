@@ -36,6 +36,10 @@ import com.google.android.material.snackbar.Snackbar
  * a database. Cumulative data is displayed in a simple scrollable TextView.
  * (Because we have not learned about RecyclerView yet.)
  * The Clear button will clear all data from the database.
+ * Фрагмент с кнопками для записи времени начала и окончания сна, которые сохраняются в
+ * база данных. Совокупные данные отображаются в простом прокручиваемом текстовом представлении.
+ * (Потому что мы еще не узнали о RecyclerView.)
+ * Кнопка Очистить очистит все данные из базы данных.
  */
 class SleepTrackerFragment : Fragment() {
 
@@ -89,10 +93,10 @@ class SleepTrackerFragment : Fragment() {
 
         // Add an Observer on the state variable for showing a Snackbar message
         // when the CLEAR button is pressed.
-        sleepTrackerViewModel.showSnackBarEvent.observe(this, Observer {
+        sleepTrackerViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) { // Observed state is true.
                 Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
+                        requireActivity().findViewById(android.R.id.content),
                         getString(R.string.cleared_message),
                         Snackbar.LENGTH_SHORT // How long to display the message.
                 ).show()
@@ -103,7 +107,7 @@ class SleepTrackerFragment : Fragment() {
         })
 
         // Add an Observer on the state variable for Navigating when STOP button is pressed.
-        sleepTrackerViewModel.navigateToSleepQuality.observe(this, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
                 // We need to get the navController from this, because button is not ready, and it
                 // just has to be a view. For some reason, this only matters if we hit stop again
@@ -122,7 +126,7 @@ class SleepTrackerFragment : Fragment() {
         })
 
         // Add an Observer on the state variable for Navigating when and item is clicked.
-        sleepTrackerViewModel.navigateToSleepDetail.observe(this, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepDetail.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
 
                 this.findNavController().navigate(
