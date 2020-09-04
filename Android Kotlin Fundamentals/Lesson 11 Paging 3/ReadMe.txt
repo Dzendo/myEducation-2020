@@ -1,3 +1,5 @@
+https://startandroid.ru/ru/courses/architecture-components/27-course/architecture-components/542-urok-14-paging-library-chast-1.html
+
 https://developer.android.com/topic/libraries/architecture/paging/v3-overview
 
 https://codelabs.developers.google.com/codelabs/android-paging/#1
@@ -10,6 +12,7 @@ https://github.com/android/architecture-components-samples/tree/paging3/PagingWi
 
 https://codelabs.developers.google.com/codelabs/android-room-with-a-view/index.html?index=..%2F..%2Findex#0
 https://codelabs.developers.google.com/codelabs/advanced-kotlin-coroutines/#0
+
 
 
  compileSdkVersion = 30

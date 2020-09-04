@@ -19,7 +19,6 @@ package com.example.android.codelabs.paging.api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -28,11 +27,14 @@ import retrofit2.http.Query
 const val IN_QUALIFIER = "in:name,description"
 
 /**
+ * api - вызовы API Github с использованием Retrofit.
  * Github API communication setup via Retrofit.
+ * Настройка связи API Github через Retrofit.
  */
 interface GithubService {
     /**
      * Get repos ordered by stars.
+     * Получите РЕПО, заказанные звездами.
      */
     @GET("search/repositories?sort=stars")
     suspend fun searchRepos(
