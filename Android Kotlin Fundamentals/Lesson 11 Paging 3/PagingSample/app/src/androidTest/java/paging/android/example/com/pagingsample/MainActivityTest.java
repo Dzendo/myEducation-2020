@@ -38,6 +38,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Simply sanity test to ensure that activity launches without any issues and shows some data.
+ * Просто тест на здравомыслие, чтобы убедиться, что активность запускается без каких-либо проблем и показывает некоторые данные.
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {

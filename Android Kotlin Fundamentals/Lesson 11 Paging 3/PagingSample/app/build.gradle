@@ -49,14 +49,16 @@ android {
 }
 
 dependencies {
-    implementation deps.app_compat
-    implementation deps.fragment.runtime_ktx
-    implementation deps.recyclerview
-    implementation deps.cardview
-    implementation deps.room.runtime
-    implementation deps.lifecycle.runtime
-    implementation deps.paging_runtime
-    implementation deps.kotlin.stdlib
+    implementation deps.app_compat  // versions.appcompat
+    implementation deps.fragment.runtime_ktx  // versions.fragment
+    implementation deps.recyclerview  // versions.recyclerview
+    implementation deps.cardview  // versions.cardview
+    implementation deps.room.runtime  // versions.room
+    //implementation deps.room.compiler  // versions.room
+    kapt "androidx.room:room-compiler:2.3.0-alpha01"
+    implementation deps.lifecycle.runtime // versions.lifecycle
+    implementation deps.paging_runtime  // versions.paging
+    implementation deps.kotlin.stdlib  // versions.kotlin
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.atsl.core

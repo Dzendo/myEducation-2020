@@ -17,10 +17,12 @@
 package paging.android.example.com.pagingsample
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Data class that represents our items.
+ * Класс данных, представляющий наши элементы.
  */
-@Entity
+@Entity (indices = [Index(value = ["name", "id" ])])
 data class Cheese(@PrimaryKey(autoGenerate = true) val id: Int, val name: String)

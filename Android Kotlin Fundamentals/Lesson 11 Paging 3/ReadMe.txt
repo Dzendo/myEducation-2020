@@ -15,19 +15,20 @@ https://codelabs.developers.google.com/codelabs/advanced-kotlin-coroutines/#0
 
 
 
- compileSdkVersion = 30
-    minSdkVersion = 28
-    targetSdkVersion = 30
+  compileSdkVersion = 30
+    buildToolsVersion = '30.0.2'
+    minSdkVersion = 22
+    targetSdkVersion = 29
     supportLibVersion = '1.2.0'
     coreVersion = '1.3.1'
     recyclerViewVersion = '1.2.0-alpha05'
     constraintLayoutVersion = '2.0.1'
-    materialVersion = '1.2.0'
+    materialVersion = '1.2.1'
     lifecycleVersion = '2.2.0'
     roomVersion = '2.3.0-alpha02'
     pagingVersion = '3.0.0-alpha06'
-    retrofitVersion = '2.7.2'
-    okhttpLoggingInterceptorVersion = '4.0.0'
+    retrofitVersion = '2.9.0'
+    okhttpLoggingInterceptorVersion = '4.8.1'
     coroutines = '1.3.9'
 
     runnerVersion = '1.3.0'

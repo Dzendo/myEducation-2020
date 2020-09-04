@@ -34,6 +34,10 @@ import kotlinx.coroutines.launch
  * <p>
  * Cheeses are stored in a database, so swipes and additions edit the database directly, and the UI
  * is updated automatically using paging components.
+ * Показывает список сыров с салфеткой для удаления и полем ввода в верхней части для добавления.
+ * <P>в
+ * Сыры хранятся в базе данных, поэтому свайпы и дополнения редактируют непосредственно базу данных, а также пользовательский интерфейс
+ * обновляется автоматически с помощью компонентов подкачки.
  */
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<CheeseViewModel>()
@@ -42,12 +46,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //viewModel.count().observe(this) { count -> title = "Paging записей=$count" }
+
         // Create adapter for the RecyclerView
+        // Создать адаптер для RecyclerView
         val adapter = CheeseAdapter()
         cheeseList.adapter = adapter
 
         // Subscribe the adapter to the ViewModel, so the items in the adapter are refreshed
         // when the list changes
+        // Подпишите адаптер на ViewModel, чтобы элементы в адаптере обновлялись
+        // когда список меняется
         lifecycleScope.launch {
             @OptIn(ExperimentalCoroutinesApi::class)
             viewModel.allCheeses.collectLatest { adapter.submitData(it) }
@@ -60,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun initSwipeToDelete() {
         ItemTouchHelper(object : ItemTouchHelper.Callback() {
             // enable the items to swipe to the left or right
+            // включите свайп элементов влево или вправо
             override fun getMovementFlags(recyclerView: RecyclerView,
                                           viewHolder: RecyclerView.ViewHolder): Int =
                     makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
@@ -69,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
             // When an item is swiped, remove the item via the view model. The list item will be
             // automatically removed in response, because the adapter is observing the live list.
+            // Когда элемент прокручивается, удалите его с помощью модели представления. Пункт списка будет следующим
+            // автоматически удаляется в ответ, потому что адаптер наблюдает за живым списком.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 (viewHolder as CheeseViewHolder).cheese?.let {
                     viewModel.remove(it)
@@ -91,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // when the user taps the "Done" button in the on screen keyboard, save the item.
+        // когда пользователь нажимает кнопку "Готово" на экранной клавиатуре, сохраните элемент.
         inputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 addCheese()
@@ -99,12 +112,14 @@ class MainActivity : AppCompatActivity() {
             false // action that isn't DONE occurred - ignore
         }
         // When the user clicks on the button, or presses enter, save the item.
+        // Когда пользователь нажимает на кнопку или нажимает enter, сохраните элемент.
         inputText.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 addCheese()
                 return@setOnKeyListener true
             }
             false // event that isn't DOWN or ENTER occurred - ignore
+            // событие, которое не отключено или не введено, произошло-игнорировать
         }
     }
 }

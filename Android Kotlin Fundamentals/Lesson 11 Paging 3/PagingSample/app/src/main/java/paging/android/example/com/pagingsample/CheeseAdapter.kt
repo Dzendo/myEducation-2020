@@ -31,6 +31,16 @@ import androidx.paging.PagingDataAdapter
  * If you want to use your own Adapter base class, try using a PagedListAdapterHelper inside your
  * adapter instead.
  *
+ * Простой адаптер постраничного списка, который связывает элементы сыра в представления карт.
+ * <P>в
+ * PagedListAdapter-это RecyclerView.Базовый класс адаптера, который может представлять содержимое выгружаемых списков
+ * в RecyclerView. Он запрашивает новые страницы по мере прокрутки пользователем и обрабатывает новый список страниц с помощью
+ * вычисление различий списков в фоновом потоке и отправка минимальных эффективных обновлений в фоновый поток.
+ * RecyclerView для обеспечения минимальной работы потока пользовательского интерфейса.
+ * <P>в
+ * Если вы хотите использовать свой собственный базовый класс адаптера, попробуйте использовать помощник адаптера PagedList внутри вашего устройства.
+ * вместо адаптера.
+ *
  * @see androidx.paging.PagedListAdapter
  * @see androidx.paging.AsyncPagedListDiffer
  */
@@ -51,6 +61,13 @@ class CheeseAdapter : PagingDataAdapter<Cheese, CheeseViewHolder>(diffCallback) 
          * detect there's only a single item difference from before, so it only needs to animate and
          * rebind a single view.
          *
+         * Этот обратный вызов diff информирует адаптер PagedList о том, как вычислить различия в списках при создании нового
+         * * Появляются списки постраничных сообщений.
+         * <P>в
+         * Когда вы добавляете сыр с помощью кнопки "Добавить", PagedListAdapter использует diffCallback для
+         * обнаружьте, что есть только одно отличие элемента от предыдущего, поэтому ему нужно только анимировать и
+         * повторная привязка одного вида.
+         *
          * @see DiffUtil
          */
         private val diffCallback = object : DiffUtil.ItemCallback<Cheese>() {
@@ -60,6 +77,8 @@ class CheeseAdapter : PagingDataAdapter<Cheese, CheeseViewHolder>(diffCallback) 
             /**
              * Note that in kotlin, == checking on data classes compares all contents, but in Java,
              * typically you'll implement Object#equals, and use it to compare object contents.
+             * Обратите внимание, что в kotlin == проверка классов данных сравнивает все содержимое, но в Java,
+             * обычно вы реализуете Object#equals и используете его для сравнения содержимого объекта.
              */
             override fun areContentsTheSame(oldItem: Cheese, newItem: Cheese): Boolean =
                     oldItem == newItem
