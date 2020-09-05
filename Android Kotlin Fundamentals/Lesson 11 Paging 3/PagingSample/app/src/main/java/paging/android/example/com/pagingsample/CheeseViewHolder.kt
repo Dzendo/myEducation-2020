@@ -30,7 +30,9 @@ import android.widget.TextView
 class CheeseViewHolder(parent :ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.cheese_item, parent, false)) {
 
+    private val idView = itemView.findViewById<TextView>(R.id.id)
     private val nameView = itemView.findViewById<TextView>(R.id.name)
+
     var cheese : Cheese? = null
 
     /**
@@ -42,5 +44,6 @@ class CheeseViewHolder(parent :ViewGroup) : RecyclerView.ViewHolder(
     fun bindTo(cheese : Cheese?) {
         this.cheese = cheese
         nameView.text = cheese?.name
+        idView.text = cheese?.id.toString()
     }
 }
