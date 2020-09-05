@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package paging.android.example.com.pagingsample
+package com.android.example.paging.pagingwithnetwork.reddit.repository
 
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+enum class Status {
+    RUNNING,
+    SUCCESS,
+    FAILED
+}
 
-/**
- * Data class that represents our items.
- * Класс данных, представляющий наши элементы.
- * ОК Все стандартно
- */
-@Entity (indices = [Index(value = ["name", "id" ])])
-data class Cheese(@PrimaryKey(autoGenerate = true) val id: Int, val name: String)
+@Suppress("DataClassPrivateConstructor")
+data class NetworkState private constructor(
+        val status: Status,
+        val msg: String? = null) {
+    companion object {
+        val LOADED = NetworkState(Status.SUCCESS)
+        val LOADING = NetworkState(Status.RUNNING)
+        fun error(msg: String?) = NetworkState(Status.FAILED, msg)
+    }
+}

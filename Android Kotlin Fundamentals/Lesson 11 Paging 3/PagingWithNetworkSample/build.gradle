@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package paging.android.example.com.pagingsample
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+buildscript {
+    apply from: 'versions.gradle'
 
-/**
- * Data class that represents our items.
- * Класс данных, представляющий наши элементы.
- * ОК Все стандартно
- */
-@Entity (indices = [Index(value = ["name", "id" ])])
-data class Cheese(@PrimaryKey(autoGenerate = true) val id: Int, val name: String)
+    addRepos(repositories)
+
+    dependencies {
+        classpath deps.android_gradle_plugin
+        classpath deps.kotlin.plugin
+        classpath deps.benchmark_gradle
+    }
+    repositories {
+        google()
+    }
+}
+
+allprojects {
+    addRepos(repositories)
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

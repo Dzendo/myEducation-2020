@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package paging.android.example.com.pagingsample
+package com.android.example.paging.pagingwithnetwork.reddit.vo
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/**
- * Data class that represents our items.
- * Класс данных, представляющий наши элементы.
- * ОК Все стандартно
- */
-@Entity (indices = [Index(value = ["name", "id" ])])
-data class Cheese(@PrimaryKey(autoGenerate = true) val id: Int, val name: String)
+@Entity(tableName = "remote_keys")
+data class SubredditRemoteKey(
+    @PrimaryKey
+    @ColumnInfo(collate = ColumnInfo.NOCASE)
+    val subreddit: String, // technically mutable but fine for a demo
+    val nextPageKey: String?
+)

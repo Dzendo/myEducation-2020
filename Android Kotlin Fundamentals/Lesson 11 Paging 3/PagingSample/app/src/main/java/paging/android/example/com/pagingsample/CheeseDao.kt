@@ -25,6 +25,7 @@ import androidx.room.Query
 /**
  * Database Access Object for the Cheese database.
  * Объект доступа к базе данных для базы данных Cheese.
+ *  * ОК Все стандартно
  */
 @Dao
 interface CheeseDao {

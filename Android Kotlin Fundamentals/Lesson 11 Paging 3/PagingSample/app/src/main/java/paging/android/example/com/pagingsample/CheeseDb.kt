@@ -25,6 +25,7 @@ import android.content.Context
  * Injection framework or Service Locator to create the singleton database.
  * Одноэлементный объект базы данных. Обратите внимание, что для реального приложения вы, вероятно, должны использовать зависимость
  * Платформа инъекций или локатор служб для создания одноэлементной базы данных.
+ *  * ОК Все стандартно
  */
 @Database(entities = [Cheese::class], version = 1)
 abstract class CheeseDb : RoomDatabase() {
