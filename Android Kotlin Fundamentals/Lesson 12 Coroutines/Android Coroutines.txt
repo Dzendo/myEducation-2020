@@ -1,0 +1,153 @@
+https://developer.android.com/topic/libraries/architecture/coroutines
+
+https://codelabs.developers.google.com/codelabs/advanced-kotlin-coroutines/#9
+
+Для ViewModelScope, используйте androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01или выше.
+Для LifecycleScope, используйте androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01или выше.
+Для liveData, используйте androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01или выше.
+
+Области сопрограмм с учетом жизненного цикла
+ViewModelScope
+viewLifecycleOwner.lifecycleScope.launch {
+A ViewModelScope определяется для каждого ViewModelв вашем приложении
+Сопрограммы здесь полезны, когда у вас есть работа, которую нужно выполнить, только если ViewModel активен
+class MyViewModel: ViewModel() {
+    init {
+        viewModelScope.launch {
+            // Coroutine that will be canceled when the ViewModel is cleared.
+        }
+    }
+}
+Приостановить сопрограммы с учетом жизненного цикла
+lifecycle.whenCreated, lifecycle.whenStarted, и lifecycle.whenResumed
+lifecycleScope.launch {
+            whenStarted {
+
+Используйте сопрограммы с LiveData
+val user: LiveData<User> = liveData {
+    val data = database.loadUser() // loadUser is a suspend function.
+    emit(data)
+}
+emit()для выдачи результата:
+ Каждый emit() вызов приостанавливает выполнение блока до тех пор, пока LiveData значение не будет установлено в основном потоке.
+
+Вы также можете комбинировать liveData с Transformations, как показано в следующем примере:
+class MyViewModel: ViewModel() {
+    private val userId: LiveData<String> = MutableLiveData()
+    val user = userId.switchMap { id ->
+        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            emit(database.loadUserById(id))
+        }
+    }
+}
+
+Вы можете генерировать несколько значений из a LiveData, вызывая emitSource() функцию всякий раз, когда вы хотите передать новое значение. Обратите внимание, что каждый вызов emit() или emitSource()удаление ранее добавленного источника.
+
+class UserDao: Dao {
+    @Query("SELECT * FROM User WHERE id = :id")
+    fun getUser(id: String): LiveData<User>
+}
+
+class MyRepository {
+    fun getUser(id: String) = liveData<User> {
+        val disposable = emitSource(
+            userDao.getUser(id).map {
+                Result.loading(it)
+            }
+        )
+        try {
+            val user = webservice.fetchUser(id)
+            // Stop the previous emission to avoid dispatching the updated user
+            // as `loading`.
+            disposable.dispose()
+            // Update the database.
+            userDao.insert(user)
+            // Re-establish the emission with success type.
+            emitSource(
+                userDao.getUser(id).map {
+                    Result.success(it)
+                }
+            )
+        } catch(exception: IOException) {
+            // Any call to `emit` disposes the previous one automatically so we don't
+            // need to dispose it here as we didn't get an updated value.
+            emitSource(
+                userDao.getUser(id).map {
+                    Result.error(exception, it)
+                }
+            )
+        }
+    }
+}
+
+
+emit принимает dataкласс, тогда как emitSource принимает LiveData<T>(T -> data).
+ Рассмотрим следующий пример: - У меня два типа звонков: -
+
+suspend fun getData(): Data // returns directly data
+и другой;
+
+suspend fun getData(): LiveData<Data> // returns live data instead
+
+liveData {
+   emit(LOADING)
+   emit(getData())
+}
+
+Если я хочу показать пользователю кешированные данные из базы данных, пока я получаю свежие данные с удаленного компьютера, с помощью только emit это будет выглядеть примерно так:
+liveData{
+    emit(db.getData())
+    val latest = webService.getLatestData()
+    db.insert(latest)
+    emit(db.getData())
+}
+Но с emitSource это выглядит так:
+
+liveData{
+    emitSource(db.getData())
+    val latest = webService.getLatestData()
+    db.insert(latest)
+}
+Не нужно снова вызывать emit, так как liveData уже имеет источник.
+
+С помощью emitSource () вы можете не только передать одно значение, но и присоединить свои LiveData к другим LiveData и начать излучение из них. В любом случае каждый вызов emit () или emitSource () удаляет ранее добавленный источник.
+===============================================================================================
+
+Ботаник: 
+Первый способ создать корутину: async
+fun fechCharacterData(): Deffered<CharacterGenaration.CharacterData> {
+	return async {
+		val apiData= URL(CHARACTER_DATA_API).readText()
+		(return) CharacterGenaration.fromAPIData(apiData)
+	}
+}
+
+Deffered<CharacterGenaration.CharacterData> - обещание на будущее - будет возвращено только когда 
+будут вычеслены данные  
+ВЫЗОВ:
+
+..... AppCompactActivity(){
+	ovveride fun onCreate(..Bundle?){
+	.................
+	generateButton.setOnClickListener {
+	launch(UI) {
+		characterData = fetchCharacterData().await()
+		displayCharacterData()
+		}
+	}
+.......
+}
+Launch вызывается в главном потоке(UI) - нужен интерфейс
+а вот async вызовется в CommonPool(по умолчанию) т.е. await() выполнение fetchCharacterData()
+а она async вызовется в потоке из пула CommonPool и отдаст результат в UI в characterData
+async и launch(UI) - строители сопрограмм:
+async создает сопрограмму, которая возвращает Deffered (в будущем)а он имеет await() - приостановку  
+launch(UI) создает и сразу запускает сопрограмму 
+
+Традиционные потоки - "блокируются" - не может выполнять другую работу 
+
+Сопрограммы приостанавливаются (Значек слева) - поток не блокирован и выполняет другую работу
+.await() Это и есть suspend:
+public suspend fun await(): T
+
+

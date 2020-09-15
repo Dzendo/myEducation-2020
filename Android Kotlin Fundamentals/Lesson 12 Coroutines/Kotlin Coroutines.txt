@@ -1,0 +1,1537 @@
+
+===============================================================================================
+
+https://kotlinlang.org/docs/reference/coroutines-overview.html
+
+fun main() {
+    GlobalScope.launch { // launch a new coroutine in background and continue
+        delay(1000L) // non-blocking delay for 1 second (default time unit is ms)
+        println("World!") // print after delay
+    }
+    println("Hello,") // main thread continues while coroutine is delayed
+    Thread.sleep(2000L) // block main thread for 2 seconds to keep JVM alive
+}
+============================================================================================
+
+
+https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html
+=======================================================================================
+https://kotlinlang.org/docs/reference/coroutines/basics.html
+Здесь мы запускаем новую сопрограмму в GlobalScope , а это означает, что время жизни новой сопрограммы ограничено только временем жизни всего приложения.
+
+Ваша первая сопрограмма
+fun main() {
+    GlobalScope.launch { // launch a new coroutine in background and continue
+        delay(1000L) // non-blocking delay for 1 second (default time unit is ms)
+        println("World!") // print after delay
+    }
+    println("Hello,") // main thread continues while coroutine is delayed
+    Thread.sleep(2000L) // block main thread for 2 seconds to keep JVM alive
+}
+Hello,
+World!
+Вы можете добиться того же результата, заменив
+ GlobalScope.launch { ... }на thread { ... }и delay(...)на Thread.sleep(...)
+
+Соединение блокирующего и неблокирующего миров:
+В первом примере неблокирование delay(...) и блокировка смешиваются Thread.sleep(...)в одном коде. Легко забыть, какой из них блокирует, а какой нет. Давайте прямо скажем о блокировке с помощью построителя сопрограмм runBlocking :
+fun main() { 
+    GlobalScope.launch { // launch a new coroutine in background and continue
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,") // main thread continues here immediately
+    runBlocking {     // but this expression blocks the main thread
+        delay(2000L)  // ... while we delay for 2 seconds to keep JVM alive
+    } 
+}
+Результат тот же, но в этом коде используется только неблокирующая задержка . Вызов основного потока runBlocking блокируется до завершения внутренней сопрограммы runBlocking.
+
+Этот пример также можно переписать более идиоматическим способом, используя runBlockingдля обертывания выполнения основной функции:
+обертывания выполнения основной функции:
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking<Unit> { //  запускаем основную сопрограмму
+    GlobalScope.launch { // апускаем новую сопрограмму в фоновом режиме и продолжаем
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,") // основная сопрограмма немедленно продолжается здесь
+    delay(2000L)      // задержка на 2 секунды, чтобы JVM работала
+}
+Hello,
+World!
+Здесь runBlocking<Unit> { ... }работает как адаптер, который используется для запуска основной сопрограммы верхнего уровня. Мы явно указываем его Unitвозвращаемый тип, потому что правильно сформированная mainфункция в Kotlin должна возвращать Unit.
+
+Это также способ написания модульных тестов для приостановки функций:
+
+class  MyTest {
+    @Тест
+    fun  testMySuspendingFunction () =  runBlocking < Unit > {
+        // здесь мы можем использовать функции приостановки, используя любой стиль утверждения, который нам нравится
+    }
+}
+
+В ожидании работы
+адержка на время, пока работает другая сопрограмма, - не лучший подход. Давайте явно подождем (неблокирующим образом), пока не будет выполнено запущенное фоновое задание :
+
+val  job  =  GlobalScope . launch { // запускаем новую сопрограмму и сохраняем ссылку на ее Job
+     delay(1000L)
+    println ( "Мир!" )
+}
+println ( "Привет," )
+job.join() // ждем завершения дочерней сопрограммы
+
+Привет
+мир!
+Теперь результат тот же, но код основной сопрограммы никак не привязан к длительности фонового задания. Намного лучше.
+
+Структурированный параллелизм
+Для практического использования сопрограмм еще есть что пожелать. Когда мы используем GlobalScope.launch, мы создаем сопрограмму верхнего уровня. Несмотря на то, что он легкий, он по-прежнему потребляет некоторые ресурсы памяти во время работы. Если мы забудем сохранить ссылку на только что запущенную сопрограмму, она все равно будет работать. Что, если код в сопрограмме зависает (например, мы ошибочно задерживаем слишком долго), что, если мы запустили слишком много сопрограмм и исчерпали память? Необходимость вручную сохранять ссылки на все запущенные сопрограммы и присоединяться к ним чревата ошибками.
+
+Есть лучшее решение. В нашем коде можно использовать структурированный параллелизм. Вместо запуска сопрограмм в GlobalScope , как мы обычно делаем с потоками (потоки всегда являются глобальными), мы можем запускать сопрограммы в определенной области выполняемой операции.
+
+В нашем примере у нас есть mainфункция, которая превращается в сопрограмму с помощью построителя сопрограмм runBlocking . Каждый построитель сопрограмм, в том числе runBlocking, добавляет экземпляр CoroutineScope в область своего блока кода. Мы можем запускать сопрограммы в этой области видимости без необходимости joinих явного выполнения, потому что внешняя сопрограмма ( runBlockingв нашем примере) не завершается, пока не будут завершены все сопрограммы, запущенные в ее области. Таким образом, мы можем упростить наш пример:
+
+import kotlinx.coroutines.*
+
+fun  main () =  runBlocking { // this: CoroutineScope
+    launch { // запускаем новую сопрограмму в рамках runBlocking
+        delay(1000L)
+        println ( "Мир!" )
+    }
+    println ( "Привет," )
+}
+Hello,
+World!
+
+Создатель области видимости
+
+В дополнение к области сопрограмм, предоставляемой разными конструкторами, можно объявить свою собственную область действия с помощью построителя coroutineScope . Он создает область сопрограммы и не завершается, пока не завершатся все запущенные дочерние элементы.
+
+runBlocking и coroutineScope могут выглядеть одинаково, потому что они оба ждут завершения своего тела и всех его дочерних элементов . Основное отличие заключается в том, что метод runBlocking блокирует текущий поток для ожидания, в то время как coroutineScope просто приостанавливает работу, освобождая базовый поток для других целей. Из-за этой разницы runBlocking является обычной функцией, а coroutineScope - функцией приостановки.
+
+Это можно продемонстрировать на следующем примере:
+
+Это можно продемонстрировать на следующем примере:
+
+import kotlinx.coroutines.*
+
+fun  main () =  runBlocking { // this: CoroutineScope
+    launch {
+       delay(200L)
+        println ( "Задача от runBlocking" )
+    }
+    
+    coroutineScope { // Создает область сопрограммы
+        launch {
+            delay(500L) 
+            println ( «Задача из вложенного запуска» )
+        }
+    
+         delay(100L)
+        println ( "Задача из области сопрограммы" ) // Эта строка будет напечатана перед вложенным запуском
+    }
+    
+    println ( "Область действия сопрограммы завершена" ) // Эта строка не печатается, пока не завершится вложенный запуск
+}
+
+Task from coroutine scope
+Task from runBlocking
+Task from nested launch
+Coroutine scope is over
+Задача из области действия сопрограммы
+Задача из области запуска Блокировка
+задачи из вложенного запуска
+Область действия сопрограммы завершена
+
+Обратите внимание, что сразу после сообщения «Задача из области сопрограммы» (во время ожидания вложенного запуска) выполняется и печатается «Задача из runBlocking», хотя coroutineScope еще не завершена.
+
+ Отредактировать страницу
+Оглавление
+
+Основы сопрограмм
+Ваша первая сопрограмма
+Соединение блокирующего и неблокирующего миров
+В ожидании работы
+Структурированный параллелизм
+Создатель области видимости
+Рефакторинг функции извлечения
+Корутины легковесны
+Глобальные сопрограммы похожи на потоки демонов
+Основы сопрограмм
+В этом разделе рассматриваются основные концепции сопрограмм.
+
+Ваша первая сопрограмма
+Запустите следующий код:
+
+fun main() {
+    GlobalScope.launch { // launch a new coroutine in background and continue
+        delay(1000L) // non-blocking delay for 1 second (default time unit is ms)
+        println("World!") // print after delay
+    }
+    println("Hello,") // main thread continues while coroutine is delayed
+    Thread.sleep(2000L) // block main thread for 2 seconds to keep JVM alive
+}
+импорт  котлинкс . сопрограммы . *
+Взаимодействие с другими людьми
+fun  main () {
+    GlobalScope . launch { // запускаем новую сопрограмму в фоновом режиме и продолжаем
+        delay ( 1000L ) // неблокирующая задержка на 1 секунду (единица времени по умолчанию - мс)
+        println ( "World!" ) // печать после задержки
+    }
+    println ( "Hello," ) // основной поток продолжается, пока сопрограмма задерживается
+    Резьба . sleep ( 2000L ) // блокируем основной поток на 2 секунды, чтобы JVM работала
+}
+Привет мир!
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Вы увидите следующий результат:
+
+Hello,
+World!
+По сути, сопрограммы - это легкие потоки. Они запускаются с помощью запуска построителя сопрограмм в контексте некоторого CoroutineScope . Здесь мы запускаем новую сопрограмму в GlobalScope , а это означает, что время жизни новой сопрограммы ограничено только временем жизни всего приложения.
+
+Вы можете добиться того же результата, заменив GlobalScope.launch { ... }на thread { ... }и delay(...)на Thread.sleep(...). Попробуйте (не забудьте импортировать kotlin.concurrent.thread).
+
+Если начать с замены GlobalScope.launchна thread, компилятор выдаст следующую ошибку:
+
+Error: Kotlin: Suspend functions are only allowed to be called from a coroutine or another suspend function
+Это потому, что задержка - это специальная функция приостановки , которая не блокирует поток, но приостанавливает сопрограмму, и ее можно использовать только из сопрограммы.
+
+Соединение блокирующего и неблокирующего миров
+В первом примере неблокирование delay(...) и блокировка смешиваются Thread.sleep(...)в одном коде. Легко забыть, какой из них блокирует, а какой нет. Давайте прямо скажем о блокировке с помощью построителя сопрограмм runBlocking :
+
+импорт  котлинкс . сопрограммы . *
+Взаимодействие с другими людьми
+fun  main () {
+    GlobalScope . launch { // запускаем новую сопрограмму в фоновом режиме и продолжаем
+        задержка ( 1000л )
+        println ( "Мир!" )
+    }
+    println ( "Hello," ) // здесь сразу же продолжается основной поток
+    runBlocking {      // но это выражение блокирует основной поток
+        delay ( 2000L )   // ... пока мы задерживаем на 2 секунды, чтобы JVM оставалась в живых
+    } 
+}
+Привет мир!
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Результат тот же, но в этом коде используется только неблокирующая задержка . Вызов основного потока runBlocking блокируется до завершения внутренней сопрограммы runBlocking.
+
+Этот пример также можно переписать более идиоматическим способом, используя runBlockingдля обертывания выполнения основной функции:
+
+импорт  котлинкс . сопрограммы . *
+Взаимодействие с другими людьми
+fun  main () =  runBlocking < Unit > { // запускаем основную сопрограмму
+    GlobalScope . launch { // запускаем новую сопрограмму в фоновом режиме и продолжаем
+        задержка ( 1000л )
+        println ( "Мир!" )
+    }
+    println ( "Hello," ) // основная сопрограмма немедленно продолжается здесь
+    delay ( 2000L )       // задержка на 2 секунды, чтобы JVM работала
+}
+Привет мир!
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Здесь runBlocking<Unit> { ... }работает как адаптер, который используется для запуска основной сопрограммы верхнего уровня. Мы явно указываем его Unitвозвращаемый тип, потому что правильно сформированная mainфункция в Kotlin должна возвращать Unit.
+
+Это также способ написания модульных тестов для приостановки функций:
+
+class  MyTest {
+    @Тест
+    fun  testMySuspendingFunction () =  runBlocking < Unit > {
+        // здесь мы можем использовать функции приостановки, используя любой стиль утверждения, который нам нравится
+    }
+}
+В ожидании работы
+Задержка на время, пока работает другая сопрограмма, - не лучший подход. Давайте явно подождем (неблокирующим образом), пока не будет выполнено запущенное фоновое задание :
+
+job.join()
+val  job  =  GlobalScope . launch { // запускаем новую сопрограмму и сохраняем ссылку на ее Job
+    задержка ( 1000л )
+    println ( "Мир!" )
+}
+println ( "Привет," )
+работа . join () // ждем завершения дочерней сопрограммы
+Привет мир!
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Теперь результат тот же, но код основной сопрограммы никак не привязан к длительности фонового задания. Намного лучше.
+
+Структурированный параллелизм
+Для практического использования сопрограмм еще есть что пожелать. Когда мы используем GlobalScope.launch, мы создаем сопрограмму верхнего уровня. Несмотря на то, что он легкий, он по-прежнему потребляет некоторые ресурсы памяти во время работы. Если мы забудем сохранить ссылку на только что запущенную сопрограмму, она все равно будет работать. Что, если код в сопрограмме зависает (например, мы ошибочно задерживаем слишком долго), что, если мы запустили слишком много сопрограмм и исчерпали память? Необходимость вручную сохранять ссылки на все запущенные сопрограммы и присоединяться к ним чревата ошибками.
+
+Есть лучшее решение. В нашем коде можно использовать структурированный параллелизм. Вместо запуска сопрограмм в GlobalScope , как мы обычно делаем с потоками (потоки всегда являются глобальными), мы можем запускать сопрограммы в определенной области выполняемой операции.
+
+В нашем примере у нас есть mainфункция, которая превращается в сопрограмму с помощью построителя сопрограмм runBlocking . Каждый построитель сопрограмм, в том числе runBlocking, добавляет экземпляр CoroutineScope в область своего блока кода. Мы можем запускать сопрограммы в этой области видимости без необходимости joinих явного выполнения, потому что внешняя сопрограмма ( runBlockingв нашем примере) не завершается, пока не будут завершены все сопрограммы, запущенные в ее области. Таким образом, мы можем упростить наш пример:
+
+delay(1000L)
+импорт  котлинкс . сопрограммы . *
+Взаимодействие с другими людьми
+fun  main () =  runBlocking { // this: CoroutineScope
+    launch { // запускаем новую сопрограмму в рамках runBlocking
+        задержка ( 1000л )
+        println ( "Мир!" )
+    }
+    println ( "Привет," )
+}
+Привет мир!
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Создатель области видимости
+В дополнение к области сопрограмм, предоставляемой разными конструкторами, можно объявить свою собственную область действия с помощью построителя coroutineScope . Он создает область сопрограммы и не завершается, пока не завершатся все запущенные дочерние элементы.
+
+runBlocking и coroutineScope могут выглядеть одинаково, потому что они оба ждут завершения своего тела и всех его дочерних элементов . Основное отличие заключается в том, что метод runBlocking блокирует текущий поток для ожидания, в то время как coroutineScope просто приостанавливает работу, освобождая базовый поток для других целей. Из-за этой разницы runBlocking является обычной функцией, а coroutineScope - функцией приостановки.
+
+Это можно продемонстрировать на следующем примере:
+
+import kotlinx.coroutines.*
+импорт  котлинкс . сопрограммы . *
+Взаимодействие с другими людьми
+fun  main () =  runBlocking { // this: CoroutineScope
+    launch {
+        задержка ( 200л )
+        println ( "Задача от runBlocking" )
+    }
+    
+    coroutineScope { // Создает область сопрограммы
+        launch {
+            задержка ( 500л )
+            println ( «Задача из вложенного запуска» )
+        }
+    
+        задержка ( 100л )
+        println ( "Задача из области сопрограммы" ) // Эта строка будет напечатана перед вложенным запуском
+    }
+    
+    println ( "Область действия сопрограммы завершена" ) // Эта строка не печатается, пока не завершится вложенный запуск
+}
+Задача из области действия сопрограммы Задача из области запуска Блокировка задачи из вложенного запуска Область действия сопрограммы завершена
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Обратите внимание, что сразу после сообщения «Задача из области сопрограммы» (во время ожидания вложенного запуска) выполняется и печатается «Задача из runBlocking», хотя coroutineScope еще не завершена.
+
+Рефакторинг функции извлечения
+
+Выделим блок кода внутри launch { ... }в отдельную функцию. Когда вы выполняете рефакторинг «Извлечь функцию» в этом коде, вы получаете новую функцию с suspend модификатором. Это ваша первая функция приостановки . Функции приостановки могут использоваться внутри сопрограмм так же, как обычные функции, но их дополнительная особенность заключается в том, что они, в свою очередь, могут использовать другие функции приостановки (как delay в этом примере) для приостановки выполнения сопрограммы.
+
+import kotlinx.coroutines.*
+​
+fun main() = runBlocking {
+    launch { doWorld() }
+    println("Hello,")
+}
+​
+// это ваша первая функция приостановки
+suspend fun doWorld() {
+    delay(1000L)
+    println("World!")
+}
+Hello,
+World!
+
+Но что, если извлеченная функция содержит построитель сопрограмм, который вызывается в текущей области? В этом случае suspend модификатора извлеченной функции недостаточно. Создание doWorld метода расширения CoroutineScope- одно из решений, но оно не всегда может быть применимо, поскольку не делает API более понятным. Идиоматическое решение состоит в том, чтобы иметь либо явное CoroutineScope поле в качестве поля в классе, содержащем целевую функцию, либо неявное, когда реализует внешний класс CoroutineScope. В крайнем случае можно использовать CoroutineScope (coroutineContext) , но такой подход структурно небезопасен, потому что вы больше не контролируете объем выполнения этого метода. Только частные API могут использовать этот конструктор.
+
+Корутины легковесны
+Запустите следующий код:
+Run the following code:
+
+import kotlinx.coroutines.*
+​
+fun main() = runBlocking {
+    repeat(100_000) { // launch a lot of coroutines
+        launch {
+            delay(5000L)
+            print(".")
+        }
+    }
+}
+Теперь попробуйте это с потоками. Что случилось бы? (Скорее всего, ваш код вызовет какую-то ошибку нехватки памяти)
+
+Глобальные сопрограммы похожи на потоки демонов
+
+Следующий код запускает длительную сопрограмму в GlobalScope, которая печатает «Я сплю» дважды в секунду, а затем возвращается из основной функции после некоторой задержки:
+
+GlobalScope . launch {
+    repeat(1000) { i ->
+        println("I'm sleeping $i ...")
+        delay(500L)
+    }
+}
+delay ( 1300L ) // просто выходим после задержки
+
+Вы можете запустить и увидеть, что он печатает три строки и завершается:
+
+I'm sleeping 0 ...
+I'm sleeping 1 ...
+I'm sleeping 2 ...
+Активные сопрограммы, запущенные в GlobalScope , не поддерживают процесс.
+Они похожи на потоки демонов.
+
+=======================================================
+https://kotlinlang.org/docs/reference/coroutines/cancellation-and-timeouts.html
+
+Отмена и тайм-ауты
+В этом разделе рассказывается об отмене сопрограмм и тайм-аутах.
+
+Отмена выполнения сопрограммы
+В долго работающем приложении вам может потребоваться детальный контроль над фоновыми сопрограммами. Например, пользователь мог закрыть страницу, на которой была запущена сопрограмма, и теперь ее результат больше не нужен, и ее работу можно отменить. Функция запуска возвращает задание, которое можно использовать для отмены работающей сопрограммы:
+
+val job = launch {
+    repeat(1000) { i ->
+        println("job: I'm sleeping $i ...")
+        delay(500L)
+    }
+}
+delay(1300L) // delay a bit
+println("main: I'm tired of waiting!")
+job.cancel() // cancels the job
+job.join() // waits for job's completion 
+println("main: Now I can quit.")
+
+job: I'm sleeping 0 ...
+job: I'm sleeping 1 ...
+job: I'm sleeping 2 ...
+main: I'm tired of waiting!
+main: Now I can quit.
+
+Отмена возможна
+
+Отмена сопрограммы осуществляется совместно . Код сопрограммы должен взаимодействовать, чтобы его можно было отменить. Все функции приостановки kotlinx.coroutines можно отменить . Они проверяют отмену сопрограммы и бросают CancellationException при отмене. Однако, если сопрограмма работает в вычислении и не проверяет отмену, ее нельзя отменить, как показано в следующем примере:
+val  startTime  =  Система . currentTimeMillis ()
+val  job  =  launch ( Диспетчеры . По умолчанию ) {
+    var  nextPrintTime  =  startTime
+    var  i  =  0
+    while ( i  <  5 ) { // цикл вычислений, просто расходует CPU
+        // выводим сообщение дважды в секунду
+        if ( System . currentTimeMillis () > =  nextPrintTime ) {
+            println ( "задание: я сплю, $ {i ++} ..." )
+            nextPrintTime  + =  500 л
+        }
+    }
+}
+delay ( 1300L ) // задержка немного
+println ( "main: я устал ждать!" )
+работа . cancelAndJoin () // отменяет задание и ждет его завершения
+println ( "main: Теперь я могу уйти." )
+
+
+job: I'm sleeping 0 ...
+job: I'm sleeping 1 ...
+job: I'm sleeping 2 ...
+main: I'm tired of waiting!
+job: I'm sleeping 3 ...
+job: I'm sleeping 4 ...
+main: Now I can quit.
+
+Делаем код вычислений отменяемым
+suspend fun yield(): Unit (источник)
+Передает поток (или пул потоков) текущего диспетчера сопрограмм другим сопрограммам для запуска, если это возможно.
+Есть два подхода к отмене вычислительного кода. Первый - периодически вызывать функцию приостановки, которая проверяет отмену. Существует функция yield, которая является хорошим выбором для этой цели.
+
+ Другой - явно проверить статус отмены. Попробуем второй подход.
+
+Замените while (i < 5)в предыдущем примере на while (isActive)и перезапустите его.
+
+Replace while (i < 5) in the previous example with while (isActive) and rerun it.
+
+val startTime = System.currentTimeMillis()
+val job = launch(Dispatchers.Default) {
+    var nextPrintTime = startTime
+    var i = 0
+    while (isActive) { // cancellable computation loop
+        // print a message twice a second
+        if (System.currentTimeMillis() >= nextPrintTime) {
+            println("job: I'm sleeping ${i++} ...")
+            nextPrintTime += 500L
+        }
+    }
+}
+
+Закрытие ресурсов с помощью finally
+
+Отменяемые функции приостановки генерируют CancellationException при отмене, что может быть обработано обычным способом. Например, try {...} finally {...}выражение и useфункция Kotlin обычно выполняют свои действия завершения, когда сопрограмма отменяется:
+
+val  job  =  launch {
+    try {
+        repeat(1000) { i ->
+            println ( "работа: я сплю, $ i ..." )
+           delay(500L)
+        }
+    } finally {
+        println ( "задание: наконец-то я бегу" )
+    }
+}
+delay ( 1300L ) // задержка немного
+println ( "main: я устал ждать!" )
+job.cancelAndJoin() // отменяет задание и ждет его завершения
+println ( "main: Теперь я могу уйти." )
+
+работа: я сплю 0 ... работа: я сплю 1 ... работа: я сплю 2 ... главная: я устал ждать! работа: наконец-то бегу. main: теперь я могу уйти.
+
+job: I'm sleeping 0 ...
+job: I'm sleeping 1 ...
+job: I'm sleeping 2 ...
+main: I'm tired of waiting!
+main: Now I can quit.
+
+Как видите, теперь этот цикл отменен. isActive - это свойство расширения, доступное внутри сопрограммы через объект CoroutineScope .
+
+И join, и cancelAndJoin ждут завершения всех действий финализации, поэтому приведенный выше пример дает следующий результат:
+
+job: I'm sleeping 0 ...
+job: I'm sleeping 1 ...
+job: I'm sleeping 2 ...
+main: I'm tired of waiting!
+job: I'm running finally
+main: Now I can quit.
+
+Запустить неотменяемую блокировку
+
+Любая попытка использовать функцию приостановки в finallyблоке предыдущего примера вызывает CancellationException , потому что сопрограмма, выполняющая этот код, отменяется. Обычно это не проблема, поскольку все корректные операции закрытия (закрытие файла, отмена задания или закрытие любого канала связи) обычно не блокируют и не включают никаких функций приостановки. Однако, в редких случаях , когда вам необходимо приостановить в отмененной сопрограмме вы можете обернуть соответствующий код в withContext(NonCancellable) {...}использовании withContext функции и NonCancellable контекста как показан в следующем примере:
+
+val job = launch {
+    try {
+        repeat(1000) { i ->
+            println("job: I'm sleeping $i ...")
+            delay(500L)
+        }
+    } finally {
+        withContext(NonCancellable) {
+            println("job: I'm running finally")
+            delay(1000L)
+            println("job: And I've just delayed for 1 sec because I'm non-cancellable")
+        }
+    }
+}
+delay(1300L) // delay a bit
+println("main: I'm tired of waiting!")
+job.cancelAndJoin() // cancels the job and waits for its completion
+println("main: Now I can quit.")
+
+job: I'm sleeping 0 ...
+job: I'm sleeping 1 ...
+job: I'm sleeping 2 ...
+main: I'm tired of waiting!
+job: I'm running finally
+job: And I've just delayed for 1 sec because I'm non-cancellable
+main: Now I can quit.
+
+-------------------------Тайм-аут------------------------
+
+Наиболее очевидная практическая причина для отмены выполнения сопрограммы заключается в том, что время ее выполнения превысило некоторый тайм-аут. В то время как вы можете вручную отслеживать ссылки на соответствующую Работу и запустить отдельную сопрограмму отменить отслеживаемые один за задержками, есть готовый использовать withTimeout функцию , которая делает это.withTimeout(1300L) {
+ Взгляните на следующий пример:
+
+withTimeout ( 1300 л ) {
+    повторить ( 1000 ) { я  ->
+        println ( "Я сплю, $ i ..." )
+        задержка ( 500л )
+    }
+}
+Я сплю 0 ... Я сплю 1 ... Я сплю 2 ...
+ Исключение в потоке "main" kotlinx.coroutines.TimeoutCancellationException : истекло время ожидания 1300 мс 
+на ??? (граница сопрограммы . ? ( ? : -1 ) 
+на FileKt $ Основная $ 1 $ 1 . invokeSuspend ( File.kt : -1 ) 
+на FileKt $ Основная $ 1 . invokeSuspend ( File.kt : -1 ) Вызванный: kotlinx.coroutines.TimeoutCancellationException : истекло время ожидания на 1300 мс
+
+на ??? (сопрограмма границы . ? ( ? : -1 ) 
+при FileKt $ основного $ 1 $ 1 . invokeSuspend ( File.kt : -1 ) 
+на FileKt $ Основного $ 1 . invokeSuspend ( File.kt : -1 )
+
+withTimeout(1300L) {
+    repeat(1000) { i ->
+        println("I'm sleeping $i ...")
+       
+
+I'm sleeping 0 ...
+I'm sleeping 1 ...
+I'm sleeping 2 ...
+Exception in thread "main" kotlinx.coroutines.TimeoutCancellationException: Timed out waiting for 1300 ms
+ at (Coroutine boundary. (:-1) 
+ at FileKt$main$1$1.invokeSuspend (File.kt:-1) 
+ at FileKt$main$1.invokeSuspend (File.kt:-1) 
+Caused by: kotlinx.coroutines.TimeoutCancellationException: Timed out waiting for 1300 ms
+at (Coroutine boundary .(:-1)
+at FileKt$main$1$1 .invokeSuspend(File.kt:-1)
+at FileKt$main$1 .invokeSuspend(File.kt:-1)
+
+=============================== Составление приостанавливающих функций =======================
+https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html
+
+В этом разделе рассматриваются различные подходы к составлению функций приостановки.
+
+Составление приостанавливающих функций
+  По умолчанию последовательно
+  Одновременное использование async
+  Лениво запустил асинхронный режим
+  Функции асинхронного стиля
+  Структурированный параллелизм с асинхронностью
+  Составление приостанавливающих функций
+
+------------------По умолчанию последовательно--------------------------
+
+Предположим, что у нас есть две функции приостановки, определенные где-то еще, которые делают что-то полезное, например, какой-то удаленный вызов службы или вычисление. Мы просто притворяемся, что они полезны, но на самом деле каждый из них просто задерживается на секунду для целей этого примера:
+
+пsuspend fun doSomethingUsefulOne(): Int {
+    delay ( 1000L ) // делаем вид, что делаем что-то полезное
+     return 13
+}
+
+suspend fun doSomethingUsefulTwo(): Int {
+    delay ( 1000L ) // притворимся, что мы тоже делаем что-то полезное
+    return 29
+}
+Что нам делать, если нам нужно, чтобы они вызывались последовательно - сначала, doSomethingUsefulOne а затем doSomethingUsefulTwo , и вычисляли сумму их результатов? На практике мы делаем это, если используем результат первой функции, чтобы принять решение о том, нужно ли нам вызывать вторую или решить, как ее вызывать.
+
+Мы используем обычный последовательный вызов, потому что код в сопрограмме, как и в обычном коде, по умолчанию является последовательным . В следующем примере это демонстрируется путем измерения общего времени, необходимого для выполнения обеих функций приостановки:
+fun  main () = runBlocking < Unit > {
+val time = measureTimeMillis {
+    val one = doSomethingUsefulOne()
+    val two = doSomethingUsefulTwo()
+    println("The answer is ${one + two}")
+}
+println("Completed in $time ms")
+val  time  =  measureTimeMillis {
+    val  one  =  doSomethingUsefulOne ()
+    val  two  =  doSomethingUsefulTwo ()
+    println ( "Ответ: $ {один + два}" )
+}
+
+println ( "Завершено за $ time ms" )
+}
+Ответ 42 Завершено за 2007 мс
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Это производит что-то вроде этого:
+
+The answer is 42
+Completed in 2017 ms
+
+-----------------------Одновременное использование async----------------------
+
+Что делать, если между вызовами doSomethingUsefulOneи нет зависимостей, doSomethingUsefulTwoи мы хотим получить ответ быстрее, выполняя и то, и другое одновременно ? Здесь на помощь приходит асинхронный режим .
+
+Концептуально async похож на  launch. . Он запускает отдельную сопрограмму, которая представляет собой легкий поток, который работает одновременно со всеми другими сопрограммами. Разница в том, что launch возвращает Job и не несет никакого результирующего значения, а async возвращает Deferred - облегченное неблокирующее будущее, которое представляет собой обещание предоставить результат позже. Вы можете использовать .await() отложенное значение, чтобы получить его конечный результат, но Deferred это также и Job, поэтому вы можете отменить его при необходимости.
+fun  main () = runBlocking < Unit > {
+val time = measureTimeMillis {
+    val one = async { doSomethingUsefulOne() }
+    val two = async { doSomethingUsefulTwo() }
+    println("The answer is ${one.await() + two.await()}")
+}
+
+println("Completed in $time ms")
+}
+The answer is 42
+Completed in 1013 ms
+
+Это вдвое быстрее, потому что две сопрограммы выполняются одновременно. Обратите внимание, что параллелизм с сопрограммами всегда явный.
+
+--------------------Lazily started async Лениво запустил асинхронный режим-----------------------
+
+При желании асинхронный режим можно сделать ленивым, установив его start параметр в CoroutineStart.LAZY. В этом режиме он начинает только сопрограмму , когда его результат требуется Await , или если его Job«ы начать функция вызывается. Выполните следующий пример:
+fun  main () = runBlocking < Unit > {
+val time = measureTimeMillis {
+    val one = async(start = CoroutineStart.LAZY) { doSomethingUsefulOne() }
+    val two = async(start = CoroutineStart.LAZY) { doSomethingUsefulTwo() }
+    // some computation
+    one.start() // start the first one
+    two.start() // start the second one
+    println("The answer is ${one.await() + two.await()}")
+}
+println("Completed in $time ms")
+
+The answer is 42
+Completed in 1014 ms
+
+Итак, здесь две сопрограммы определены, но не выполняются, как в предыдущем примере, но программист получает контроль над тем, когда именно начать выполнение, вызывая start . Сначала мы запускаем one, затем начинаем two, а затем ждем завершения отдельных сопрограмм.
+
+Обратите внимание , что если мы просто называем Await в printlnбез первого вызова запуска на отдельных сопрограммах, это приведет к последовательному поведению, поскольку Await начинает выполнение сопрограммы и ждет своего конца, который не предназначен вариантом использования для лени. Вариант использования async(start = CoroutineStart.LAZY)- это замена стандартной lazyфункции в случаях, когда вычисление значения включает приостановку функций.
+
+------------------------Функции асинхронного стиля---------------------------------
+
+Мы можем определить функции асинхронной стиле, вызывающие doSomethingUsefulOneи doSomethingUsefulTwo асинхронно с помощью  async  сопрограммы строитель с явной GlobalScope ссылкой. Мы называем такие функции суффиксом «… Async», чтобы подчеркнуть тот факт, что они запускают только асинхронные вычисления, и для получения результата необходимо использовать полученное отложенное значение.
+
+// The result type of somethingUsefulOneAsync is Deferred<Int>
+fun somethingUsefulOneAsync() = GlobalScope.async {
+    doSomethingUsefulOne()
+}
+
+// The result type of somethingUsefulTwoAsync is Deferred<Int>
+fun somethingUsefulTwoAsync() = GlobalScope.async {
+    doSomethingUsefulTwo()
+}
+
+Обратите внимание, что эти xxxAsyncфункции не являются функциями приостановки . Их можно использовать откуда угодно. Однако их использование всегда подразумевает асинхронное (здесь имеется в виду одновременное ) выполнение их действия с вызывающим кодом.
+
+В следующем примере показано их использование вне сопрограммы:
+
+// обратите внимание, что в этом примере у нас нет runBlocking справа от main
+fun  main () {
+    val  time  =  measureTimeMillis {
+        // мы можем инициировать асинхронные действия вне сопрограммы
+        val  one  =  somethingUsefulOneAsync ()
+        val  two  =  somethingUsefulTwoAsync ()
+        // но ожидание результата должно включать либо приостановку, либо блокировку.
+        // здесь мы используем `runBlocking {...}` для блокировки основного потока в ожидании результата
+        runBlocking {
+            println ( "Ответ: $ {one.await () + two.await ()}" )
+        }
+    }
+    println ( "Завершено за $ time ms" )
+
+Этот стиль программирования с асинхронными функциями представлен здесь только для иллюстрации, потому что это популярный стиль в других языках программирования. Использование этого стиля с сопрограммами Kotlin настоятельно не рекомендуется по причинам, описанным ниже.
+}
+
+Подумайте, что произойдет, если между val one = somethingUsefulOneAsync()строкой и one.await()выражением есть некоторая логическая ошибка в коде, и программа выдает исключение, и операция, выполнявшаяся программой, прерывается. Обычно глобальный обработчик ошибок может перехватить это исключение, зарегистрировать и сообщить об ошибке разработчикам, но в противном случае программа могла бы продолжить выполнение других операций. Но здесь мы все somethingUsefulOneAsyncеще работаем в фоновом режиме, хотя инициировавшая его операция была прервана. Эта проблема не возникает при структурированном параллелизме, как показано в разделе ниже.
+
+----------------Структурированный параллелизм с асинхронностью-----------------
+Возьму Параллельный используя асинхронный пример и извлечь функцию , которая одновременно выполняет doSomethingUsefulOneи doSomethingUsefulTwoвозвращает сумму их результатов. Поскольку построитель асинхронных сопрограмм определен как расширение на CoroutineScope , нам нужно, чтобы он был в области видимости, и это то, что обеспечивает функция coroutineScope :
+
+suspend fun concurrentSum(): Int = coroutineScope {
+    val one = async { doSomethingUsefulOne() }
+    val two = async { doSomethingUsefulTwo() }
+    one.await() + two.await()
+}
+
+Таким образом, если что-то пойдет не так внутри кода concurrentSumфункции и вызовет исключение, все сопрограммы, запущенные в ее области видимости, будут отменены.
+
+val  time  =  measureTimeMillis {
+    println ( "Ответ $ {concurrentSum ()}" )
+}
+println ( "Завершено за $ time ms" )
+Ответ: 42 Завершено за 1020 мс
+ Edit Page
+Table of contents
+
+Composing Suspending Functions
+Sequential by default
+Concurrent using async
+Lazily started async
+Async-style functions
+Structured concurrency with async
+Composing Suspending Functions
+This section covers various approaches to composition of suspending functions.
+
+Sequential by default
+Assume that we have two suspending functions defined elsewhere that do something useful like some kind of remote service call or computation. We just pretend they are useful, but actually each one just delays for a second for the purpose of this example:
+
+suspend fun doSomethingUsefulOne(): Int {
+    delay(1000L) // pretend we are doing something useful here
+    return 13
+}
+​
+suspend fun doSomethingUsefulTwo(): Int {
+    delay(1000L) // pretend we are doing something useful here, too
+    return 29
+}
+What do we do if we need them to be invoked sequentially — first doSomethingUsefulOne and then doSomethingUsefulTwo, and compute the sum of their results? In practice we do this if we use the result of the first function to make a decision on whether we need to invoke the second one or to decide on how to invoke it.
+
+We use a normal sequential invocation, because the code in the coroutine, just like in the regular code, is sequential by default. The following example demonstrates it by measuring the total time it takes to execute both suspending functions:
+
+val time = measureTimeMillis {
+    val one = doSomethingUsefulOne()
+    val two = doSomethingUsefulTwo()
+    println("The answer is ${one + two}")
+}
+println("Completed in $time ms")
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code here.
+
+It produces something like this:
+
+The answer is 42
+Completed in 2017 ms
+Concurrent using async
+What if there are no dependencies between invocations of doSomethingUsefulOne and doSomethingUsefulTwo and we want to get the answer faster, by doing both concurrently? This is where async comes to help.
+
+Conceptually, async is just like launch. It starts a separate coroutine which is a light-weight thread that works concurrently with all the other coroutines. The difference is that launch returns a Job and does not carry any resulting value, while async returns a Deferred — a light-weight non-blocking future that represents a promise to provide a result later. You can use .await() on a deferred value to get its eventual result, but Deferred is also a Job, so you can cancel it if needed.
+
+val time = measureTimeMillis {
+    val one = async { doSomethingUsefulOne() }
+    val two = async { doSomethingUsefulTwo() }
+    println("The answer is ${one.await() + two.await()}")
+}
+println("Completed in $time ms")
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code here.
+
+It produces something like this:
+
+The answer is 42
+Completed in 1017 ms
+This is twice as fast, because the two coroutines execute concurrently. Note that concurrency with coroutines is always explicit.
+
+Lazily started async
+Optionally, async can be made lazy by setting its start parameter to CoroutineStart.LAZY. In this mode it only starts the coroutine when its result is required by await, or if its Job's start function is invoked. Run the following example:
+
+val time = measureTimeMillis {
+    val one = async(start = CoroutineStart.LAZY) { doSomethingUsefulOne() }
+    val two = async(start = CoroutineStart.LAZY) { doSomethingUsefulTwo() }
+    // some computation
+    one.start() // start the first one
+    two.start() // start the second one
+    println("The answer is ${one.await() + two.await()}")
+}
+println("Completed in $time ms")
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code here.
+
+It produces something like this:
+
+The answer is 42
+Completed in 1017 ms
+So, here the two coroutines are defined but not executed as in the previous example, but the control is given to the programmer on when exactly to start the execution by calling start. We first start one, then start two, and then await for the individual coroutines to finish.
+
+Note that if we just call await in println without first calling start on individual coroutines, this will lead to sequential behavior, since await starts the coroutine execution and waits for its finish, which is not the intended use-case for laziness. The use-case for async(start = CoroutineStart.LAZY) is a replacement for the standard lazy function in cases when computation of the value involves suspending functions.
+
+Async-style functions
+We can define async-style functions that invoke doSomethingUsefulOne and doSomethingUsefulTwo asynchronously using the async coroutine builder with an explicit GlobalScope reference. We name such functions with the "…Async" suffix to highlight the fact that they only start asynchronous computation and one needs to use the resulting deferred value to get the result.
+
+// The result type of somethingUsefulOneAsync is Deferred<Int>
+fun somethingUsefulOneAsync() = GlobalScope.async {
+    doSomethingUsefulOne()
+}
+​
+// The result type of somethingUsefulTwoAsync is Deferred<Int>
+fun somethingUsefulTwoAsync() = GlobalScope.async {
+    doSomethingUsefulTwo()
+}
+Note that these xxxAsync functions are not suspending functions. They can be used from anywhere. However, their use always implies asynchronous (here meaning concurrent) execution of their action with the invoking code.
+
+The following example shows their use outside of coroutine:
+
+// note that we don't have `runBlocking` to the right of `main` in this example
+fun main() {
+    val time = measureTimeMillis {
+        // we can initiate async actions outside of a coroutine
+        val one = somethingUsefulOneAsync()
+        val two = somethingUsefulTwoAsync()
+        // but waiting for a result must involve either suspending or blocking.
+        // here we use `runBlocking { ... }` to block the main thread while waiting for the result
+        runBlocking {
+            println("The answer is ${one.await() + two.await()}")
+        }
+    }
+    println("Completed in $time ms")
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code here.
+
+This programming style with async functions is provided here only for illustration, because it is a popular style in other programming languages. Using this style with Kotlin coroutines is strongly discouraged for the reasons explained below.
+
+Consider what happens if between the val one = somethingUsefulOneAsync() line and one.await() expression there is some logic error in the code and the program throws an exception and the operation that was being performed by the program aborts. Normally, a global error-handler could catch this exception, log and report the error for developers, but the program could otherwise continue doing other operations. But here we have somethingUsefulOneAsync still running in the background, even though the operation that initiated it was aborted. This problem does not happen with structured concurrency, as shown in the section below.
+
+Structured concurrency with async
+Возьму Параллельный используя асинхронный пример и извлечь функцию , которая одновременно выполняет doSomethingUsefulOneи doSomethingUsefulTwoвозвращает сумму их результатов. Поскольку построитель асинхронных сопрограмм определен как расширение на CoroutineScope , нам нужно, чтобы он был в области видимости, и это то, что обеспечивает функция coroutineScope :
+
+приостановить  веселье  concurrentSum (): Int  =  coroutineScope {
+    val  one  =  async { doSomethingUsefulOne ()}
+    val  two  =  async { doSomethingUsefulTwo ()}
+    один . ожидание () +  два . ждать ()
+}
+Таким образом, если что-то пойдет не так внутри кода concurrentSumфункции и вызовет исключение, все сопрограммы, запущенные в ее области видимости, будут отменены.
+
+val  time  =  measureTimeMillis {
+    println ( "Ответ $ {concurrentSum ()}" )
+}
+println ( "Завершено за $ time ms" )
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+У нас все еще есть одновременное выполнение обеих операций, как видно из выходных данных вышеупомянутой mainфункции:
+
+Отмена всегда распространяется через иерархию сопрограмм:
+
+fun main() = runBlocking<Unit> {
+    try {
+        failedConcurrentSum()
+    } catch(e: ArithmeticException) {
+        println("Computation failed with ArithmeticException")
+    }
+}
+
+suspend fun failedConcurrentSum(): Int = coroutineScope {
+    val one = async<Int> { 
+        try {
+            delay(Long.MAX_VALUE) // Emulates very long computation
+            42
+        } finally {
+            println("First child was cancelled")
+        }
+    }
+    val two = async<Int> { 
+        println("Second child throws an exception")
+        throw ArithmeticException()
+    }
+    one.await() + two.await()
+}
+Second child throws an exception
+First child was cancelled
+Computation failed with ArithmeticException
+
+https://kotlinlang.org/docs/reference/coroutines/coroutine-context-and-dispatchers.html
+====================== Контекст сопрограмм и диспетчеры ==============================
+Контекст сопрограмм и диспетчеры
+ Диспетчеры и потоки
+ Неограниченный против ограниченного диспетчера
+ Отладка сопрограмм и потоков
+   Отладка с IDEA
+   Отладка с использованием журнала
+ Переход между потоками
+ Работа в контексте
+ Дети сопрограммы
+ Родительские обязанности
+ Именование сопрограмм для отладки
+ Объединение элементов контекста
+ Область сопрограммы
+ Локальные данные потока
+----------------------- Контекст сопрограмм и диспетчеры ---------------------------
+Сопрограммы всегда выполняются в некотором контексте, представленном значением типа CoroutineContext , определенным в стандартной библиотеке Kotlin.
+
+Контекст сопрограммы - это набор различных элементов. Основные элементы являются работой в сопрограммах, которую мы видели раньше, и его диспетчер, который рассматривается в данном разделе.
+
+------------------------- Диспетчеры и потоки------------------------
+
+Контекст сопрограммы включает диспетчер сопрограмм (см. CoroutineDispatcher ), который определяет, какой поток или потоки использует соответствующая сопрограмма для своего выполнения. Диспетчер сопрограмм может ограничить выполнение сопрограммы определенным потоком, отправить ее в пул потоков или позволить ей работать без ограничений.
+
+Все построители сопрограмм, такие как launch и async, принимают необязательный параметр CoroutineContext, который можно использовать для явного указания диспетчера для новой сопрограммы и других элементов контекста.
+
+launch { // context of the parent, main runBlocking coroutine
+    println("main runBlocking      : I'm working in thread ${Thread.currentThread().name}")
+}
+launch(Dispatchers.Unconfined) { // not confined -- will work with main thread
+    println("Unconfined            : I'm working in thread ${Thread.currentThread().name}")
+}
+launch(Dispatchers.Default) { // will get dispatched to DefaultDispatcher 
+    println("Default               : I'm working in thread ${Thread.currentThread().name}")
+}
+launch(newSingleThreadContext("MyOwnThread")) { // will get its own new thread
+    println("newSingleThreadContext: I'm working in thread ${Thread.currentThread().name}")
+}
+Unconfined            : I'm working in thread main @coroutine#3
+Default               : I'm working in thread DefaultDispatcher-worker-1 @coroutine#4
+main runBlocking      : I'm working in thread main @coroutine#2
+newSingleThreadContext: I'm working in thread MyOwnThread @coroutine#5
+
+Когда launch { ... }используется без параметров, он наследует контекст (и, следовательно, диспетчер) от CoroutineScope, из которого он запускается. В этом случае он наследует контекст основной runBlockingсопрограммы, которая выполняется в mainпотоке.
+
+Dispatchers.Unconfined - это специальный диспетчер, который также запускается в mainпотоке, но на самом деле это другой механизм, который будет объяснен позже.
+
+Диспетчер по умолчанию, который используется при запуске сопрограмм в GlobalScope , представлен Dispatchers.Default и использует общий фоновый пул потоков, поэтому launch(Dispatchers.Default) { ... }использует тот же диспетчер, что и GlobalScope.launch { ... }.
+
+newSingleThreadContext создает поток для запуска сопрограммы. Выделенный поток - очень дорогой ресурс. В реальном приложении он должен быть либо освобожден, когда он больше не нужен, с помощью функции закрытия , либо сохранен в переменной верхнего уровня и повторно использован во всем приложении.
+
+----------------------------- Неограниченный против ограниченного диспетчера--------------------
+
+Dispatchers.Unconfined сопрограммы диспетчер начинает сопрограмму в потоке вызывающего абонента, но только до первой точки подвеса. После приостановки он возобновляет сопрограмму в потоке, который полностью определяется вызванной функцией приостановки. Неограниченный диспетчер подходит для сопрограмм, которые не потребляют время ЦП и не обновляют какие-либо общие данные (например, пользовательский интерфейс), ограниченные конкретным потоком.
+
+С другой стороны, диспетчер по умолчанию наследуется от внешнего CoroutineScope . Диспетчер по умолчанию для сопрограммы runBlocking , в частности, ограничен потоком вызывающего, поэтому его наследование имеет эффект ограничения выполнения этим потоком с предсказуемым планированием FIFO.
+
+launch(Dispatchers.Unconfined) { // not confined -- will work with main thread
+    println("Unconfined      : I'm working in thread ${Thread.currentThread().name}")
+    delay(500)
+    println("Unconfined      : After delay in thread ${Thread.currentThread().name}")
+}
+launch { // context of the parent, main runBlocking coroutine
+    println("main runBlocking: I'm working in thread ${Thread.currentThread().name}")
+    delay(1000)
+    println("main runBlocking: After delay in thread ${Thread.currentThread().name}")
+}
+
+Unconfined      : I'm working in thread main @coroutine#2
+main runBlocking: I'm working in thread main @coroutine#3
+Unconfined      : After delay in thread kotlinx.coroutines.DefaultExecutor @coroutine#2
+main runBlocking: After delay in thread main @coroutine#3
+
+Таким образом, сопрограмма с унаследованным от нее контекстом runBlocking {...}продолжает выполняться в mainпотоке, в то время как неограниченная программа возобновляется в потоке исполнителя по умолчанию, который использует функция задержки .
+
+Неограниченный диспетчер - это расширенный механизм, который может быть полезен в определенных угловых случаях, когда отправка сопрограммы для ее последующего выполнения не требуется или вызывает нежелательные побочные эффекты, поскольку некоторая операция в сопрограмме должна выполняться сразу. Неограниченный диспетчер не должен использоваться в общем коде.
+
+
+------------------------------------ Отладка сопрограмм и потоков -------------------------------
+
+Сопрограммы могут приостанавливаться в одном потоке и возобновляться в другом потоке. Даже с однопоточным диспетчером может быть трудно понять, что, где и когда делала сопрограмма, если у вас нет специальных инструментов.
+
+Отладка с IDEA
+
+Отладчик Coroutine плагина Kotlin упрощает отладку сопрограмм в IntelliJ IDEA.
+Отладка работает для версий 1.3.8 или новее kotlinx-coroutines-core. (1.3.9)
+
+Окно Debug Tool содержит вкладку Coroutines . На этой вкладке вы можете найти информацию как о текущих, так и о приостановленных сопрограммах. Сопрограммы группируются по диспетчеру, на котором они работают.
+
+
+
+Ты можешь:
+
+Легко проверяйте состояние каждой сопрограммы.
+Просмотрите значения локальных и захваченных переменных как для запущенных, так и для приостановленных сопрограмм.
+См. Полный стек создания сопрограммы, а также стек вызовов внутри сопрограммы. В стек входят все кадры с переменными значениями, даже те, которые были бы потеряны во время стандартной отладки.
+
+Если вам нужен полный отчет, содержащий состояние каждой сопрограммы и ее стека, щелкните правой кнопкой мыши вкладку « Сопрограммы » и выберите « Получить дамп сопрограмм» .
+
+Узнайте больше об отладке сопрограмм в этом сообщении блога и документации IntelliJ IDEA .
+
+Отладка с использованием журнала
+
+Другой подход к отладке приложений с потоками без Coroutine Debugger - это печать имени потока в файле журнала для каждого оператора журнала. Эта функция повсеместно поддерживается платформами ведения журналов. При использовании сопрограмм само по себе имя потока не дает большого контекста, поэтому kotlinx.coroutinesвключает средства отладки, чтобы упростить его.
+
+Запустите следующий код с -Dkotlinx.coroutines.debugопцией JVM:
+val a = async {
+    log("I'm computing a piece of the answer")
+    6
+}
+val b = async {
+    log("I'm computing another piece of the answer")
+    7
+}
+log("The answer is ${a.await() * b.await()}")
+
+[main @coroutine#2] I'm computing a piece of the answer
+[main @coroutine#3] I'm computing another piece of the answer
+[main @coroutine#1] The answer is 42
+
+Есть три сопрограммы. Основная сопрограмма (# 1) внутри runBlocking и две сопрограммы, вычисляющие отложенные значения a(# 2) и b(# 3). Все они выполняются в контексте runBlockingосновного потока и ограничены им. Вывод этого кода:
+
+[main @coroutine#2] I'm computing a piece of the answer
+[main @coroutine#3] I'm computing another piece of the answer
+[main @coroutine#1] The answer is 42
+logФункция печатает имя потока в квадратных скобках, и вы можете видеть , что это main нить с идентификатором исполняемой в данный момент сопрограммы приложенном к нему. Этот идентификатор последовательно назначается всем созданным сопрограммам при включенном режиме отладки.
+
+Режим отладки также включается, когда JVM запускается с -eaопцией. Вы можете узнать больше о возможностях отладки в документации свойства DEBUG_PROPERTY_NAME .
+
+-------------------------------------------- Переход между потоками -------------------------------
+
+Запустите следующий код с -Dkotlinx.coroutines.debugопцией JVM (см. Отладку ):
+
+newSingleThreadContext("Ctx1").use { ctx1 ->
+    newSingleThreadContext("Ctx2").use { ctx2 ->
+        runBlocking(ctx1) {
+            log("Started in ctx1")
+            withContext(ctx2) {
+                log("Working in ctx2")
+            }
+            log("Back to ctx1")
+        }
+    }
+}
+
+[Ctx1 @coroutine#1] Started in ctx1
+[Ctx2 @coroutine#1] Working in ctx2
+[Ctx1 @coroutine#1] Back to ctx1
+Exception in thread "main" java.security.AccessControlException: Access control exception due to security reasons in web playground: 
+ access denied ("java.lang.RuntimePermission" "modifyThread")
+ at java.lang.SecurityManager.checkPermission (SecurityManager.java:549) 
+
+Он демонстрирует несколько новых техник. Один использует runBlocking с явно указанным контекстом, а другой использует функцию withContext для изменения контекста сопрограммы, оставаясь при этом в той же сопрограмме, как вы можете видеть в выходных данных ниже:
+
+[Ctx1 @coroutine#1] Started in ctx1
+[Ctx2 @coroutine#1] Working in ctx2
+[Ctx1 @coroutine#1] Back to ctx1
+Обратите внимание, что в этом примере также используется use функция из стандартной библиотеки Kotlin для освобождения потоков, созданных с помощью newSingleThreadContext, когда они больше не нужны.
+
+-------------------  Job in the context Работа в контексте --------------------------------------
+
+Сопрограммы  Job  является частью его контекста, и может быть извлечена из него с помощью coroutineContext[Job]выражения:
+println("My job is ${coroutineContext[Job]}")
+My job is "coroutine#1":BlockingCoroutine{Active}@4f2410ac
+Обратите внимание , что IsActive в CoroutineScope это просто удобный ярлык для coroutineContext[Job]?.isActive == true.
+
+------------------------------------- Дети сопрограммы --------------------------------
+https://kotlinlang.org/docs/reference/coroutines/coroutine-context-and-dispatchers.html
+
+............
+...........
+
+================================Асинхронный поток================================
+Представление нескольких значений
+Последовательности
+Приостановка функций
+Потоки
+Потоки холодные
+Основы отмены потока
+Построители потока
+Операторы промежуточного потока
+Оператор преобразования
+Операторы, ограничивающие размер
+Операторы терминального потока
+Потоки последовательные
+Контекст потока
+Неправильная эмиссия с контекстом
+оператор flowOn
+Буферизация
+Слияние
+Обработка последнего значения
+Составление нескольких потоков
+Почтовый индекс
+Объединить
+Сглаживание потоков
+flatMapConcat
+flatMapMerge
+flatMapLatest
+Исключения потока
+Коллекционер попробуй поймать
+Все поймано
+Исключительная прозрачность
+Прозрачный улов
+Ловля декларативно
+Завершение потока
+Обязательно блокировать
+Декларативная обработка
+Успешное завершение
+Императивное против декларативного
+Запуск потока
+Проверки отмены потока
+Делаем занятый поток отменяемым
+Поток и реактивные потоки
+
+------------------------------------------ Асинхронный поток --------------------------
+
+Функция приостановки асинхронно возвращает одно значение, но как мы можем вернуть несколько асинхронно вычисленных значений? Здесь на помощь приходят Kotlin Flows.
+
+------------------------------ Представление нескольких значений ---------------------
+
+Несколько значений могут быть представлены в Kotlin с помощью коллекций . Например, у нас может быть simpleфункция, которая возвращает список из трех чисел, а затем выводит их все с помощью forEach :
+
+fun simple(): List<Int> = listOf(1, 2, 3)
+ 
+fun main() {
+    simple().forEach { value -> println(value) } 
+1
+2
+3
+
+-----  Sequences Последовательности
+
+Если мы вычисляем числа с помощью некоторого блокирующего кода, потребляющего ресурсы процессора (каждое вычисление занимает 100 мс), то мы можем представить числа, используя последовательность :
+
+fun simple(): Sequence<Int> = sequence { // sequence builder
+    for (i in 1..3) {
+        Thread.sleep(100) // pretend we are computing it
+        yield(i) // yield next value
+    }
+}
+
+fun main() {
+    simple().forEach { value -> println(value) } 
+}
+1
+2
+3
+
+Этот код выводит те же числа, но он ждет 100 мс перед печатью каждого из них.
+
+------  Приостановка функций
+
+Однако это вычисление блокирует основной поток, выполняющий код. Когда эти значения вычисляются асинхронным кодом, мы можем пометить simpleфункцию suspendмодификатором, чтобы она могла выполнять свою работу без блокировки и возвращать результат в виде списка:
+
+suspend fun simple(): List<Int> {
+    delay(1000) // pretend we are doing something asynchronous here
+    return listOf(1, 2, 3)
+}
+
+fun main() = runBlocking<Unit> {
+    simple().forEach { value -> println(value) } 
+}
+1
+2
+3
+Этот код печатает числа после ожидания в течение секунды.
+
+------- Потоки
+
+Использование List<Int>типа результата означает, что мы можем вернуть только все значения сразу. Чтобы представить поток значений, которые асинхронно вычисляются, мы можем использовать Flow<Int>тип так же, как мы использовали бы Sequence<Int>тип для синхронно вычисляемых значений:
+
+fun simple(): Flow<Int> = flow { // flow builder
+    for (i in 1..3) {
+        delay(100) // pretend we are doing something useful here
+        emit(i) // emit next value
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    // Launch a concurrent coroutine to check if the main thread is blocked
+    launch {
+        for (k in 1..3) {
+            println("I'm not blocked $k")
+            delay(100)
+        }
+    }
+    // Collect the flow
+    simple().collect { value -> println(value) } 
+}
+I'm not blocked 1
+1
+I'm not blocked 2
+2
+I'm not blocked 3
+3
+
+Обратите внимание на следующие отличия кода от Flow из предыдущих примеров:
+
+Функция построителя для типа Flow называется потоком .
+Код внутри flow { ... }строительного блока может приостановиться.
+Не simpleфункция больше не отмечены suspendмодификатором.
+Значения , излучаемые из потока , используя испускает функцию.
+Значения собираются из потока с помощью функции сбора .
+Мы можем заменить задержку с Thread.sleepв теле simple«s flow { ... }и видеть , что основной поток блокируется в этом случае.
+1
+2
+3
+I'm not blocked 1
+I'm not blocked 2
+I'm not blocked 3
+
+------  Потоки холодные ----------------
+
+Потоки - это холодные потоки, подобные последовательностям - код внутри построителя потоков не запускается, пока поток не будет собран. Это становится ясным из следующего примера:
+
+fun simple(): Flow<Int> = flow { 
+    println("Flow started")
+    for (i in 1..3) {
+        delay(100)
+        emit(i)
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    println("Calling simple function...")
+    val flow = simple()
+    println("Calling collect...")
+    flow.collect { value -> println(value) } 
+    println("Calling collect again...")
+    flow.collect { value -> println(value) } 
+}
+
+Calling simple function...
+Calling collect...
+Flow started
+1
+2
+3
+Calling collect again...
+Flow started
+1
+2
+3
+
+Это ключевая причина, по которой simpleфункция (которая возвращает поток) не помечена suspendмодификатором. Сам по себе simple()звонок возвращается быстро и ничего не ждет. Поток запускается каждый раз, когда он собирается, поэтому мы видим «Поток запущен» при collectповторном вызове .
+
+---------  Основы отмены потока ----------------------
+
+Flow придерживается общей практики отмены сопрограмм. Как обычно, сбор потока можно отменить, если поток приостановлен с помощью отменяемой функции приостановки (например, delay ). В следующем примере показано, как поток отменяется по истечении времени ожидания при запуске в блоке withTimeoutOrNull и прекращает выполнение своего кода:
+
+fun simple(): Flow<Int> = flow { 
+    for (i in 1..3) {
+        delay(100)          
+        println("Emitting $i")
+        emit(i)
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    withTimeoutOrNull(250) { // Timeout after 250ms 
+        simple().collect { value -> println(value) } 
+    }
+    println("Done")
+}
+Emitting 1
+1
+Emitting 2
+2
+Done
+Дополнительные сведения см. В разделе « Проверки отмены потока» .
+
+---------------------  Edit Page
+Table of contents
+
+Asynchronous Flow
+Representing multiple values
+Sequences
+Suspending functions
+Flows
+Flows are cold
+Flow cancellation basics
+Flow builders
+Intermediate flow operators
+Transform operator
+Size-limiting operators
+Terminal flow operators
+Flows are sequential
+Flow context
+Wrong emission withContext
+flowOn operator
+Buffering
+Conflation
+Processing the latest value
+Composing multiple flows
+Zip
+Combine
+Flattening flows
+flatMapConcat
+flatMapMerge
+flatMapLatest
+Flow exceptions
+Collector try and catch
+Everything is caught
+Exception transparency
+Transparent catch
+Catching declaratively
+Flow completion
+Imperative finally block
+Declarative handling
+Successful completion
+Imperative versus declarative
+Launching flow
+Flow cancellation checks
+Making busy flow cancellable
+Flow and Reactive Streams
+Asynchronous Flow
+A suspending function asynchronously returns a single value, but how can we return multiple asynchronously computed values? This is where Kotlin Flows come in.
+
+Representing multiple values
+Multiple values can be represented in Kotlin using collections. For example, we can have a simple function that returns a List of three numbers and then print them all using forEach:
+
+fun simple(): List<Int> = listOf(1, 2, 3)
+ 
+fun main() {
+    simple().forEach { value -> println(value) } 
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code from here.
+
+This code outputs:
+
+1
+2
+3
+Sequences
+If we are computing the numbers with some CPU-consuming blocking code (each computation taking 100ms), then we can represent the numbers using a Sequence:
+
+fun simple(): Sequence<Int> = sequence { // sequence builder
+    for (i in 1..3) {
+        Thread.sleep(100) // pretend we are computing it
+        yield(i) // yield next value
+    }
+}
+​
+fun main() {
+    simple().forEach { value -> println(value) } 
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code from here.
+
+This code outputs the same numbers, but it waits 100ms before printing each one.
+
+Suspending functions
+However, this computation blocks the main thread that is running the code. When these values are computed by asynchronous code we can mark the simple function with a suspend modifier, so that it can perform its work without blocking and return the result as a list:
+
+suspend fun simple(): List<Int> {
+    delay(1000) // pretend we are doing something asynchronous here
+    return listOf(1, 2, 3)
+}
+​
+fun main() = runBlocking<Unit> {
+    simple().forEach { value -> println(value) } 
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code from here.
+
+This code prints the numbers after waiting for a second.
+
+Flows
+Using the List<Int> result type, means we can only return all the values at once. To represent the stream of values that are being asynchronously computed, we can use a Flow<Int> type just like we would use the Sequence<Int> type for synchronously computed values:
+
+              
+fun simple(): Flow<Int> = flow { // flow builder
+    for (i in 1..3) {
+        delay(100) // pretend we are doing something useful here
+        emit(i) // emit next value
+    }
+}
+​
+fun main() = runBlocking<Unit> {
+    // Launch a concurrent coroutine to check if the main thread is blocked
+    launch {
+        for (k in 1..3) {
+            println("I'm not blocked $k")
+            delay(100)
+        }
+    }
+    // Collect the flow
+    simple().collect { value -> println(value) } 
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code from here.
+
+This code waits 100ms before printing each number without blocking the main thread. This is verified by printing "I'm not blocked" every 100ms from a separate coroutine that is running in the main thread:
+
+I'm not blocked 1
+1
+I'm not blocked 2
+2
+I'm not blocked 3
+3
+Notice the following differences in the code with the Flow from the earlier examples:
+
+A builder function for Flow type is called flow.
+Code inside the flow { ... } builder block can suspend.
+The simple function is no longer marked with suspend modifier.
+Values are emitted from the flow using emit function.
+Values are collected from the flow using collect function.
+We can replace delay with Thread.sleep in the body of simple's flow { ... } and see that the main thread is blocked in this case.
+
+Flows are cold
+Flows are cold streams similar to sequences — the code inside a flow builder does not run until the flow is collected. This becomes clear in the following example:
+
+     
+fun simple(): Flow<Int> = flow { 
+    println("Flow started")
+    for (i in 1..3) {
+        delay(100)
+        emit(i)
+    }
+}
+​
+fun main() = runBlocking<Unit> {
+    println("Calling simple function...")
+    val flow = simple()
+    println("Calling collect...")
+    flow.collect { value -> println(value) } 
+    println("Calling collect again...")
+    flow.collect { value -> println(value) } 
+}
+Target platform: JVMRunning on kotlin v. 1.4.0
+You can get the full code from here.
+
+Which prints:
+
+Calling simple function...
+Calling collect...
+Flow started
+1
+2
+3
+Calling collect again...
+Flow started
+1
+2
+3
+This is a key reason the simple function (which returns a flow) is not marked with suspend modifier. By itself, simple() call returns quickly and does not wait for anything. The flow starts every time it is collected, that is why we see "Flow started" when we call collect again.
+
+Flow cancellation basics
+Flow adheres to the general cooperative cancellation of coroutines. As usual, flow collection can be cancelled when the flow is suspended in a cancellable suspending function (like delay). The following example shows how the flow gets cancelled on a timeout when running in a withTimeoutOrNull block and stops executing its code:
+
+          
+fun  simple (): Flow < Int >  =  flow {
+    for ( i  in  1 .. 3 ) {
+        задержка ( 100 )          
+        println ( "Выдача $ i" )
+        испускать ( я )
+    }
+}
+Взаимодействие с другими людьми
+fun  main () =  runBlocking < Unit > {
+    withTimeoutOrNull ( 250 ) { // Тайм-аут через 250 мс
+        простой (). собирать { значение  ->  println ( значение )}
+    }
+    println ( "Готово" )
+}
+Излучающий 1 1 Излучающий 2 2 Готово
+Целевая платформа: JVM, работающая на kotlin v. 1.4.0
+Вы можете получить полный код здесь .
+
+Обратите внимание, как поток simpleфункции передает только два числа , что дает следующий результат:
+
+Emitting 1
+1
+Emitting 2
+2
+Done
+Дополнительные сведения см. В разделе « Проверки отмены потока» .
+
+Проверки отмены потока
+Для удобства построитель потока выполняет дополнительные проверки sureActive на отмену для каждого выданного значения. Это означает, что цикл занятости, исходящий из a, flow { ... }можно отменить:
+fun foo(): Flow<Int> = flow { 
+    for (i in 1..5) {
+        println("Emitting $i") 
+        emit(i) 
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    foo().collect { value -> 
+        if (value == 3) cancel()  
+        println(value)
+    } 
+}
+Emitting 1
+1
+Emitting 2
+2
+Emitting 3
+3
+Emitting 4
+Exception in thread "main" kotlinx.coroutines.JobCancellationException: BlockingCoroutine was cancelled
+ at kotlinx.coroutines.JobSupport.cancel (JobSupport.kt:1587) 
+ at kotlinx.coroutines.CoroutineScopeKt.cancel (CoroutineScope.kt:217) 
+ at kotlinx.coroutines.CoroutineScopeKt.cancel$default (CoroutineScope.kt:215) 
+
+Однако большинство других операторов потока не выполняют дополнительных проверок отмены самостоятельно по причинам производительности. Например, если вы используете расширение IntRange.asFlow для написания того же цикла занятости и нигде не приостанавливаетесь, то проверки на отмену не выполняются:
+fun main() = runBlocking<Unit> {
+    (1..5).asFlow().collect { value -> 
+        if (value == 3) cancel()  
+        println(value)
+    } 
+}
+
+--------------------------- Делаем занятый поток отменяемым ------------------------
+В случае, если у вас есть цикл занятости с сопрограммами, вы должны явно проверить отмену. Вы можете добавить .onEach { currentCoroutineContext().ensureActive() }, но для этого есть готовый к использованию cancellable оператор:
+         
+fun main() = runBlocking<Unit> {
+    (1..5).asFlow().cancellable().collect { value -> 
+        if (value == 3) cancel()  
+        println(value)
+    } 
+}
+1
+2
+3
+Exception in thread "main" kotlinx.coroutines.JobCancellationException: BlockingCoroutine was cancelled
+ at kotlinx.coroutines.JobSupport.cancel (JobSupport.kt:1587) 
+ at kotlinx.coroutines.CoroutineScopeKt.cancel (CoroutineScope.kt:217) 
+ at kotlinx.coroutines.CoroutineScopeKt.cancel$default (CoroutineScope.kt:215) 
+
+С cancellable оператором собираются только цифры от 1 до 3:
+
+1
+2
+3
+Exception in thread "main" kotlinx.coroutines.JobCancellationException: BlockingCoroutine was cancelled; job="coroutine#1":BlockingCoroutine{Cancelled}@5ec0a365
+
+Это был фальшстарт
+
+----------------------- Построители потока -----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

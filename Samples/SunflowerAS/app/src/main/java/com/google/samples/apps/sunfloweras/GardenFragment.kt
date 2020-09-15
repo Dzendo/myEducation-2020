@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
@@ -84,11 +85,11 @@ class GardenFragment : Fragment() {
     // подписаться на пользовательский интерфейс - разбирать что делает
     //Основы Android Kotlin 07.2.5: DiffUtil и привязка данных с помощью RecyclerView
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
-        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
+        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner, Observer  { result ->
             binding.hasPlantings = !result.isNullOrEmpty()  // по дороге при высветке успевает проставлять в XML посажено или нет
             adapter.submitList(result)
             //  Используйте submitList (), чтобы обновлять список
-        }
+        })
     }
 
     // TODO: convert to data binding if applicable -- преобразование в привязку данных, если это применимо
