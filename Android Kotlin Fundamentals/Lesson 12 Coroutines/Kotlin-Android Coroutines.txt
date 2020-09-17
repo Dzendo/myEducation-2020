@@ -1,0 +1,438 @@
+
+https://developer.android.com/topic/libraries/architecture/coroutines
+
+https://developer.android.com/kotlin/coroutines#examples-overview
+============================================================================================
+
+Для разработчиков Android > Котлин > Начать
+Продвинутые руководства по котлин > Котлиновские сопрограммы > Обзор
+
+Kotlin сопрограммы на Android
+
+Характеристики:
+Легковесность : приостановки https://kotlinlang.org/docs/reference/coroutines/basics.html
+Меньше утечек памяти : используйте структурированный параллелизм 		https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency 
+Встроенная поддержка отмены : отмена 
+		https://kotlinlang.org/docs/reference/coroutines/cancellation-and-timeouts.html
+Интеграция Jetpack : многие библиотеки Jetpack включают расширения 		https://developer.android.com/kotlin/ktx Part of Android Jetpack !!!!!!
+	 Некоторые библиотеки также предоставляют свою собственную область сопрограмм, которую вы можете 	 использовать для структурированного параллелизма.
+	 https://developer.android.com/topic/libraries/architecture/coroutines
+
+Обзор примеров
+Основываясь на Руководстве по архитектуре приложения , примеры в этом разделе выполняют сетевой запрос и возвращают результат в основной поток, где приложение затем может отображать результат пользователю.
+
+https://www.youtube.com/watch?v=st1XVfkDWqk 40 мин
+ktx - это для написания БОЛЕЕ идеоматического кода - надо найти их списки
+List of KTX extensions https://developer.android.com/kotlin/ktx/extensions-list
+
+dependencies {
+	implementation "androidx.core:core-ktx:1.3.1"
+	implementation "androidx.collection:collection-ktx:1.1.0"
+	implementation "androidx.fragment:fragment-ktx:1.2.5"
+	implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+	implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+
+	implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
+	implementation "androidx.navigation:navigation-runtime-ktx:2.3.0"
+    	implementation "androidx.navigation:navigation-fragment-ktx:2.3.0"
+    	implementation "androidx.navigation:navigation-ui-ktx:2.3.0"
+
+	implementation "androidx.room:room-ktx:2.2.5"
+	implementation "androidx.sqlite:sqlite-ktx:2.1.0"
+	implementation "androidx.work:work-runtime-ktx:2.4.0"
+
+	implementation "androidx.palette:palette-ktx:1.0.0"
+	implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.2.0"
+
+	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+
+	// Other KTX modules
+	// Firebase KTX
+	// Google Maps Platform KTX
+	// Play Core KTX
+}
+
+В частности, ViewModel компонент архитектуры вызывает уровень репозитория в основном потоке для запуска сетевого запроса. В этом руководстве рассматриваются различные решения, в которых используются сопрограммы, позволяющие разблокировать основной поток.
+
+ViewModelвключает набор расширений KTX, которые работают напрямую с сопрограммами. Эти расширения являются lifecycle-viewmodel-ktxбиблиотекой и используются в этом руководстве.
+
+Чтобы использовать сопрограммы в вашем проекте Android, добавьте следующую зависимость в build.gradleфайл вашего приложения :
+
+dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+}
+
+Выполнение в фоновом потоке
+
+
+Выполнение сетевого запроса в основном потоке заставляет его ждать или блокировать , пока не получит ответ. Поскольку поток заблокирован, ОС не может выполнить вызов onDraw(), что приводит к зависанию вашего приложения и потенциально приводит к диалоговому окну «Приложение не отвечает» (ANR). Для лучшего взаимодействия с пользователем давайте запустим эту операцию в фоновом потоке.
+
+Во-первых, давайте взглянем на наш Repositoryкласс и посмотрим, как он выполняет сетевой запрос:
+
+makeLoginRequestсинхронно и блокирует вызывающий поток.	
+sealed class Result<out R> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
+}
+
+class LoginRepository(private val responseParser: LoginResponseParser) {
+    private const val loginUrl = "https://example.com/login"
+
+    // Function that makes the network request, blocking the current thread
+    fun makeLoginRequest(						suspend fun makeLoginRequest(
+        jsonBody: String						// Move the execution of the coroutine to the I/O dispatcher
+    ): Result<LoginResponse> {						return withContext(Dispatchers.IO) {
+        val url = URL(loginUrl)						// Blocking network request code
+        (url.openConnection() as? HttpURLConnection)?.run {
+            requestMethod = "POST"
+            setRequestProperty("Content-Type", "application/json; utf-8")
+            setRequestProperty("Accept", "application/json")
+            doOutput = true
+            outputStream.write(jsonBody.toByteArray())
+            return Result.Success(responseParser.parse(inputStream))
+        }
+        return Result.Error(Exception("Cannot open HttpURLConnection"))
+    }
+}
+makeLoginRequestсинхронно и блокирует вызывающий поток. Для моделирования ответа на сетевой запрос у нас есть собственный Resultкласс.
+
+ViewModelЗапускает сетевой запрос , когда пользователь нажимает, например, на кнопку:
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+): ViewModel() {
+
+    fun login(username: String, token: String) {
+						// Create a new coroutine to move the execution off the UI thread
+						        viewModelScope.launch(Dispatchers.IO) {
+        val jsonBody = "{ username: \"$username\", token: \"$token\"}"
+        loginRepository.makeLoginRequest(jsonBody)  // вызов верхней блокирующей
+							}
+    }
+}
+
+В предыдущем коде LoginViewModel блокирует поток пользовательского интерфейса при выполнении сетевого запроса.
+Самое простое решение для переноса выполнения из основного потока - создать новую сопрограмму и выполнить сетевой запрос в потоке ввода-вывода:
+
+						// Create a new coroutine to move the execution off the UI thread
+						        viewModelScope.launch(Dispatchers.IO) {
+						Вызов блокирующей подпрограммы - функции loginRepository.makeLoginRequest(jsonBody)
+							}
+Давайте разберем код сопрограмм в login функции:
+
+viewModelScope - предопределенный, CoroutineScope который включен в ViewModel расширения KTX. Обратите внимание, что все сопрограммы должны работать в области видимости.
+	A CoroutineScope управляет одной или несколькими связанными сопрограммами.
+
+launch - это функция, которая создает сопрограмму и отправляет выполнение тела своей функции соответствующему диспетчеру.
+
+Dispatchers.IO указывает, что эта сопрограмма должна выполняться в потоке, зарезервированном для операций ввода-вывода.
+
+login Функция выполняется следующим образом :
+
+Приложение вызывает login функцию из View уровня в основном потоке.(fun login(username: String, token: String))
+launch создает новую сопрограмму, и сетевой запрос выполняется независимо от потока, зарезервированного для операций ввода-вывода.
+Пока сопрограмма работает, login функция продолжает выполнение и возвращается, возможно, до того, как сетевой запрос будет завершен.
+ Обратите внимание, что для простоты ответ сети пока игнорируется.
+Поскольку эта сопрограмма запускается с viewModelScope, она выполняется в рамках ViewModel. Если ViewModelуничтожается, потому что пользователь уходит от экрана, viewModelScope он автоматически отменяется, и все работающие сопрограммы также отменяются.
+
+Одна проблема с предыдущим примером заключается в том, что все, что вызывает, makeLoginRequest необходимо помнить о явном перемещении выполнения из основного потока.
+
+ Давайте посмотрим, как мы можем изменить, Repository чтобы решить эту проблему за нас.
+
+Используйте сопрограммы для обеспечения безопасности
+
+Мы считаем функцию безопасной, если она не блокирует обновления пользовательского интерфейса в основном потоке. makeLoginRequest Функция не является основной безопасной, как вызов makeLoginRequest от основного потока делает блок пользовательского интерфейса. Используйте withContext() функцию из библиотеки сопрограмм, чтобы переместить выполнение сопрограммы в другой поток:
+
+class LoginRepository(...) {
+    ...
+    suspend fun makeLoginRequest(
+        jsonBody: String
+    ): Result<LoginResponse> {
+
+        // Move the execution of the coroutine to the I/O dispatcher
+        return withContext(Dispatchers.IO) {
+            // Blocking network request code
+        }
+    }
+}
+
+withContext(Dispatchers.IO) перемещает выполнение сопрограммы в поток ввода-вывода, делая нашу вызывающую функцию безопасной и позволяя пользовательскому интерфейсу обновляться по мере необходимости.
+makeLoginRequest также отмечен suspend ключевым словом. Это ключевое слово является способом Kotlin принудительно вызывать функцию из сопрограммы.
+
+В следующем примере сопрограмма создается в LoginViewModel. Когда выполнение makeLoginRequest перемещается из основного потока, сопрограмма в login функции теперь может выполняться в основном потоке:
+
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+): ViewModel() {
+
+    fun login(username: String, token: String) {
+
+        // Create a new coroutine on the UI thread
+        viewModelScope.launch {
+            val jsonBody = "{ username: \"$username\", token: \"$token\"}"
+
+            // Make the network call and suspend execution until it finishes
+            val result = loginRepository.makeLoginRequest(jsonBody)
+
+            // Display result of the network request to the user
+            when (result) {
+                is Result.Success<LoginResponse> -> // Happy path
+                else -> // Show error in UI
+            }
+        }
+    }
+}
+
+Обратите внимание, что сопрограмма все еще нужна здесь, поскольку makeLoginRequestэто suspendфункция, и все suspendфункции должны выполняться в сопрограмме.
+
+Этот код отличается от предыдущего loginпримера несколькими способами:
+
+launch не принимает Dispatchers.IO параметр. Если вы не пропускать Dispatcherна launch любые сопрограммы запускаемые с viewModelScope запуска в главном потоке.
+Результат сетевого запроса теперь обрабатывается для отображения пользовательского интерфейса успешного или неудачного выполнения.
+
+Теперь функция входа в систему выполняется следующим образом:
+Приложение вызывает login() функцию из View уровня в основном потоке.
+launch создает новую сопрограмму для выполнения сетевого запроса в основном потоке, и сопрограмма начинает выполнение.
+Внутри сопрограммы вызов to loginRepository.makeLoginRequest() now приостанавливает дальнейшее выполнение сопрограммы до тех пор, пока выполнение withContext блока в ней не makeLoginRequest() завершится.
+После завершения withContext блока сопрограмма login() возобновляет выполнение в основном потоке с результатом сетевого запроса.
+
+Примечание. Для связи с уровнем View из ViewModel уровня используйте, LiveDataкак рекомендовано в Руководстве по архитектуре приложения . Следуя этой модели, код в ViewModelвыполняется в основном потоке, так что вы можете вызвать MutableLiveData «s setValue() функцию непосредственно.
+
+Обработка исключений
+
+Чтобы обрабатывать исключения, которые Repository может вызывать уровень, используйте встроенную поддержку исключений Kotlin. В следующем примере мы используем try-catch блок:
+
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+): ViewModel() {
+
+    fun makeLoginRequest(username: String, token: String) {
+        viewModelScope.launch {
+            val jsonBody = "{ username: \"$username\", token: \"$token\"}"
+            val result = try {
+                loginRepository.makeLoginRequest(jsonBody)       // вызывается suspend функция с withContext(Dispatchers.IO) {  Blocking network request code}
+            } catch(e: Exception) {
+                Result.Error(Exception("Network request failed"))
+            }
+            when (result) {
+                is Result.Success<LoginResponse> -> // Happy path
+                else -> // Show error in UI
+            }
+        }
+    }
+}
+
+В этом примере любое неожиданное исключение, вызванное makeLoginRequest() вызовом, обрабатывается как ошибка в пользовательском интерфейсе.
+https://developer.android.com/kotlin/coroutines#examples-overview
+========================================================================================================================================================================
+https://developer.android.com/kotlin/coroutines-adv 
+Для разработчиков Android > Котлин > Начать
+Продвинутые руководства по котлин > Котлиновские сопрограммы > Improve app performance with Kotlin coroutines
+
+Повышение производительности приложений с помощью сопрограмм Kotlin
+
+Сопрограммы Kotlin позволяют писать чистый, упрощенный асинхронный код, который поддерживает отзывчивость вашего приложения при управлении длительными задачами, такими как сетевые вызовы или операции с диском.
+
+В этом разделе подробно рассматриваются сопрограммы на Android. Если вы не знакомы с сопрограммами, обязательно прочтите сопрограммы Kotlin на Android, прежде чем читать эту тему.
+https://developer.android.com/kotlin/coroutines
+
+Управляйте долгосрочными задачами
+
+Сопрограммы основываются на обычных функциях, добавляя две операции для обработки длительно выполняемых задач. В дополнение к invoke(или call) и returnсопрограммы добавляют suspendи resume:
+
+suspend приостанавливает выполнение текущей сопрограммы, сохраняя все локальные переменные.
+resume продолжает выполнение приостановленной сопрограммы с того места, где она была приостановлена.
+Вы можете вызывать suspendфункции только из других suspend функций или с помощью построителя сопрограмм, например, launch для запуска новой сопрограммы.
+
+В следующем примере показана простая реализация сопрограммы для гипотетической длительной задачи:
+
+suspend fun fetchDocs() {                             // Dispatchers.Main
+    val result = get("https://developer.android.com") // Dispatchers.IO for `get`
+    show(result)                                      // Dispatchers.Main
+}
+
+suspend fun get(url: String) = withContext(Dispatchers.IO) { /* ... */ }
+
+В этом примере get()все еще выполняется в основном потоке, но он приостанавливает работу сопрограммы до того, как она запустит сетевой запрос. Когда сетевой запрос завершается, getвозобновляет приостановленную сопрограмму вместо использования обратного вызова для уведомления основного потока.
+
+Kotlin использует стековый фрейм для управления тем, какая функция выполняется вместе с любыми локальными переменными. При приостановке сопрограммы текущий кадр стека копируется и сохраняется на будущее. При возобновлении кадр стека копируется обратно из того места, где он был сохранен, и функция снова запускается. Несмотря на то, что код может выглядеть как обычный запрос последовательной блокировки, сопрограмма гарантирует, что сетевой запрос избегает блокировки основного потока.
+
+Используйте сопрограммы для обеспечения безопасности
+
+Сопрограммы Kotlin используют диспетчеров, чтобы определить, какие потоки используются для выполнения сопрограмм. Чтобы запустить код вне основного потока, вы можете указать сопрограммам Kotlin выполнять работу либо с диспетчером по умолчанию, либо с диспетчером ввода-вывода . В Kotlin все сопрограммы должны работать в диспетчере, даже если они работают в основном потоке. Сопрограммы могут приостанавливаться, и диспетчер отвечает за их возобновление.
+
+Чтобы указать, где должны запускаться сопрограммы, Kotlin предоставляет три диспетчера, которые вы можете использовать:
+
+--Dispatchers.Main - используйте этот диспетчер для запуска сопрограммы в основном потоке Android. Это следует использовать только для взаимодействия с пользовательским интерфейсом и выполнения быстрой работы. Примеры включают вызов suspendфункций, выполнение операций платформы пользовательского интерфейса Android и обновление LiveDataобъектов.
+--Dispatchers.IO - этот диспетчер оптимизирован для выполнения дискового или сетевого ввода-вывода вне основного потока. Примеры включают использование компонента Room , чтение или запись в файлы, а также выполнение любых сетевых операций.
+--Dispatchers.Default - этот диспетчер оптимизирован для выполнения ресурсоемкой работы вне основного потока. Примеры использования включают сортировку списка и анализ JSON.
+
+Продолжая предыдущий пример, вы можете использовать диспетчеров для повторного определения get функции. Внутри тела getвызовите withContext(Dispatchers.IO) для создания блока, который запускается в пуле потоков ввода-вывода. Любой код, который вы помещаете в этот блок, всегда выполняется через IO диспетчер. Поскольку withContext сама по себе функция приостановки, функция get также является функцией приостановки.
+
+suspend fun fetchDocs() {                      // Dispatchers.Main
+    val result = get("developer.android.com")  // Dispatchers.Main
+    show(result)                               // Dispatchers.Main
+}
+
+suspend fun get(url: String) =                 // Dispatchers.Main
+    withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
+        /* perform network IO here */          // Dispatchers.IO (main-safety block)
+    }                                          // Dispatchers.Main
+}
+С помощью сопрограмм вы можете отправлять потоки с детализированным управлением. Поскольку withContext() позволяет вам управлять пулом потоков любой строки кода без использования обратных вызовов, вы можете применять его к очень небольшим функциям, таким как чтение из базы данных или выполнение сетевого запроса. Хорошая практика состоит в том, withContext() чтобы убедиться, что каждая функция является основной , что означает, что вы можете вызывать функцию из основного потока. Таким образом, вызывающему абоненту никогда не нужно думать о том, какой поток следует использовать для выполнения функции.
+
+В предыдущем примере fetchDocs() выполняется в основном потоке; однако он может безопасно вызывать get, который выполняет сетевой запрос в фоновом режиме. Поскольку сопрограммы поддерживают suspend и resume, сопрограмма в основном потоке возобновляется с get результатом, как только withContext блок будет выполнен.
+
+Важно: Использование suspendне указывает Kotlin запускать функцию в фоновом потоке. Это нормально, что suspend функции работают с основным потоком. Также обычно запускают сопрограммы в основном потоке. Вы всегда должны использовать withContext() внутри suspend функции, когда вам нужна основная безопасность, например, при чтении или записи на диск, выполнении сетевых операций или выполнении операций с интенсивным использованием ЦП.
+
+Производительность withContext ()
+
+withContext() не добавляет дополнительных накладных расходов по сравнению с эквивалентной реализацией на основе обратного вызова. Кроме того, withContext() в некоторых ситуациях можно оптимизировать вызовы, выходящие за рамки эквивалентной реализации на основе обратного вызова. Например, если функция выполняет десять вызовов в сеть, вы можете указать Kotlin переключить потоки только один раз, используя внешний withContext(). Затем, даже если сетевая библиотека используется withContext() несколько раз, она остается в одном диспетчере и избегает переключения потоков. Кроме того, котлинский оптимизирует переключение между Dispatchers.Default и , Dispatchers.IO чтобы избежать нить переключается , когда это возможно.
+
+Важно: использование диспетчера, который использует пул потоков, например Dispatchers.IO или Dispatchers.Default не гарантирует, что блок будет выполняться в одном потоке сверху вниз. В некоторых ситуациях сопрограммы Kotlin могут перемещать выполнение в другой поток после suspend-and- resume. Это означает, что локальные переменные потока могут не указывать на одно и то же значение для всего withContext() блока.
+
+Запустить сопрограмму
+
+Вы можете запустить сопрограммы одним из двух способов:
+
+--launch запускает новую сопрограмму и не возвращает результат вызывающей стороне. Любую работу, которая считается «выстрелил и забыл», можно приступить к работе launch.
+--async запускает новую сопрограмму и позволяет вам вернуть результат с помощью вызываемой функции приостановки await.
+
+Как правило, вам следует launch создать новую сопрограмму из обычной функции, поскольку обычная функция не может вызывать await. Используйте asyncтолько внутри другой сопрограммы или внутри функции приостановки и выполнения параллельной декомпозиции.
+
+Предупреждение: и обрабатывать исключения иначе. Поскольку ожидает возможного вызова , он удерживает исключения и повторно генерирует их как часть вызова. Это означает, что если вы используете для запуска новой сопрограммы из обычной функции, вы можете молча сбросить исключение. Эти отброшенные исключения не будут отображаться в ваших показателях сбоев и не будут отмечены в logcat. Для получения дополнительной информации см. Отмена и исключения в сопрограммах . launchasyncasyncawaitawaitawait
+
+Параллельная декомпозиция
+
+Все сопрограммы, которые запускаются suspend функцией, должны быть остановлены, когда эта функция вернется, поэтому вам, вероятно, потребуется гарантировать, что эти сопрограммы завершатся до возврата. С помощью структурированного параллелизма в Kotlin вы можете определить, coroutineScope который запускает одну или несколько сопрограмм. Затем, используя await() (для одной сопрограммы) или awaitAll() (для нескольких сопрограмм), вы можете гарантировать, что эти сопрограммы завершатся до возврата из функции.
+
+В качестве примера определим, coroutineScope что асинхронно выбирает два документа. Вызывая await() каждую отложенную ссылку, мы гарантируем, что обе async операции завершатся до возврата значения:
+
+suspend fun fetchTwoDocs() =
+    coroutineScope {
+        val deferredOne = async { fetchDoc(1) }
+        val deferredTwo = async { fetchDoc(2) }
+        deferredOne.await()
+        deferredTwo.await()
+    }
+
+Вы также можете использовать awaitAll() в коллекциях, как показано в следующем примере:
+
+suspend fun fetchTwoDocs() =        // called on any Dispatcher (any thread, possibly Main)
+    coroutineScope {
+        val deferreds = listOf(     // fetch two docs at the same time
+            async { fetchDoc(1) },  // async returns a result for the first doc
+            async { fetchDoc(2) }   // async returns a result for the second doc
+        )
+        deferreds.awaitAll()        // use awaitAll to wait for both network requests
+    }
+Несмотря на то, fetchTwoDocs() запуски новых сопрограммы с async, функция использует , awaitAll() чтобы ждать этих запущенных сопрограммам до конца , прежде чем вернуться. Обратите внимание, однако, что даже если бы мы не вызывались awaitAll(), coroutineScope построитель не возобновляет вызванную сопрограмму fetchTwoDocs до тех пор, пока не будут завершены все новые сопрограммы.
+
+Кроме того, coroutineScopeперехватывает любые исключения, которые генерируют сопрограммы, и направляет их обратно вызывающей стороне.
+
+Для получения дополнительной информации о параллельной декомпозиции см. Создание приостанавливающих функций . https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html
+
+Концепции сопрограмм
+
+A CoroutineScope отслеживает любую сопрограмму, которую он создает с помощью launch или async. Текущая работа (то есть работающие сопрограммы) может быть отменена вызовом scope.cancel() в любой момент времени. В Android некоторые библиотеки KTX предоставляют свои собственные CoroutineScope для определенных классов жизненного цикла. Например, ViewModel имеет viewModelScope и Lifecycle имеет lifecycleScope. Однако, в отличие от диспетчера, CoroutineScope сопрограммы не запускаются.
+
+Примечание. Дополнительные сведения viewModelScope см. В разделе « Простые сопрограммы в Android: viewModelScope» . 
+https://medium.com/androiddevelopers/easy-coroutines-in-android-viewmodelscope-25bffb605471
+
+viewModelScope также используется в примерах из раздела Фоновая потоковая передача на Android с помощью сопрограмм . Однако, если вам нужно создать свой собственный CoroutineScope для управления жизненным циклом сопрограмм на определенном уровне вашего приложения, вы можете создать его следующим образом:
+
+class ExampleClass {
+
+    // Job and Dispatcher are combined into a CoroutineContext which
+    // will be discussed shortly
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
+
+    fun exampleMethod() {
+        // Starts a new coroutine within the scope
+        scope.launch {
+            // New coroutine that can call suspend functions
+            fetchDocs()
+        }
+    }
+
+    fun cleanUp() {
+        // Cancel the scope to cancel ongoing coroutines work
+        scope.cancel()
+    }
+}
+
+Отмененная область не может создавать больше сопрограмм. Следовательно, вы должны вызывать scope.cancel() только тогда, когда класс, контролирующий его жизненный цикл, уничтожается. При использовании viewModelScope, то ViewModelкласс отменяет рамки автоматически для вас в ViewModel в onCleared() методе.
+
+Работа Job
+
+A Job - дескриптор сопрограммы. Каждая сопрограмма, которую вы создаете, launch или async возвращает Job экземпляр, который однозначно идентифицирует сопрограмму и управляет ее жизненным циклом. Вы также можете передать объект Job a CoroutineScope для дальнейшего управления его жизненным циклом, как показано в следующем примере:
+
+class ExampleClass {
+    ...
+    fun exampleMethod() {
+        // Handle to the coroutine, you can control its lifecycle
+        val job = scope.launch {
+            // New coroutine
+        }
+
+        if (...) {
+            // Cancel the coroutine started above, this doesn't affect the scope
+            // this coroutine was launched in
+            job.cancel()
+        }
+    }
+}
+
+CoroutineContext
+
+A CoroutineContext определяет поведение сопрограммы, используя следующий набор элементов:
+
+--Job: Управляет жизненным циклом сопрограммы.
+--CoroutineDispatcher: Отправка выполняется в соответствующий поток.
+--CoroutineName: Имя сопрограммы, полезное для отладки.
+--CoroutineExceptionHandler: Обрабатывает неперехваченные исключения.
+
+Для новых сопрограмм, созданных в области видимости, новый Job экземпляр назначается новой сопрограмме, а другие CoroutineContext элементы наследуются от содержащей ее области. Вы можете переопределить унаследованные элементы, передав новое CoroutineContext в функцию launch или async. Следует отметить , что пропускание Jobв launch или async не имеет никакого эффекта, в качестве нового экземпляра Job всегда присваиваются новой сопрограмма.
+
+class ExampleClass {
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
+
+    fun exampleMethod() {
+        // Starts a new coroutine on Dispatchers.Main as it's the scope's default
+        val job1 = scope.launch {
+            // New coroutine with CoroutineName = "coroutine" (default)
+        }
+
+        // Starts a new coroutine on Dispatchers.Default
+        val job2 = scope.launch(Dispatchers.Default + "BackgroundCoroutine") {
+            // New coroutine with CoroutineName = "BackgroundCoroutine" (overridden)
+        }
+    }
+}
+Примечание. Для получения дополнительной информации CoroutineExceptionHandler см. Исключения в сообщении блога сопрограмм .
+
+Дополнительные ресурсы сопрограмм
+
+тобы узнать больше о сопрограммах, см. Следующие дополнительные ресурсы:
+
+Документация
+Обзор сопрограмм (JetBrains) https://kotlinlang.org/docs/reference/coroutines-overview.html
+Codelabs
+Лаборатория кодов сопрограмм : эта лаборатория кодов показывает вам, как использовать сопрограммы Kotlin для управления фоновыми потоками и упрощения асинхронного кода.
+https://codelabs.developers.google.com/codelabs/kotlin-coroutines
+
+Расширенные сопрограммы с Kotlin Flow и LiveData : узнайте, как использовать сопрограммы Kotlin с LiveData и Flow в приложении для Android.
+https://codelabs.developers.google.com/codelabs/advanced-kotlin-coroutines
+
+Ролики
+Сопрограммы: нужно их всех поймать : изучите лучшие практики обработки отмены и исключений в сопрограммах Kotlin.
+Понимание Kotlin Coroutines на Android : в этом выступлении Google I / O 2019 дается обзор использования Kotlin Coroutines на Android.
+LiveData с сопрограммами и потоком : в этом выступлении на Саммите разработчиков Android 2019 рассматривается liveDataконструктор сопрограмм, показывающий, когда и как его использовать, а также шаблоны тестирования и антипаттерны для создания чистых, эффективных и надежных реактивных пользовательских интерфейсов.
+#AskAndroid на Android Dev Summit 2019 - Kotlin & Coroutines для Android : этот сеанс с Android Dev Summit 2019 отвечает на вопросы, связанные с Kotlin и сопрограммами, отправленные онлайн-разработчиками Android.
+Сообщения в блоге
+Уроки, извлеченные с использованием Coroutines Flow в приложении Android Dev Summit 2019 : в этой статье освещаются передовые практики и другие уроки, извлеченные при добавлении поддержки Flow в приложение Android Dev Summit 2019.
+Простые сопрограммы в Android: viewModelScope : в этой статье описывается viewModelScope, свойство расширения, которое добавляет поддержку сопрограмм в ViewModelкласс.
+Сопрограммы в Android (серия - ссылка на первую статью) : этот пост является первым в серии, в которой рассказывается о сопрограммах Kotlin.
+https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
+
+

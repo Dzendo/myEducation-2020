@@ -8,8 +8,9 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
     defaultConfig {
         applicationId "com.example.android.advancedcoroutines"
