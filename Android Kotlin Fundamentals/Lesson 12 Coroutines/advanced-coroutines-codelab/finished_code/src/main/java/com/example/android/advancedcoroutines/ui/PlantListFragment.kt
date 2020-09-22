@@ -88,7 +88,7 @@ class PlantListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
+// 10, Не нашел и так указывает:
     private fun subscribeUi(adapter: PlantAdapter) {
         viewModel.plantsUsingFlow.observe(viewLifecycleOwner, Observer { plants ->
             adapter.submitList(plants)

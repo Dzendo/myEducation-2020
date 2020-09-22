@@ -20,4 +20,27 @@ This folder contains the source code for the [Kotlin Coroutines codelab](https:/
 
 https://codelabs.developers.google.com/codelabs/building-kotlin-extensions-library/#0c
 
+Используйте сопрограммы с LiveData
+Каждый emit()вызов приостанавливает выполнение блока до тех пор,
+ пока LiveData значение не будет установлено в основном потоке.
+  emit(Result.error(ioException)) emit(data)
 
+val plants: LiveData<List<Plant>> = plantDao.getPlants()
+
+val plants: LiveData<List<Plant>> = liveData<List<Plant>> {
+   val plantsLiveData = plantDao.getPlants()
+   val customSortOrder = plantsListSortOrderCache.getOrAwait()
+   emitSource(plantsLiveData.map { plantList -> plantList.applySort(customSortOrder) })
+}
+
+Вы также реализуете ту же логику с Flow:
+private val customSortFlow = plantsListSortOrderCache::getOrAwait.asFlow()
+
+val plantsFlow: Flow<List<Plant>>
+   get() = plantDao.getPlantsFlow()
+       .combine(customSortFlow) { plants, sortOrder ->
+           plants.applySort(sortOrder)
+       }
+       .flowOn(defaultDispatcher)
+       .conflate()
+       

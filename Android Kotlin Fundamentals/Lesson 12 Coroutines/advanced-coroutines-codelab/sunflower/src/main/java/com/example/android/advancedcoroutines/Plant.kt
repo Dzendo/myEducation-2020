@@ -32,6 +32,7 @@ data class Plant(
     override fun toString() = name
 }
 
+// Обратить внимание на стартовый код:
 
 inline class GrowZone(val number: Int)
 val NoGrowZone = GrowZone(-1)

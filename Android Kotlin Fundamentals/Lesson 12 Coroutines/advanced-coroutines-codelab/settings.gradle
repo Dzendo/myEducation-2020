@@ -1,2 +1,2 @@
-include ':finished_code', ':start', ':sunflower', ':my'
+include ':finished_code', ':start', ':sunflower', ':my', ':my_livedata', ':my_flow'
 rootProject.name='Advanced Coroutines on Android'
