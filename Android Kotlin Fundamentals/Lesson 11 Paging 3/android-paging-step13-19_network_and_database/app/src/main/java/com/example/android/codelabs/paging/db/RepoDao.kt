@@ -26,6 +26,10 @@ import com.example.android.codelabs.paging.model.Repo
 @Dao
 interface RepoDao {
 
+    //  The Int type parameter tells Room to use a PositionalDataSource object.
+    //    @Query("SELECT * FROM concerts ORDER BY date DESC")
+    //    fun concertsByDate(): DataSource.Factory<Int, Concert>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(repos: List<Repo>)
 
@@ -36,5 +40,6 @@ interface RepoDao {
 
     @Query("DELETE FROM repos")
     suspend fun clearRepos()
+
 
 }

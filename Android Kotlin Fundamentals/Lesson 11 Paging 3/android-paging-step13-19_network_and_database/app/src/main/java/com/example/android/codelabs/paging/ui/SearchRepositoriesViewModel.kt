@@ -36,6 +36,11 @@ import kotlinx.coroutines.flow.map
 class SearchRepositoriesViewModel(private val repository: GithubRepository) : ViewModel() {
     private var currentQueryValue: String? = null
 
+    // PagedList класс
+    // val concertList: LiveData<PagedList<Concert>> =
+    //            concertDao.concertsByDate().toLiveData(pageSize = 50)
+
+
     private var currentSearchResult: Flow<PagingData<UiModel>>? = null
 
     fun searchRepo(queryString: String): Flow<PagingData<UiModel>> {
