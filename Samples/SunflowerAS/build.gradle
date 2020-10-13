@@ -26,13 +26,13 @@ buildscript {
 
         // App dependencies
         appCompatVersion = '1.2.0'
-        constraintLayoutVersion = '2.0.1' // '2.0.0-beta6'
+        constraintLayoutVersion = '2.0.2' // '2.0.0-beta6'
         coreTestingVersion = '2.1.0'
         coroutinesVersion = "1.3.9"
         espressoVersion = '3.3.0'
         //fragmentVersion = '1.3.0-alpha06' не нужен есть androidx.navigation:navigation-fragment-ktx
         glideVersion = '4.11.0'
-        gradleVersion = '4.0.1'
+        gradleVersion = '4.0.2'
         //gradleVersion = '4.2.0-alpha06'
         gsonVersion = '2.8.6'
         junitVersion = '4.13'
@@ -40,7 +40,7 @@ buildscript {
         kotlinVersion = '1.4.10'
         //kotlinVersion = '1.4.0-rc'
         ktlintVersion = '0.33.0'
-        ktxVersion = '1.3.1'        // необязательно
+        ktxVersion = '1.3.2'        // необязательно
         lifecycleVersion = '2.2.0'  // '2.3.0-alpha06'
         materialVersion = '1.2.1' // '1.3.0-alpha01'
         navigationVersion = '2.3.0'
