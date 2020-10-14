@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the task list screen.
+ * ViewModel для экрана списка задач.
  */
 class TasksViewModel(application: Application) : AndroidViewModel(application) {
 

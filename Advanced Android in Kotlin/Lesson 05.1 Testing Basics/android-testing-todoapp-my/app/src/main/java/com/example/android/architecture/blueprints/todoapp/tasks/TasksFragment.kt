@@ -60,6 +60,7 @@ class TasksFragment : Fragment() {
             viewmodel = viewModel
         }
         setHasOptionsMenu(true)
+
         return viewDataBinding.root
     }
 
@@ -95,6 +96,7 @@ class TasksFragment : Fragment() {
         setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.tasksList)
         setupNavigation()
         setupFab()
+
     }
 
     private fun setupNavigation() {
@@ -107,7 +109,8 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupSnackbar() {
-        view?.setupSnackbar(viewLifecycleOwner, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        viewDataBinding.root.setupSnackbar(viewLifecycleOwner, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        //view?.setupSnackbar(viewLifecycleOwner, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
         arguments?.let {
             viewModel.showEditResultMessage(args.userMessage)
         }
@@ -133,11 +136,13 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupFab() {
-        activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+        viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
+       /* Исходный текст плохо работает
+          activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }
-        }
+        }*/
     }
 
     private fun navigateToAddNewTask() {

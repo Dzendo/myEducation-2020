@@ -96,10 +96,10 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.openTaskEvent.observe(this, EventObserver {
+        viewModel.openTaskEvent.observe(viewLifecycleOwner, EventObserver {
             openTaskDetails(it)
         })
-        viewModel.newTaskEvent.observe(this, EventObserver {
+        viewModel.newTaskEvent.observe(viewLifecycleOwner, EventObserver {
             navigateToAddNewTask()
         })
     }
@@ -131,7 +131,8 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupFab() {
-        activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+        viewDataBinding.root.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+        //activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }

@@ -48,7 +48,7 @@ class TasksActivity : AppCompatActivity() {
         val navController: NavController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration =
             AppBarConfiguration.Builder(R.id.tasks_fragment_dest, R.id.statistics_fragment_dest)
-                .setDrawerLayout(drawerLayout)
+                .setOpenableLayout(drawerLayout)
                 //.setOpenableLayout(openableLayout)
                 .build()
         setupActionBarWithNavController(navController, appBarConfiguration)

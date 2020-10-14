@@ -37,6 +37,9 @@ object TasksRemoteDataSource : TasksDataSource {
     init {
         addTask("Build tower in Pisa", "Ground looks good, no foundation work required.")
         addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!")
+        addTask("Тесты 5.1", " Testing Basics")
+        addTask("Тесты 5.2", " Dependency Injection and Test Doubles ")
+        addTask("Тесты 5.3", " Обзор тем тестирования ")
     }
 
     private val observableTasks = MutableLiveData<Result<List<Task>>>()
