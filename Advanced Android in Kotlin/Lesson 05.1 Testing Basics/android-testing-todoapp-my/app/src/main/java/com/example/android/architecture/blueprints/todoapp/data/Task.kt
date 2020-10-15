@@ -21,8 +21,10 @@ import androidx.room.PrimaryKey
 import java.util.UUID
 
 /**
- * Immutable model class for a Task. In order to compile with Room, we can't use @JvmOverloads to
- * generate multiple constructors.
+ * Immutable model class for a Task.
+ * In order to compile with Room, we can't use @JvmOverloads to generate multiple constructors.
+ * Неизменяемый класс модели для задачи.
+ * Для компиляции с помощью Room мы не можем использовать @JvmOverloads для создания нескольких конструкторов.
  *
  * @param title       title of the task
  * @param description description of the task

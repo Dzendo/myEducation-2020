@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * Concrete implementation to load tasks from the data sources into a cache.
+ * Конкретная реализация для загрузки задач из источников данных в кэш.
  */
 class DefaultTasksRepository private constructor(application: Application) {
 
@@ -89,6 +90,7 @@ class DefaultTasksRepository private constructor(application: Application) {
 
         if (remoteTasks is Success) {
             // Real apps might want to do a proper sync.
+            // Реальные приложения могут захотеть сделать правильную синхронизацию.
             tasksLocalDataSource.deleteAllTasks()
             remoteTasks.data.forEach { task ->
                 tasksLocalDataSource.saveTask(task)
@@ -112,6 +114,7 @@ class DefaultTasksRepository private constructor(application: Application) {
 
     /**
      * Relies on [getTasks] to fetch data and picks the task with the same ID.
+     * Полагается на [getTasks] для извлечения данных и выбирает задачу с тем же идентификатором.
      */
     suspend fun getTask(taskId: String,  forceUpdate: Boolean = false): Result<Task> {
         if (forceUpdate) {

@@ -28,6 +28,7 @@ import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayo
 
 /**
  * Main UI for the statistics screen.
+ * Основной пользовательский интерфейс для экрана статистики.
  */
 class StatisticsFragment : Fragment() {
 

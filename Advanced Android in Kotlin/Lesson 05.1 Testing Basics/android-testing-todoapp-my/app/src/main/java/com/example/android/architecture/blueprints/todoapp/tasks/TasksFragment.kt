@@ -34,7 +34,6 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.databinding.TasksFragBinding
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -165,7 +164,7 @@ class TasksFragment : Fragment() {
             listAdapter = TasksAdapter(viewModel)
             viewDataBinding.tasksList.adapter = listAdapter
         } else {
-            Timber.w("ViewModel not initialized when attempting to set up adapter.")
+            Timber.w("ViewModel не инициализируется при попытке настроить адаптер.")
         }
     }
 }

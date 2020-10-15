@@ -16,6 +16,7 @@
 
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- Поля экрана по умолчанию, в соответствии с руководящими принципами дизайна Android. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 

@@ -27,11 +27,14 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the statistics screen.
+ * ViewModel для экрана статистики.
  */
 class StatisticsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Note, for testing and architecture purposes, it's bad practice to construct the repository
-    // here. We'll show you how to fix this during the codelab
+    // Note, for testing and architecture purposes, it's bad practice to construct the repository here.
+    // We'll show you how to fix this during the codelab
+    // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
+    // Мы покажем вам, как это исправить во время codelab
     private val tasksRepository = DefaultTasksRepository.getRepository(application)
 
     private val tasks: LiveData<Result<List<Task>>> = tasksRepository.observeTasks()

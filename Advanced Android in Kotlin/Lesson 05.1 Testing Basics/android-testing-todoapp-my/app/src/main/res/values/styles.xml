@@ -15,23 +15,30 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. --><style name="AppTheme" parent="Base.AppTheme" />
+    <!-- Base application theme. -->
+    <!-- Базовая тема приложения. -->
+    <style name="AppTheme" parent="Base.AppTheme" />
 
     <style name="AppTheme.OverlapSystemBar" parent="Base.AppTheme" />
 
     <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <!-- Настройте свою тему здесь. -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- For Android sdk versions 26+. -->
+        <!-- Для Android sdk версии 26+. -->
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/opensans_font</item>
         <!-- Target Android sdk versions < 26 and > 14. -->
+        <!-- Целевые версии Android sdk < 26 и > 14. -->
         <item name="fontFamily">@font/opensans_font</item>
         <!-- sets the style for the overflow button -->
+        <!-- устанавливает стиль для кнопки переполнения -->
         <item name="actionOverflowButtonStyle">@style/actionOverflowButtonStyle</item>
     </style>
 
     <!-- This style defines the tint color of the overflow menu button -->
+    <!-- Этот стиль определяет оттенок цвета кнопки меню переполнения -->
     <style name="actionOverflowButtonStyle" parent="@style/Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/colorAccent</item>
     </style>

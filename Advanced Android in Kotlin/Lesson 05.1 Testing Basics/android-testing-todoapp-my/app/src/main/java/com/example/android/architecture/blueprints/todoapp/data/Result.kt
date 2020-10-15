@@ -20,6 +20,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 
 /**
  * A generic class that holds a value with its loading status.
+ * Универсальный класс, который содержит значение со своим статусом загрузки.
  * @param <T>
  */
 sealed class Result<out R> {
@@ -39,6 +40,7 @@ sealed class Result<out R> {
 
 /**
  * `true` if [Result] is of type [Success] & holds non-null [Success.data].
+ *  true` если [Result] имеет тип [Success] и содержит ненулевые [Success.data].
  */
 val Result<*>.succeeded
     get() = this is Success && data != null

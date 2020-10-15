@@ -26,12 +26,14 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * Data Access Object for the tasks table.
+ * Объект доступа к данным для таблицы задач.
  */
 @Dao
 interface TasksDao {
 
     /**
      * Observes list of tasks.
+     * Наблюдает за списком задач.
      *
      * @return all tasks.
      */
@@ -40,6 +42,7 @@ interface TasksDao {
 
     /**
      * Observes a single task.
+     * Наблюдает за одной задачей.
      *
      * @param taskId the task id.
      * @return the task with taskId.
@@ -49,6 +52,7 @@ interface TasksDao {
 
     /**
      * Select all tasks from the tasks table.
+     * Выберите все задачи из таблицы задачи.
      *
      * @return all tasks.
      */
@@ -57,6 +61,7 @@ interface TasksDao {
 
     /**
      * Select a task by id.
+     * Выберите задачу по идентификатору.
      *
      * @param taskId the task id.
      * @return the task with taskId.
@@ -66,6 +71,7 @@ interface TasksDao {
 
     /**
      * Insert a task in the database. If the task already exists, replace it.
+     * Вставьте задачу в базу данных. Если задача уже существует, замените ее.
      *
      * @param task the task to be inserted.
      */
@@ -74,6 +80,7 @@ interface TasksDao {
 
     /**
      * Update a task.
+     * Обновите задачу.
      *
      * @param task task to be updated
      * @return the number of tasks updated. This should always be 1.
@@ -83,6 +90,7 @@ interface TasksDao {
 
     /**
      * Update the complete status of a task
+     * Обновление полного состояния задачи
      *
      * @param taskId    id of the task
      * @param completed status to be updated
@@ -92,6 +100,7 @@ interface TasksDao {
 
     /**
      * Delete a task by id.
+     * Удаление задачи по идентификатору.
      *
      * @return the number of tasks deleted. This should always be 1.
      */
@@ -100,12 +109,14 @@ interface TasksDao {
 
     /**
      * Delete all tasks.
+     * Удалите все задачи.
      */
     @Query("DELETE FROM Tasks")
     suspend fun deleteTasks()
 
     /**
      * Delete all completed tasks from the table.
+     * Удалите все выполненные задачи из таблицы.
      *
      * @return the number of tasks deleted.
      */

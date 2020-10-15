@@ -65,6 +65,7 @@
                     android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}" />
 
                 <!-- android:paddingTop specified to temporarily work around -->
+                <!-- android:paddingTop указан для временной работы вокруг -->
                 <!-- https://github.com/robolectric/robolectric/issues/4588 -->
                 <TextView
                     android:id="@+id/stats_completed_text"

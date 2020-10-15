@@ -10,6 +10,7 @@ import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
+ * Инструментальный тест, который будет выполняться на Android-устройстве.
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
@@ -18,7 +19,9 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
+        // Контекст тестируемого приложения.  InstrumentationRegistry
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.android.architecture.blueprints.todoapp", appContext.packageName)
+        //assertEquals("com.example.android.architecture.blueprints.todoapp", appContext.packageName)
+        assertEquals("com.example.android.architecture.blueprints.reactive", appContext.packageName)
     }
 }

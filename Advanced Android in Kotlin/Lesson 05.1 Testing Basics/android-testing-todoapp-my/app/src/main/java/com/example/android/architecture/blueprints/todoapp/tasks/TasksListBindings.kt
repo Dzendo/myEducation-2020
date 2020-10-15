@@ -25,8 +25,10 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * [BindingAdapter]s for the [Task]s list.
+ * [Привязка адаптера]для [задачи]список С.
  */
 // warning: Application namespace for attribute app:completedTask will be ignored.
+// предупреждение: пространство имен приложения для атрибута app:завершенная задача будет проигнорирована.
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<Task>?) {
     items?.let {

@@ -34,8 +34,10 @@ import kotlinx.coroutines.launch
  */
 class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Note, for testing and architecture purposes, it's bad practice to construct the repository
-    // here. We'll show you how to fix this during the codelab
+    // Note, for testing and architecture purposes, it's bad practice to construct the repository here.
+    // We'll show you how to fix this during the codelab
+    // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
+    // Мы покажем вам, как это исправить во время codelab
     private val tasksRepository = DefaultTasksRepository.getRepository(application)
 
     private val _forceUpdate = MutableLiveData(false)
@@ -75,6 +77,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
     private var currentFiltering = TasksFilterType.ALL_TASKS
 
     // Not used at the moment
+    // В данный момент не используется
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
     private val _openTaskEvent = MutableLiveData<Event<String>>()
@@ -86,18 +89,21 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
     private var resultMessageShown: Boolean = false
 
     // This LiveData depends on another so we can use a transformation.
+    // // Эти живые данные зависят от других, поэтому мы можем использовать преобразование.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
     }
 
     init {
         // Set initial state
+        // Установить начальное состояние
         setFiltering(TasksFilterType.ALL_TASKS)
         loadTasks(true)
     }
 
     /**
      * Sets the current task filtering type.
+     * Задает текущий тип фильтрации задач.
      *
      * @param requestType Can be [TasksFilterType.ALL_TASKS],
      * [TasksFilterType.COMPLETED_TASKS], or
@@ -107,6 +113,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         currentFiltering = requestType
 
         // Depending on the filter type, set the filtering label, icon drawables, etc.
+        // В зависимости от типа фильтра, установите метку фильтрации, холст иконы, и т. д.
         when (requestType) {
             TasksFilterType.ALL_TASKS -> {
                 setFilter(
@@ -128,6 +135,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         // Refresh list
+        // Обновить список
         loadTasks(false)
     }
 
@@ -160,6 +168,8 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Called by the Data Binding library and the FAB's click listener.
+     * Вызывается библиотекой привязки данных и ПРОСЛУШИВАТЕЛЕМ щелчков FAB.
+     * будем использовать при теститровании
      */
     fun addNewTask() {
         _newTaskEvent.value = Event(Unit)
@@ -167,6 +177,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Called by Data Binding.
+     * Вызывается привязкой данных.
      */
     fun openTask(taskId: String) {
         _openTaskEvent.value = Event(taskId)
@@ -188,6 +199,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun filterTasks(tasksResult: Result<List<Task>>): LiveData<List<Task>> {
         // TODO: This is a good case for liveData builder. Replace when stable.
+        // TODO: это хороший случай для live Data builder. Замените, когда он стабилен.
         val result = MutableLiveData<List<Task>>()
 
         if (tasksResult is Success) {
@@ -206,6 +218,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
+     * @param forceUpdate Pass in true для обновления данных в источнике данных [Tasks]
      */
     fun loadTasks(forceUpdate: Boolean) {
         _forceUpdate.value = forceUpdate

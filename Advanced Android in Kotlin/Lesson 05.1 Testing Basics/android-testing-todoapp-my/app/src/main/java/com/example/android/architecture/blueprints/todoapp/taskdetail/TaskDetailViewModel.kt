@@ -28,11 +28,14 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Details screen.
+ * ViewModel для экрана сведений.
  */
 class TaskDetailViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Note, for testing and architecture purposes, it's bad practice to construct the repository
-    // here. We'll show you how to fix this during the codelab
+    // Note, for testing and architecture purposes, it's bad practice to construct the repository here.
+    // We'll show you how to fix this during the codelab
+    // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
+    // Мы покажем вам, как это исправить во время codelab
     private val tasksRepository = DefaultTasksRepository.getRepository(application)
 
     private val _taskId = MutableLiveData<String>()
@@ -57,6 +60,7 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
     // This LiveData depends on another so we can use a transformation.
+    // Эти живые данные зависят от других, поэтому мы можем использовать преобразование.
     val completed: LiveData<Boolean> = _task.map { input: Task? ->
         input?.isCompleted ?: false
     }
@@ -85,10 +89,12 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun start(taskId: String?) {
         // If we're already loading or already loaded, return (might be a config change)
+        // Если мы уже загружаемся или уже загружены, return (может быть изменением конфигурации)
         if (_dataLoading.value == true || taskId == _taskId.value) {
             return
         }
         // Trigger the load
+        // Запуск нагрузки
         _taskId.value = taskId!!
     }
 
@@ -104,6 +110,7 @@ class TaskDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun refresh() {
         // Refresh the repository and the task will be updated automatically.
+        // Обновите репозиторий, и задача будет обновлена автоматически.
         _task.value?.let {
             _dataLoading.value = true
             viewModelScope.launch {

@@ -17,6 +17,7 @@ package com.example.android.architecture.blueprints.todoapp.util
 
 /**
  * Extension functions and Binding Adapters.
+ * Функции расширения и связующие адаптеры.
  */
 
 import android.view.View
@@ -31,6 +32,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /**
  * Transforms static java function Snackbar.make() to an extension function on View.
+ * Преобразует статическую java-функцию Snackbar.make() в функцию расширения на представлении.
  */
 fun View.showSnackbar(snackbarText: String, timeLength: Int) {
     Snackbar.make(this, snackbarText, timeLength).run {
@@ -40,6 +42,7 @@ fun View.showSnackbar(snackbarText: String, timeLength: Int) {
 
 /**
  * Triggers a snackbar message when the value contained by snackbarTaskMessageLiveEvent is modified.
+ * Запускает сообщение snack bar, когда изменяется значение, содержащееся в событии snack bar Task Message Live.
  */
 fun View.setupSnackbar(
     lifecycleOwner: LifecycleOwner,
@@ -64,6 +67,7 @@ fun Fragment.setupRefreshLayout(
         ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
     )
     // Set the scrolling view in the custom SwipeRefreshLayout.
+    // Установите вид прокрутки в пользовательском SwipeRefreshLayout.
     scrollUpChild?.let {
         refreshLayout.scrollUpChild = it
     }

@@ -17,20 +17,24 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 
 /**
  * Used with the filter spinner in the tasks list.
+ * Используется с фильтром spinner в списке задач.
  */
 enum class TasksFilterType {
     /**
      * Do not filter tasks.
+     * Не фильтруйте задачи.
      */
     ALL_TASKS,
 
     /**
      * Filters only the active (not completed yet) tasks.
+     * Фильтрует только активные (еще не завершенные) задачи.
      */
     ACTIVE_TASKS,
 
     /**
      * Filters only the completed tasks.
+     * Фильтрует только выполненные задачи.
      */
     COMPLETED_TASKS
 }
