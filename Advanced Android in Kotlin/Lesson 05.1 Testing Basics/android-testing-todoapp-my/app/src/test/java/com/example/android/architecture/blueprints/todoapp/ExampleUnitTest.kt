@@ -22,6 +22,6 @@ class ExampleUnitTest {
         // Здесь вы проверяете, что 4-это то же самое, что 2+2
         assertEquals(4, 2 + 2)
         // assert - Утверждение
-        assertEquals(3, 1 + 1) // This should fail
+//        assertEquals(3, 1 + 1) // This should fail
     }
 }

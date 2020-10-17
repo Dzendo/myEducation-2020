@@ -21,8 +21,6 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.architecture.blueprints.todoapp.data.Task
 
-
-
 /**
  * [BindingAdapter]s for the [Task]s list.
  * [Привязка адаптера]для [задачи]список С.
@@ -41,9 +39,15 @@ fun setItems(listView: RecyclerView, items: List<Task>?) {
 //  androidx.room.RoomProcessor (DYNAMIC).
 @BindingAdapter("app:completedTask")
 fun setStyle(textView: TextView, enabled: Boolean) {
-    if (enabled) {
-        textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-    } else {
-        textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+    textView.paintFlags =
+            if (enabled)  textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                     else textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
     }
-}
+
+/*    fun setStyle(textView: TextView, enabled: Boolean) {
+        if (enabled) {
+            textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
+}*/

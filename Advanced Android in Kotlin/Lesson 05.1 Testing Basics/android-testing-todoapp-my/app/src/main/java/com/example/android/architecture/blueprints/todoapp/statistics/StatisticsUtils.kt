@@ -52,7 +52,8 @@ internal fun getActiveAndCompletedStatsTDD(tasks: List<Task>?): StatsResult {
     )
 
 }
-internal fun getActiveAndCompletedStats(tasks: List<Task>?): StatsResult {
+// Codelab
+internal fun getActiveAndCompletedStatsRR(tasks: List<Task>?): StatsResult {
 
     return if (tasks == null || tasks.isEmpty()) {
         StatsResult(0f, 0f)
@@ -65,5 +66,14 @@ internal fun getActiveAndCompletedStats(tasks: List<Task>?): StatsResult {
         )
     }
 }
+// AS
+internal fun getActiveAndCompletedStats(tasks: List<Task>?): StatsResult =
+    if (tasks == null || tasks.isEmpty())
+        StatsResult(0f, 0f)
+        else
+        StatsResult(
+            activeTasksPercent      = 100f * tasks.count {  it.isActive } / tasks.size,
+            completedTasksPercent   = 100f * tasks.count { !it.isActive } / tasks.size
+        )
 
 data class StatsResult(val activeTasksPercent: Float, val completedTasksPercent: Float)
