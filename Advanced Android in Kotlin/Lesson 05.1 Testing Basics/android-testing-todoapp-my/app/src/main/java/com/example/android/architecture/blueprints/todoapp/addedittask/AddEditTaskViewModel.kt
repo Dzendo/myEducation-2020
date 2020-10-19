@@ -20,6 +20,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.TodoApplication
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
@@ -35,7 +36,8 @@ class AddEditTaskViewModel(application: Application) : AndroidViewModel(applicat
     // We'll show you how to fix this during the codelab
     // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
     // Мы покажем вам, как это исправить во время codelab
-    private val tasksRepository = DefaultTasksRepository.getRepository(application)
+    //private val tasksRepository = DefaultTasksRepository.getRepository(application)
+    private val tasksRepository = (application as TodoApplication).taskRepository
 
     // Two-way databinding, exposing MutableLiveData
     // Двусторонняя привязка данных, предоставляющая изменяемые живые данные

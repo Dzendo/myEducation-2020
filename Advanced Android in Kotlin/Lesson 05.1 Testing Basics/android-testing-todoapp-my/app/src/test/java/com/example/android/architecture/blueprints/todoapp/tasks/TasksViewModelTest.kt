@@ -1,16 +1,16 @@
 package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
+//import androidx.test.core.app.ApplicationProvider
+//import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.data.source.FakeTestRepository
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
-import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
+import org.hamcrest.Matchers.*
+import org.junit.*
+//import org.junit.runner.RunWith
+//import org.robolectric.annotation.Config
 
 //  . Robolectric - это библиотека, которая создает смоделированную среду Android для тестов
 //  и работает быстрее, чем загрузка эмулятора или запуск на устройстве
@@ -20,11 +20,23 @@ import org.robolectric.annotation.Config
 // Если вам нужно запустить смоделированный код Android в test исходном наборе,
 // вы можете добавить зависимость Robolectric и @RunWith(AndroidJUnit4::class)аннотацию.
 
-
+// Поскольку вы больше не используете тестовый ApplicationProvider.getApplicationContext код AndroidX,
+// вы также можете удалить @RunWith(AndroidJUnit4::class)аннотацию. (при файк репозитории)
+//@RunWith(AndroidJUnit4::class)
 //@Config(sdk = [Build.VERSION_CODES.O_MR1])
-@Config(manifest= Config.NONE)
-@RunWith(AndroidJUnit4::class)
+//@Config(manifest= Config.NONE)
+
+/**
+ * Используя внедрение зависимостей конструктора, вы удалили DefaultTasksRepository зависимость
+ *  и заменили ее на вашу FakeTestRepository в тестах.
+ */
+
+
 class TasksViewModelTest{
+
+    // Добавьте FakeTestRepositoryсвойство в TasksViewModelTest.
+    private lateinit var tasksRepository: FakeTestRepository
+
 
     // Executes each task synchronously using Architecture Components.
     // Выполняет каждую задачу синхронно с использованием компонентов архитектуры.
@@ -35,12 +47,32 @@ class TasksViewModelTest{
     // Subject under test
     private lateinit var tasksViewModel: TasksViewModel
  // XXXXX  val tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext()) xxx- нужен свежий
+    // Это приведет к тому, что для всех тестов будет использоваться один и тот же экземпляр. Поэтому в @Before
+    // Этого следует избегать, поскольку в каждом тесте должен быть свежий экземпляр тестируемого объекта (в данном случае ViewModel).
 
     @Before
     fun setupViewModel() {
-        tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
+        // Вы создаете свой свежий tasksViewModel
+        // используя ApplicationProvider.getApplicationContext() оператор AndroidX .
+        //tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
+        // Поскольку вы больше не используете тестовый ApplicationProvider.getApplicationContext код AndroidX,
+        // вы также можете удалить @RunWith(AndroidJUnit4::class)аннотацию.
+
+        // We initialise the tasks to 3, with one active and two completed
+        // Обновите setupViewModel метод, чтобы создать FakeTestRepository с тремя задачами,
+        tasksRepository = FakeTestRepository()
+        val task1 = Task("Title1", "Description1")
+        val task2 = Task("Title2", "Description2", true)
+        val task3 = Task("Title3", "Description3", true)
+        tasksRepository.addTasks(task1, task2, task3)
+        // а затем создайте tasksViewModel с этим репозиторием.
+        tasksViewModel = TasksViewModel(tasksRepository)
+        // Примечание. Нет необходимости использовать delegate свойство или a ViewModelProvider,
+        // вы можете просто создать ViewModel в модульных тестах.
+
     }
 
+    // проверит, что при вызове addNewTask метода Event запускается окно открытия новой задачи
     @Test
     fun addNewTask_setsNewTaskEvent() {
 
@@ -74,9 +106,11 @@ class TasksViewModelTest{
         // в @Before val tasksViewModel = TasksViewModel(ApplicationProvider.getApplicationContext())
 
         // When the filter type is ALL_TASKS
+        // Вы вызываете setFiltering метод, передавая ALL_TASKSтип фильтра enum.
         tasksViewModel.setFiltering(TasksFilterType.ALL_TASKS)
 
         // Then the "Add task" action is visible
+        // Вы проверяете, что tasksAddViewVisible верно, используя getOrAwaitNextValue метод.
         assertThat(tasksViewModel.tasksAddViewVisible.getOrAwaitValue(), `is`(true))
     }
 }

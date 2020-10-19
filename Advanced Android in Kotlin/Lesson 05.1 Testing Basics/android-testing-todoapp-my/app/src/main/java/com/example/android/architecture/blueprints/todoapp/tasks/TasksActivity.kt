@@ -19,6 +19,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.customview.widget.Openable
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -27,6 +28,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.databinding.TasksActBinding
 import com.google.android.material.navigation.NavigationView
 
 /**
@@ -35,11 +37,46 @@ import com.google.android.material.navigation.NavigationView
  */
 class TasksActivity : AppCompatActivity() {
 
+    private lateinit var mainBinding: TasksActBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var openableLayout: Openable
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+/*    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.tasks_act)
+        setupNavigationDrawer()  // устанавливает drawerLayout см ниже
+        setSupportActionBar(mainBinding.toolbar)
+
+        val navController: NavController = findNavController(R.id.nav_host_fragment)
+        appBarConfiguration = AppBarConfiguration(navController.graph, mainBinding.drawerLayout)
+        /*appBarConfiguration =
+            AppBarConfiguration.Builder(R.id.tasks_fragment_dest, R.id.statistics_fragment_dest)
+                //.setDrawerLayout(drawerLayout)
+                //.setOpenableLayout(openableLayout)
+                .setOpenableLayout(drawerLayout)
+                .build()*/
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        //findViewById<NavigationView>(R.id.nav_view)
+        //    .setupWithNavController(navController)
+    }
+    // mainBinding.navView.setupWithNavController(navController)
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration)
+            || super.onSupportNavigateUp()
+    }
+
+    private fun setupNavigationDrawer() {
+        drawerLayout = (findViewById<DrawerLayout>(R.id.drawer_layout))
+            .apply {
+                setStatusBarBackground(R.color.colorPrimaryDark)
+            }
+    }
+    */
+
+
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_act)
         setupNavigationDrawer()  // устанавливает drawerLayout см ниже
@@ -68,6 +105,7 @@ class TasksActivity : AppCompatActivity() {
                 setStatusBarBackground(R.color.colorPrimaryDark)
             }
     }
+
 }
 
 // Keys for navigation

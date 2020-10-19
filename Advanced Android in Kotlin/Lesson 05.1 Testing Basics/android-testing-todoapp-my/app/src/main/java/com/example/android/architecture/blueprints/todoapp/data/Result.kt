@@ -16,12 +16,15 @@
 
 package com.example.android.architecture.blueprints.todoapp.data
 
-import com.example.android.architecture.blueprints.todoapp.data.Result.Success
+//import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 
 /**
  * A generic class that holds a value with its loading status.
  * Универсальный класс, который содержит значение со своим статусом загрузки.
  * @param <T>
+ *  Он используется как возвращаемое значение из источников данных и репозитория.
+ *  Котлин запечатанный класс с тремя типами, что представляет состояние операции чтения / записи
+ *  Success, Error, and Loading
  */
 sealed class Result<out R> {
 
@@ -43,4 +46,4 @@ sealed class Result<out R> {
  *  true` если [Result] имеет тип [Success] и содержит ненулевые [Success.data].
  */
 val Result<*>.succeeded
-    get() = this is Success && data != null
+    get() = this is Result.Success && data != null

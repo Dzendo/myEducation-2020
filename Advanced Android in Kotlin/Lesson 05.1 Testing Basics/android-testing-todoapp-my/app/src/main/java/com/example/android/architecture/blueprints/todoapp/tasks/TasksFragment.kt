@@ -30,7 +30,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.architecture.blueprints.todoapp.EventObserver
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.TodoApplication
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.databinding.TasksFragBinding
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
@@ -42,8 +44,19 @@ import timber.log.Timber
  * Отображение сетки [задач]s. Пользователь может выбрать просмотр всех активных или завершенных задач.
  */
 class TasksFragment : Fragment() {
+    //private val viewModel by viewModels<TasksViewModel>()
+// Теперь вместо использования реального репозитория в тестах модели представления вы можете использовать поддельный репозиторий.
+    private val viewModel by viewModels<TasksViewModel> {
+       // TasksViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application)) //ServiceLocator
+        TasksViewModelFactory((requireContext().applicationContext as TodoApplication).taskRepository)
+    }
 
-    private val viewModel by viewModels<TasksViewModel>()
+    // В этой задаче вы используете поддельный класс внутри ViewModel.
+    // Используйте внедрение зависимостей конструктора,
+    // чтобы получить два источника данных через внедрение зависимостей конструктора,
+    // добавив TasksRepository переменную в TasksViewModel конструктор.
+    // Чтобы изменить способ построения модели представления,
+    // вам необходимо добавить и использовать файл ViewModelProvider.Factory
 
     private val args: TasksFragmentArgs by navArgs()
 

@@ -18,6 +18,7 @@ package com.example.android.architecture.blueprints.todoapp.statistics
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.example.android.architecture.blueprints.todoapp.TodoApplication
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Result.Error
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
@@ -35,7 +36,8 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     // We'll show you how to fix this during the codelab
     // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
     // Мы покажем вам, как это исправить во время codelab
-    private val tasksRepository = DefaultTasksRepository.getRepository(application)
+    //private val tasksRepository = DefaultTasksRepository.getRepository(application)
+    private val tasksRepository = (application as TodoApplication).taskRepository
 
     private val tasks: LiveData<Result<List<Task>>> = tasksRepository.observeTasks()
     private val _dataLoading = MutableLiveData(false)

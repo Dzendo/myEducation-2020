@@ -75,24 +75,6 @@ class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Obser
     }
 }
 
-/* ОК: использовать SingleLiveEvent он ограничен одним наблюдателем
-class ListViewModel : ViewModel {
-    private val _navigateToDetails = SingleLiveEvent<Any>()
-
-    val navigateToDetails : LiveData<Any>
-        get() = _navigateToDetails
-
-
-    fun userClicksOnButton() {
-        _navigateToDetails.call()
-    }
-}
-// в фрагменте:
-myViewModel.navigateToDetails.observe ( this , Observer {
-    startActivity ( DetailsActivity ...)
-})
- */
-
 /* использовать оболочку событий см выше open class Even
 class ListViewModel : ViewModel {
     private val _navigateToDetails = MutableLiveData<Event<String>>()
@@ -115,11 +97,36 @@ myViewModel.navigateToDetails.observe(this, Observer {
     }
 })
 
+        viewModel.openTaskEvent.observe(viewLifecycleOwner, EventObserver {
+            openTaskDetails(it)
+        })
+        viewModel.newTaskEvent.observe(viewLifecycleOwner, EventObserver {
+            navigateToAddNewTask()
+        })
+
 Преимущество этого подхода состоит в том, что пользователю необходимо указать намерение,
  используя getContentIfNotHandled() или peekContent().
   Этот метод моделирует события как часть состояния:
    теперь они просто сообщение, которое было использовано или нет.
 
+ */
+
+/* ОК: использовать SingleLiveEvent он ограничен одним наблюдателем
+class ListViewModel : ViewModel {
+    private val _navigateToDetails = SingleLiveEvent<Any>()
+
+    val navigateToDetails : LiveData<Any>
+        get() = _navigateToDetails
+
+
+    fun userClicksOnButton() {
+        _navigateToDetails.call()
+    }
+}
+// в фрагменте:
+myViewModel.navigateToDetails.observe ( this , Observer {
+    startActivity ( DetailsActivity ...)
+})
  */
 
 

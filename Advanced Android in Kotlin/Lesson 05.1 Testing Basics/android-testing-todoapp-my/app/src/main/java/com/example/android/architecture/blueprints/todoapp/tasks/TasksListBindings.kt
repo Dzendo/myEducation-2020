@@ -21,6 +21,26 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.architecture.blueprints.todoapp.data.Task
 
+//  ^[WARN] Incremental annotation processing requested,
+//  but support is disabled because the following processors are not incremental:
+//  androidx.room.RoomProcessor (DYNAMIC).
+@BindingAdapter("app:completedTask")
+fun setStyle(textView: TextView, enabled: Boolean) {
+    textView.paintFlags =
+        if (enabled)  textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        else textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+}
+
+/*
+ <CheckBox
+            android:id="@+id/complete_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:onClick="@{(view) -> viewmodel.completeTask(task, ((CompoundButton)view).isChecked())}"
+            android:checked="@{task.completed}" />
+ */
+
 /**
  * [BindingAdapter]s for the [Task]s list.
  * [Привязка адаптера]для [задачи]список С.
@@ -34,20 +54,24 @@ fun setItems(listView: RecyclerView, items: List<Task>?) {
     }
 }
 
-//  ^[WARN] Incremental annotation processing requested,
-//  but support is disabled because the following processors are not incremental:
-//  androidx.room.RoomProcessor (DYNAMIC).
-@BindingAdapter("app:completedTask")
-fun setStyle(textView: TextView, enabled: Boolean) {
-    textView.paintFlags =
-            if (enabled)  textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                     else textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-    }
-
-/*    fun setStyle(textView: TextView, enabled: Boolean) {
-        if (enabled) {
-            textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        } else {
-            textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+/*
+ private val _items: LiveData<List<Task>> = _forceUpdate.switchMap { forceUpdate ->
+        if (forceUpdate) {
+            _dataLoading.value = true
+            viewModelScope.launch {
+                tasksRepository.refreshTasks()
+                _dataLoading.value = false
+            }
         }
-}*/
+        tasksRepository.observeTasks().switchMap { filterTasks(it) }
+    }
+ val items: LiveData<List<Task>> = _items
+<androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/tasks_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:items="@{viewmodel.items}" />
+                </LinearLayout>
+ */
+

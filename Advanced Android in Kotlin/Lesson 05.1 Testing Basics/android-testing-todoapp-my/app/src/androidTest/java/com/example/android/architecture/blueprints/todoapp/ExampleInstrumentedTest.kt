@@ -21,6 +21,7 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         // Контекст тестируемого приложения.  InstrumentationRegistry
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        //Thread.sleep(20000)
         //assertEquals("com.example.android.architecture.blueprints.todoapp", appContext.packageName)
         assertEquals("com.example.android.architecture.blueprints.reactive", appContext.packageName)
     }

@@ -26,19 +26,24 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
+import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
 import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the task list screen.
  * ViewModel для экрана списка задач.
  */
-class TasksViewModel(application: Application) : AndroidViewModel(application) {
-
+// Без внедрения зависимостей первоначальный вариант:
+/*class TasksViewModel(application: Application) : AndroidViewModel(application) {
     // Note, for testing and architecture purposes, it's bad practice to construct the repository here.
     // We'll show you how to fix this during the codelab
     // Обратите внимание, что для целей тестирования и архитектуры создание репозитория здесь-плохая практика.
     // Мы покажем вам, как это исправить во время codelab
     private val tasksRepository = DefaultTasksRepository.getRepository(application)
+*/
+// Теперь вместо использования реального репозитория в тестах модели представления вы можете использовать поддельный репозиторий.
+// с внедрением зависимостей:  (нужна фабрика внизу)
+class TasksViewModel( private val tasksRepository: TasksRepository) : ViewModel() {
 
     private val _forceUpdate = MutableLiveData(false)
 
@@ -245,3 +250,16 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         _forceUpdate.value = true
     }
 }
+
+// фабрика для создания модели с инъекцией
+@Suppress("UNCHECKED_CAST")
+class TasksViewModelFactory (
+    private val tasksRepository: TasksRepository
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (TasksViewModel(tasksRepository) as T)
+}
+// использование вместо private val viewModel by viewModels<TasksViewModel>()
+//private val viewModel by viewModels<TasksViewModel> {
+//    TasksViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application))
+//Теперь вместо использования реального репозитория в тестах модели представления вы можете использовать поддельный репозиторий.
