@@ -1,6 +1,5 @@
 package com.example.android.architecture.blueprints.todoapp.source
 
-    import androidx.annotation.VisibleForTesting
     import androidx.lifecycle.LiveData
     import androidx.lifecycle.MutableLiveData
     import androidx.lifecycle.map
@@ -12,10 +11,15 @@ package com.example.android.architecture.blueprints.todoapp.source
     import kotlinx.coroutines.runBlocking
     import java.util.LinkedHashMap
 
-
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
  * Реализация удаленного источника данных со статическим доступом к данным для удобства тестирования.
+ * У вас уже есть FakeTestRepository в тестовом наборе исходников.
+ * Вы не можете разделить тестовые классы между test и androidTest исходными наборами по умолчанию.
+ * Итак, вам нужно создать дубликат FakeTestRepository класса в androidTest исходном наборе и вызвать его FakeAndroidTestRepository.
+ * Если вы хотите обмениваться файлами между test и androidTest исходными наборами вы можете настроить,
+ * с помощью Gradle , а sharedTest папку , как показано в реактивном образце архитектуры Blueprints .
+ *
  */
 
 

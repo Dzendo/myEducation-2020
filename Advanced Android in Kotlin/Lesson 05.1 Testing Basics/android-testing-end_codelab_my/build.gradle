@@ -1,8 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlinVersion = '1.4.10'
-    ext.kotlin_version = "1.4.20-M1"
-    ext.navigationVersion = "2.3.0"
+    ext.kotlinVersion = "1.4.20-M2"
+    ext.kotlin_version = '1.4.10'
+    ext.navigationVersion = "2.3.1"
     repositories {
         google()
         jcenter()
@@ -54,6 +54,7 @@ ext {
     archTestingVersion = '2.1.0'
     cardVersion = '1.0.0'
     coroutinesVersion = '1.3.9'
+    coroutinesTestVersion = '1.3.5' //'1.4.0-M1' //'1.3.9'   Выше ошибка
     dexMakerVersion = '2.12.1'
     espressoVersion = '3.3.0'
     fragmentVersion = '1.3.0-beta01'
@@ -64,11 +65,11 @@ ext {
     //mockitoVersion = '2.8.9'
     mockitoVersion = '3.5.13'
     recyclerViewVersion = '1.1.0'
-    robolectricVersion = '4.4'
+    robolectricVersion = '4.5-alpha-1' //'4.4'
     roomVersion = '2.2.5'
     rulesVersion = '1.0.1'
     timberVersion = '4.7.1'
-    truthVersion = '0.44'
+    truthVersion = '1.0.1'
 }
 
 

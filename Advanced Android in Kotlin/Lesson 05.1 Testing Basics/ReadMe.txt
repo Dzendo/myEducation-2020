@@ -194,3 +194,6 @@ https://github.com/android/architecture-samples/tree/reactive
 
 шаблон ServiceLocator
 библиотеки Espresso и Mockito
+
+https://codelabs.developers.google.com/codelabs/advanced-android-kotlin-training-testing-test-doubles/#8
+

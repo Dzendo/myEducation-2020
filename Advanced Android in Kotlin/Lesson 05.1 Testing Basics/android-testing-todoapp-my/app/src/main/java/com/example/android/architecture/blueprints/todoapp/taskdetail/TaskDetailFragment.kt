@@ -45,6 +45,7 @@ class TaskDetailFragment : Fragment() {
 
     private val args: TaskDetailFragmentArgs by navArgs()
 
+    // Теперь вы можете использовать FakeTestRepository вместо реального репозитория в TasksFragment и TaskDetailFragment.
     private val viewModel by viewModels<TaskDetailViewModel> {
        // TaskDetailViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application)) //ServiceLocator
         TaskDetailViewModelFactory((requireContext().applicationContext as TodoApplication).taskRepository)

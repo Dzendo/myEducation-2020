@@ -69,7 +69,7 @@ class DefaultTasksRepository(
         private val tasksRemoteDataSource: TasksDataSource,
         private val tasksLocalDataSource: TasksDataSource,
         private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : TasksRepository {
-    // Теперь не нужен - будет создаваться в APP ServiceLocator.provideTaskRepository
+    // Теперь companion object не нужен - будет создаваться в APP ServiceLocator.provideTaskRepository
     // С ручной инъекцией зависимостей
   /*  companion object {
         @Volatile

@@ -4,6 +4,17 @@ import androidx.lifecycle.LiveData
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Task
 
+/**
+ * Первым шагом к использованию внедрения зависимостей конструктора является создание общего интерфейса,
+ * разделяемого между подделкой и реальным классом.
+ * Откройте DefaultTasksRepository и щелкните правой кнопкой мыши имя класса.
+ * Затем выберите Refactor -> Extract -> Interface.
+ * Выберите Извлечь в отдельный файл.
+ * В окне « Извлечь интерфейс» измените имя интерфейса на TasksRepository.
+ * В разделе интерфейса « Члены для формирования » отметьте все элементы,
+ * кроме двух сопутствующих элементов и частных методов.
+ * Щелкните Refactor. Новый TasksRepository интерфейс должен появиться в пакете данных / источника.
+ */
 interface TasksRepository {
     suspend fun getTasks(forceUpdate: Boolean = false): Result<List<Task>>
 

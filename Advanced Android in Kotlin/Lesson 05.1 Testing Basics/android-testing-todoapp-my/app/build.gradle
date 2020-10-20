@@ -7,7 +7,8 @@ plugins {
     // Необходимо для класса передачи параметров в навигации проекта
     id "androidx.navigation.safeargs.kotlin"
     // Для использования идиом (краткая запись) Котлина и Андроида для Котлина
-    id 'kotlin-android-extensions'
+    //id 'kotlin-android-extensions'
+    // kotlin-parcelize
 }
 
 android {
@@ -43,7 +44,7 @@ android {
      //  enabledForTests = true
       // построит из xml спецклассы java см. java (generated)
       dataBinding = true
-      viewBinding = true //будем использовать для других
+     // viewBinding = true //будем использовать для других
     }
     dataBinding {
      //   enabled = true
@@ -53,20 +54,9 @@ android {
     // Всегда показывайте результат каждого модульного теста при запуске через командную строку, даже если он проходит.
     // избавиться от ошибки  No such manifest file: ./AndroidManifest.xml - НЕ работает дает ошибку ROBO
     testOptions.unitTests {
-        //includeAndroidResources = true
-      //  returnDefaultValues = true
+        includeAndroidResources = true
+        returnDefaultValues = true
     }
-  /*  packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
-    }*/
 }
 
 dependencies {
@@ -98,33 +88,37 @@ dependencies {
     // независимо от того, разрабатываете ли вы под одну платформу или создаете мультиплатформенный проект.
     // Начиная с Kotlin 1.4.0, эта зависимость добавляется по умолчанию.
     //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"  для 1.4 не требуется указывать - по умолчанию
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    //implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    //implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
+    // AndroidX Test - JVM testing
     // Dependencies for local unit tests
     // Зависимости для локальных модульных тестов
     // JUnit, который необходим для написания основных тестовых операторов.
-    testImplementation "junit:junit:$junitVersion"
-
-    // AndroidX Test - Instrumented testing
-    // Android Test - Инструментальное тестирование
-    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    //androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-
-    // Other dependencies (09 июля 2012 г.)
-    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
-
-    // AndroidX Test - JVM testing
+    //testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    // Other dependencies (09 июля 2012 г.)
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+
+    // AndroidX Test - Instrumented testing
+    // Android Test - Инструментальное тестирование
+    androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
+
+    // Dependencies for Android instrumented unit tests
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 
     // Testing code should not be included in the main code.
     // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
-    implementation "androidx.fragment:fragment-testing:$fragmentVersion"
+    debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
 
 

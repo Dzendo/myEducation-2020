@@ -12,6 +12,7 @@ import com.example.android.architecture.blueprints.todoapp.data.source.remote.Ta
 import kotlinx.coroutines.runBlocking
 
 /**
+ * Шаблон Service Locator - альтернатива внедрению зависимостей.
  * В этой задаче вы предоставите свой поддельный репозиторий для своего фрагмента с помощью файла ServiceLocator.
  * Это позволит вам написать свой фрагмент и просмотреть тесты интеграции модели.
  *
@@ -28,8 +29,8 @@ import kotlinx.coroutines.runBlocking
  * Для тестов вы изменяете Service Locator, чтобы предоставить тестовые двойные версии зависимостей.
  */
 /**
- * A Service Locator for the [TasksRepository]. This is the prod version, with a
- * the "real" [TasksRemoteDataSource].
+ * A Service Locator for the [TasksRepository]. This is the prod version, with a the "real" [TasksRemoteDataSource].
+ * Локатор служб для [репозитория задач]. Это версия prod, с "реальным" [удаленным источником данных задач].
  */
 object ServiceLocator {
 
@@ -37,6 +38,7 @@ object ServiceLocator {
     private var database: ToDoDatabase? = null
     @Volatile  // потому что он может использоваться несколькими потоками
     var tasksRepository: TasksRepository? = null
+        // Эта аннотация - способ выразить, что причина, по которой установщик является общедоступным, связана с тестированием.
         @VisibleForTesting set
 
     //  Либо предоставляет уже существующий репозиторий, либо создает новый.
@@ -69,6 +71,14 @@ object ServiceLocator {
         return result
     }
 
+    /**
+     * Важно: одним из недостатков использования локатора служб является то, что это общий синглтон.
+     * Помимо необходимости сбросить состояние локатора сервисов по завершении теста, вы не можете запускать тесты параллельно.
+     * Этого не происходит, когда вы используете внедрение зависимостей,
+     * что является одной из причин предпочесть внедрение зависимостей конструктора,
+     * когда вы можете его использовать.
+     * Вы можете прочитать документацию, чтобы узнать больше о компромиссах.
+     */
     // Добавьте вызываемый специфичный для тестирования метод, resetRepository
     // который очищает базу данных и устанавливает для репозитория и базы данных значение NULL.
     @VisibleForTesting
@@ -87,5 +97,25 @@ object ServiceLocator {
             tasksRepository = null
         }
     }
-
 }
+
+/*
+class TodoApplication : Application() {
+
+    // Важно, чтобы вы всегда создавали только один экземпляр класса репозитория.
+    // Чтобы в этом убедиться, вы воспользуетесь локатором служб в классе TodoApplication.
+    // назначьте ему репозиторий, полученный с использованием ServiceLocator.provideTaskRepository
+    val taskRepository: TasksRepository
+        get() = ServiceLocator.provideTasksRepository(this)
+
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG) Timber.plant(DebugTree())
+    }
+}
+ */
+/*
+fun init() {
+        tasksRepository = ServiceLocator.provideTasksRepository(getApplicationContext())
+    }
+ */

@@ -36,6 +36,7 @@ import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTa
 import com.example.android.architecture.blueprints.todoapp.databinding.TasksFragBinding
 import com.example.android.architecture.blueprints.todoapp.util.setupRefreshLayout
 import com.example.android.architecture.blueprints.todoapp.util.setupSnackbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
@@ -47,7 +48,7 @@ class TasksFragment : Fragment() {
     //private val viewModel by viewModels<TasksViewModel>()
 // Теперь вместо использования реального репозитория в тестах модели представления вы можете использовать поддельный репозиторий.
     private val viewModel by viewModels<TasksViewModel> {
-       // TasksViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application)) //ServiceLocator
+       // TasksViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application)) //до ServiceLocator
         TasksViewModelFactory((requireContext().applicationContext as TodoApplication).taskRepository)
     }
 
@@ -148,13 +149,13 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupFab() {
-        viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
-       /* Исходный текст плохо работает
+       // viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
+       // Исходный текст плохо работает
           activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }
-        }*/
+        }
     }
 
     private fun navigateToAddNewTask() {
