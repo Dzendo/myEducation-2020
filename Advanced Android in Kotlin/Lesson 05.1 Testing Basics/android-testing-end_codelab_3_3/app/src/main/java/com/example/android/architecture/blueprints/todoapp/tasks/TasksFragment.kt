@@ -86,29 +86,32 @@ class TasksFragment : Fragment() {
         inflater.inflate(R.menu.tasks_fragment_menu, menu)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View,savedInstanceState: Bundle?) {
+        super.onViewCreated(view,savedInstanceState)
 
         // Set the lifecycle owner to the lifecycle of the view
+        // Установите владельца жизненного цикла на жизненный цикл представления
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         setupSnackbar()
         setupListAdapter()
         setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.tasksList)
         setupNavigation()
         setupFab()
+
     }
 
     private fun setupNavigation() {
-        viewModel.openTaskEvent.observe(this, EventObserver {
+        viewModel.openTaskEvent.observe(viewLifecycleOwner, EventObserver {
             openTaskDetails(it)
         })
-        viewModel.newTaskEvent.observe(this, EventObserver {
+        viewModel.newTaskEvent.observe(viewLifecycleOwner, EventObserver {
             navigateToAddNewTask()
         })
     }
 
     private fun setupSnackbar() {
-        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        viewDataBinding.root.setupSnackbar(viewLifecycleOwner, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        //view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
         arguments?.let {
             viewModel.showEditResultMessage(args.userMessage)
         }
@@ -134,11 +137,13 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupFab() {
-        activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+        // ХОРОШО ДАЕТ ОШИБКУ НА ТЕСТЕ !!!!!!!
+        viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
+        /*activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }
-        }
+        }*/
     }
 
     private fun navigateToAddNewTask() {

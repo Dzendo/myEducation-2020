@@ -132,20 +132,28 @@ class TasksActivityTest {
 
         // Add active task
         onView(withId(R.id.add_task_fab)).perform(click())
+        Thread.sleep(2000)
         onView(withId(R.id.add_task_title_edit_text))
             .perform(typeText("TITLE1"), closeSoftKeyboard())
+        Thread.sleep(2000)
         onView(withId(R.id.add_task_description_edit_text)).perform(typeText("DESCRIPTION"))
+        Thread.sleep(2000)
         onView(withId(R.id.save_task_fab)).perform(click())
-
+        Thread.sleep(2000)
         // Open it in details view
         onView(withText("TITLE1")).perform(click())
+        Thread.sleep(2000)
         // Click delete task in menu
         onView(withId(R.id.menu_delete)).perform(click())
+        Thread.sleep(2000)
 
         // Verify it was deleted
         onView(withId(R.id.menu_filter)).perform(click())
+        Thread.sleep(2000)
         onView(withText(R.string.nav_all)).perform(click())
+        Thread.sleep(2000)
         onView(withText("TITLE1")).check(doesNotExist())
+        Thread.sleep(2000)
         // Make sure the activity is closed before resetting the db:
         activityScenario.close()
     }
