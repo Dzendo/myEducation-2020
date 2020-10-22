@@ -72,7 +72,8 @@ class TaskDetailFragment : Fragment() {
     }
 
     private fun setupFab() {
-        activity?.findViewById<View>(R.id.edit_task_fab)?.setOnClickListener {
+        viewDataBinding.editTaskFab.setOnClickListener {
+        //activity?.findViewById<View>(R.id.edit_task_fab)?.setOnClickListener {
             viewModel.editTask()
         }
     }

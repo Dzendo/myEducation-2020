@@ -1,4 +1,4 @@
-package com.example.android.architecture.blueprints.todoapp.source
+package com.example.android.architecture.blueprints.todoapp.data.source
 
     import androidx.lifecycle.LiveData
     import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,6 @@ package com.example.android.architecture.blueprints.todoapp.source
     import com.example.android.architecture.blueprints.todoapp.data.Result.Error
     import com.example.android.architecture.blueprints.todoapp.data.Result.Success
     import com.example.android.architecture.blueprints.todoapp.data.Task
-    import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
     import kotlinx.coroutines.runBlocking
     import java.util.LinkedHashMap
 
@@ -55,7 +54,7 @@ package com.example.android.architecture.blueprints.todoapp.source
                     is Result.Loading -> Result.Loading
                     is Error -> Error(tasks.exception)
                     is Success -> {
-                        val task = tasks.data.firstOrNull() { it.id == taskId }
+                        val task = tasks.data.firstOrNull { it.id == taskId }
                             ?: return@map Error(Exception("Not found"))
                         Success(task)
                     }
@@ -85,8 +84,12 @@ package com.example.android.architecture.blueprints.todoapp.source
         }
 
         override suspend fun completeTask(task: Task) {
-            val completedTask = Task(task.title, task.description, true, task.id)
+            //val completedTask = Task(task.title, task.description, true, task.id)
+            //tasksServiceData[task.id] = completedTask
+            val completedTask = task.copy(isCompleted = true)
             tasksServiceData[task.id] = completedTask
+            refreshTasks()
+
         }
 
         override suspend fun completeTask(taskId: String) {
@@ -95,8 +98,11 @@ package com.example.android.architecture.blueprints.todoapp.source
         }
 
         override suspend fun activateTask(task: Task) {
-            val activeTask = Task(task.title, task.description, false, task.id)
+            //val activeTask = Task(task.title, task.description, false, task.id)
+            //tasksServiceData[task.id] = activeTask
+            val activeTask = task.copy(isCompleted = false)
             tasksServiceData[task.id] = activeTask
+            refreshTasks()
         }
 
         override suspend fun activateTask(taskId: String) {

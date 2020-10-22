@@ -1,5 +1,6 @@
 package com.example.android.architecture.blueprints.todoapp.data.source
 
+import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,13 @@ class DefaultTasksRepositoryTest {
     private val localTasks = listOf(task3).sortedBy { it.id }
     private val newTasks = listOf(task3).sortedBy { it.id }
 
+
+    // Set the main coroutines dispatcher for unit testing.
+    // Установите главный диспетчер сопрограмм для модульного тестирования.
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
     // Создайте метод настройки и инициализации тестируемого объекта DefaultTasksRepository.
     // Это DefaultTasksRepository будет использовать ваш тестовый двойник FakeDataSource.
     // Создайте метод с именем createRepositoryи аннотируйте его с помощью @Before.
@@ -44,7 +52,16 @@ class DefaultTasksRepositoryTest {
                 // это требует большего понимания сопрограмм + тестирования
                 //- так что пока мы будем держать это в секрете.
 
-                tasksRemoteDataSource, tasksLocalDataSource, Dispatchers.Unconfined
+              //  tasksRemoteDataSource, tasksLocalDataSource, Dispatchers.Unconfined
+        /*
+        Используйте Dispatcher.Mainв место Dispatcher.Unconfined при определении тестируемого репозитория.
+         Аналогично TestCoroutineDispatcher, Dispatchers.Unconfined выполняет задачи немедленно.
+          Но он не включает в себя все другие преимущества тестирования TestCoroutineDispatcher,
+           такие как возможность приостановить выполнение:
+         */
+             // HERE Swap Dispatcher.Unconfined Вот и Поменяйся диспетчером.Неограниченный
+              tasksRemoteDataSource, tasksLocalDataSource, Dispatchers.Main
+
         )
     }
 
@@ -57,8 +74,16 @@ class DefaultTasksRepositoryTest {
     //  который выполняется синхронно и немедленно, что означает, что действия будут происходить в детерминированном порядке.
     //  По сути, это заставляет ваши сопрограммы работать как не сопрограммы, поэтому они предназначены для тестирования кода
 
+    /**
+     * Отличная работа! с  @get:Rule вверху и классом MainCoroutineRule можно заменить
+     * Теперь вы используете TestCoroutineDispatcher в своем коде, который является предпочтительным диспетчером для тестирования.
+     * Далее вы увидите, как использовать дополнительную функцию TestCoroutineDispatcher контроля времени выполнения сопрограмм.
+     */
     @Test
-    fun getTasks_requestsAllTasksFromRemoteDataSource()=runBlockingTest {
+    // REPLACE
+    //fun getTasks_requestsAllTasksFromRemoteDataSource() = runBlockingTest {
+    // WITH
+    fun getTasks_requestsAllTasksFromRemoteDataSource() = mainCoroutineRule.runBlockingTest {
         // testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
         // When tasks are requested from the tasks repository
         // Когда задачи запрашиваются из репозитория задач

@@ -17,16 +17,20 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.ServiceLocator
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.source.FakeAndroidTestRepository
+import com.example.android.architecture.blueprints.todoapp.data.source.FakeAndroidTestRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+/**
+ * Integration test for the Task List screen.
+ * Интеграционный тест для экрана списка задач.
+ */
+// TODO - Use FragmentScenario, see: https://github.com/android/android-test/issues/291
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest
@@ -45,6 +49,7 @@ class TasksFragmentTest {
     fun cleanupDb() = runBlockingTest {
         ServiceLocator.resetRepository()
     }
+    
 // Добавьте тест навигации, чтобы проверить, что при нажатии на задачу в списке задач
 // вы переходите к правильному пути TaskDetailFragment.
     @Test

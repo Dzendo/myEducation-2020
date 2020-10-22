@@ -63,8 +63,15 @@ import kotlinx.coroutines.withContext
         tasksLocalDataSource = TasksLocalDataSource(database.taskDao())
     }
 */
-// Теперь вы используете внедрение зависимостей конструктора!
-// С ручной инъекцией зависимостей
+/** Теперь вы используете внедрение зависимостей конструктора!
+ * С ручной инъекцией зависимостей
+ * Приведенный ниже код внедряет локальный и удаленный источник данных, а также файл CoroutineDispatcher.
+ * Поскольку диспетчер внедрен, вы можете использовать TestCoroutineDispatcher в своих тестах.
+ * Внедрение CoroutineDispatcher, в отличие от жесткого программирования диспетчера,
+ * является хорошей привычкой при использовании сопрограмм .
+*/
+
+
 class DefaultTasksRepository(
         private val tasksRemoteDataSource: TasksDataSource,
         private val tasksLocalDataSource: TasksDataSource,

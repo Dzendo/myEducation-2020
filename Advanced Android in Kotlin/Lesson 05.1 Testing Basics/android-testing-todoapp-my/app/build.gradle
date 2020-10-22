@@ -60,6 +60,7 @@ android {
         // А если использовать следующую опцию в Gradle -
         returnDefaultValues = true
         // то, RuntimeException брошен не будет. Такое поведение может приводить к тяжело детектируемым ошибкам в тестах.
+        // необходим для поддержания работы модульных тестов при добавлении кода ресурса простоя в код приложения.
     }
 }
 
@@ -119,6 +120,8 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"  // для тестов компонентов архитектуры ROOM...
 
     // Testing code should not be included in the main code.
     // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.

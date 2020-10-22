@@ -149,13 +149,13 @@ class TasksFragment : Fragment() {
     }
 
     private fun setupFab() {
-       // viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
+       viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
        // Исходный текст плохо работает
-          activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+        /*  activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }
-        }
+        }*/
     }
 
     private fun navigateToAddNewTask() {

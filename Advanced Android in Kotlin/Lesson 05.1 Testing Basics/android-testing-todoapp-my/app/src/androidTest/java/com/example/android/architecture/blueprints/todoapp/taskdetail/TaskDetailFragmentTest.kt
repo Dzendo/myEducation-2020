@@ -10,12 +10,11 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.ServiceLocator
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.source.FakeAndroidTestRepository
+import com.example.android.architecture.blueprints.todoapp.data.source.FakeAndroidTestRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.core.IsNot.not
 import org.junit.*
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 
 // Как правило, если вы тестируете что-то визуальное, запускайте это как инструментальный тест.
@@ -59,7 +58,7 @@ class TaskDetailFragmentTest {
         val bundle = TaskDetailFragmentArgs(activeTask.id).toBundle()
         // Функция создает FragmentScenario, с этим пучком и темой.
         launchFragmentInContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
-        Thread.sleep(2000)
+       // Thread.sleep(2000)
     // Примечание. Предоставление темы необходимо, поскольку фрагменты обычно получают свою тематику из родительской активности.
     // При использовании FragmentScenario ваш фрагмент запускается внутри общего пустого действия,
     // чтобы он был должным образом изолирован от кода действия
@@ -92,7 +91,7 @@ class TaskDetailFragmentTest {
         // WHEN - Details fragment launched to display task
         val bundle = TaskDetailFragmentArgs(completedTask.id).toBundle()
         launchFragmentInContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
-        Thread.sleep(2000)
+       // Thread.sleep(2000)
         // THEN - Task details are displayed on the screen
         // make sure that the title/description are both shown and correct
         onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))

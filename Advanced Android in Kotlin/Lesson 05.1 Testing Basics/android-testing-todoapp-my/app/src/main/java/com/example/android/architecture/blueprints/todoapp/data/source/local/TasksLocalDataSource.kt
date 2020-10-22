@@ -29,6 +29,9 @@ import kotlinx.coroutines.withContext
 /**
  * Concrete implementation of a data source as a db.
  * Конкретная реализация источника данных в виде БД.
+ * TasksLocalDatasource- это класс, который принимает информацию, возвращаемую DAO,
+ * и преобразует ее в формат, ожидаемый вашим классом репозитория
+ * (например, он обертывает возвращаемые значения с помощью Success или Error состояния).
  */
 class TasksLocalDataSource internal constructor(
     private val tasksDao: TasksDao,

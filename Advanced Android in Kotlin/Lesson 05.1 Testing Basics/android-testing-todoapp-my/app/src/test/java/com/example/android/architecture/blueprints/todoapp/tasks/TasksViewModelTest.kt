@@ -1,12 +1,20 @@
 package com.example.android.architecture.blueprints.todoapp.tasks
 
-//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+
 //import androidx.test.core.app.ApplicationProvider
 //import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.android.architecture.blueprints.todoapp.Event
+import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
+import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeTestRepository
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.*
@@ -38,6 +46,12 @@ class TasksViewModelTest{
     // Добавьте FakeTestRepositoryсвойство в TasksViewModelTest.
     private lateinit var tasksRepository: FakeTestRepository
 
+   // @ExperimentalCoroutinesApi
+   // val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    // Чтобы использовать правило JUnit, вы создаете экземпляр правила и аннотируете его с помощью @get:Rule.
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     // Executes each task synchronously using Architecture Components.
     // Выполняет каждую задачу синхронно с использованием компонентов архитектуры.
@@ -72,6 +86,26 @@ class TasksViewModelTest{
         // вы можете просто создать ViewModel в модульных тестах.
 
     }
+
+    /*
+        Эта ошибка указывает на то, что Dispatcher.Main не удалось инициализировать.
+         Основная причина (не объясненная в ошибке) - отсутствие Android Looper.getMainLooper().
+          Сообщение об ошибке говорит вам использовать Dispatcher.setMain from kotlinx-coroutines-test.
+           Давай, сделай это!
+           С MainCoroutineRule() это уже не требуется
+         */
+  /*  @ExperimentalCoroutinesApi
+    @Before
+    fun setupDispatcher() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @ExperimentalCoroutinesApi
+    @After
+    fun tearDownDispatcher() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
+    }*/
 
     // проверит, что при вызове addNewTask метода Event запускается окно открытия новой задачи
     @Test
@@ -113,6 +147,33 @@ class TasksViewModelTest{
         // Then the "Add task" action is visible
         // Вы проверяете, что tasksAddViewVisible верно, используя getOrAwaitNextValue метод.
         assertThat(tasksViewModel.tasksAddViewVisible.getOrAwaitValue(), `is`(true))
+    }
+
+    @Test
+    fun completeTask_dataAndSnackbarUpdated() {
+        // Create an active task and add it to the repository.
+        // Создайте активную задачу и добавьте ее в репозиторий.
+        val task = Task("Title", "Description")
+        tasksRepository.addTasks(task)
+
+        // Mark the task as complete task.
+        // Отметьте задачу как завершенную.
+        tasksViewModel.completeTask(task, true)
+
+        // Verify the task is completed.
+        // Убедитесь, что задача выполнена.
+        assertThat(tasksRepository.tasksServiceData[task.id]?.isCompleted, `is`(true))
+
+        // Assert that the snackbar has been updated with the correct text.
+        // Утверждаем, что снэк - бар был обновлен правильным текстом.
+        val snackbarText: Event<Int> =  tasksViewModel.snackbarText.getOrAwaitValue()
+        assertThat(snackbarText.getContentIfNotHandled(), `is`(R.string.task_marked_complete))
+        /*
+        Эта ошибка указывает на то, что Dispatcher.Main не удалось инициализировать.
+         Основная причина (не объясненная в ошибке) - отсутствие Android Looper.getMainLooper().
+          Сообщение об ошибке говорит вам использовать Dispatcher.setMain from kotlinx-coroutines-test.
+           Давай, сделай это!
+         */
     }
 }
 
