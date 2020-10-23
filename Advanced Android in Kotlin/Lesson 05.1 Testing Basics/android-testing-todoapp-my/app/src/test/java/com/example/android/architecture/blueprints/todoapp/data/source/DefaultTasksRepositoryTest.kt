@@ -6,9 +6,10 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
 import org.junit.*
-import org.junit.Assert.*
+//import org.junit.Assert.*
 
 // Используйте runBlockingTest в своих тестовых классах при вызове suspend функции.
 @ExperimentalCoroutinesApi
