@@ -129,6 +129,7 @@ dependencies {
     // Testing code should not be included in the main code.
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
+    implementation "androidx.test:core:$androidXTestCoreVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Dependencies for local unit tests
@@ -166,7 +167,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
     androidTestImplementation "org.robolectric:annotations:$robolectricVersion"
-    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Resolve conflicts between main and test APK:
     androidTestImplementation "androidx.annotation:annotation:$androidXAnnotations"

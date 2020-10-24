@@ -45,7 +45,8 @@ class TasksActivity : AppCompatActivity() {
         val navController: NavController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration =
             AppBarConfiguration.Builder(R.id.tasks_fragment_dest, R.id.statistics_fragment_dest)
-                .setDrawerLayout(drawerLayout)
+                //.setDrawerLayout(drawerLayout)
+                .setOpenableLayout(drawerLayout)
                 .build()
         setupActionBarWithNavController(navController, appBarConfiguration)
         findViewById<NavigationView>(R.id.nav_view)
@@ -58,6 +59,7 @@ class TasksActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationDrawer() {
+        //drawerLayout = (findViewById<DrawerLayout>(R.id.drawer_layout))
         drawerLayout = (findViewById<DrawerLayout>(R.id.drawer_layout))
             .apply {
                 setStatusBarBackground(R.color.colorPrimaryDark)
