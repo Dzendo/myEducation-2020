@@ -22,6 +22,7 @@ import androidx.room.Query
 
 /**
  * Data access object to query the database.
+ * Объект доступа к данным для запроса базы данных.
  */
 @Dao
 interface LogDao {

@@ -37,6 +37,7 @@ class AppTest {
     @After
     fun tearDown() {
         // Remove logs after the test finishes
+        // Удаление журналов после завершения теста
         ServiceLocator(getInstrumentation().targetContext).loggerLocalDataSource.removeLogs()
     }
 
@@ -45,15 +46,19 @@ class AppTest {
         ActivityScenario.launch(MainActivity::class.java)
 
         // Check Buttons fragment screen is displayed
+        // Check Buttons отображается фрагмент экрана
         onView(withId(R.id.textView)).check(matches(isDisplayed()))
 
         // Tap on Button 1
+        // Нажмите на кнопку 1
         onView(withId(R.id.button1)).perform(click())
 
         // Navigate to Logs screen
+        // Перейдите к экрану журналов
         onView(withId(R.id.all_logs)).perform(click())
 
         // Check Logs fragment screen is displayed
+        // Отображается экран фрагмента журнала проверки
         onView(withText(containsString("Interaction with 'Button 1'")))
             .check(matches(isDisplayed()))
     }

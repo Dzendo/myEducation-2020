@@ -23,6 +23,7 @@ import java.util.concurrent.Executors
 
 /**
  * Data manager class that handles data manipulation between the database and the UI.
+ * Класс диспетчера данных, который обрабатывает манипуляции с данными между базой данных и пользовательским интерфейсом.
  */
 class LoggerLocalDataSource(private val logDao: LogDao) {
 

@@ -18,6 +18,7 @@ package com.example.android.hilt.navigator
 
 /**
  * Available screens.
+ * Доступные экраны.
  */
 enum class Screens {
     BUTTONS,
@@ -26,8 +27,10 @@ enum class Screens {
 
 /**
  * Interfaces that defines an app navigator.
+ * Интерфейсы, определяющие навигатор приложений.
  */
 interface AppNavigator {
     // Navigate to a given screen.
+    // Перейдите к заданному экрану.
     fun navigateTo(screen: Screens)
 }

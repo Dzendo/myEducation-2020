@@ -23,6 +23,7 @@ import com.example.android.hilt.ui.LogsFragment
 
 /**
  * Navigator implementation.
+ * Реализация навигатора.
  */
 class AppNavigatorImpl(private val activity: FragmentActivity) : AppNavigator {
 

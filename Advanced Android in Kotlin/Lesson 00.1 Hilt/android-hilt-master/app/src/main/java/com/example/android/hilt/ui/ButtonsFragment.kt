@@ -31,6 +31,7 @@ import com.example.android.hilt.navigator.Screens
 
 /**
  * Fragment that displays buttons whose interactions are recorded.
+ * Фрагмент, отображающий кнопки, взаимодействие с которыми записывается.
  */
 class ButtonsFragment : Fragment() {
 
@@ -56,7 +57,7 @@ class ButtonsFragment : Fragment() {
             serviceLocator.loggerLocalDataSource
 
         navigator = (context.applicationContext as LogApplication).
-            serviceLocator.provideNavigator(activity!!)
+            serviceLocator.provideNavigator(requireActivity())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

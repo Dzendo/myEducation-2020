@@ -21,6 +21,7 @@ import androidx.room.PrimaryKey
 
 /**
  * Data class that represent the a table in the database.
+ * Класс данных, представляющий таблицу а в базе данных.
  */
 @Entity(tableName = "logs")
 data class Log(val msg: String, val timestamp: Long) {

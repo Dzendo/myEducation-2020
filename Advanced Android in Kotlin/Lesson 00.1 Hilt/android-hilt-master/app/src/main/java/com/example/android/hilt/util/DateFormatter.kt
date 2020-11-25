@@ -22,6 +22,7 @@ import java.util.Date
 
 /**
  * String formatter for the log dates.
+ * Строковый форматер для дат журнала.
  */
 class DateFormatter {
 

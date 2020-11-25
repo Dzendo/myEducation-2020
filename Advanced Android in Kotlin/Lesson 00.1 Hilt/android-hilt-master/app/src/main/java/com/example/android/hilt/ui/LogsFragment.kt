@@ -33,6 +33,7 @@ import com.example.android.hilt.util.DateFormatter
 
 /**
  * Fragment that displays the database logs.
+ * Фрагмент, отображающий журналы базы данных.
  */
 class LogsFragment : Fragment() {
 
@@ -82,6 +83,7 @@ class LogsFragment : Fragment() {
 
 /**
  * RecyclerView adapter for the logs list.
+ * Адаптер RecyclerView для списка журналов.
  */
 private class LogsViewAdapter(
     private val logsDataSet: List<Log>,

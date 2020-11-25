@@ -25,8 +25,11 @@ import com.example.android.hilt.navigator.Screens
 
 /**
  * Main activity of the application.
+ * Основная деятельность приложения.
  *
  * Container for the Buttons & Logs fragments. This activity simply tracks clicks on buttons.
+ * Контейнер для фрагментов кнопок и журналов.
+ * Это упражнение просто отслеживает нажатия на кнопки.
  */
 class MainActivity : AppCompatActivity() {
 
