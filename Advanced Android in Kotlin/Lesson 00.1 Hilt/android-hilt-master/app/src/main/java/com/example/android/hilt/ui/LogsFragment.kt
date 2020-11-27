@@ -30,15 +30,38 @@ import com.example.android.hilt.R
 import com.example.android.hilt.data.Log
 import com.example.android.hilt.data.LoggerLocalDataSource
 import com.example.android.hilt.util.DateFormatter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Fragment that displays the database logs.
  * Фрагмент, отображающий журналы базы данных.
  */
+/**
+ * Аннотирование классов Android с помощью @AndroidEntryPoint создает контейнер зависимостей,
+ * который следует жизненному циклу класса Android.
+ * С помощью @AndroidEntryPoint Hilt будет создан контейнер зависимостей,
+ * который присоединен к LogsFragment жизненному циклу и сможет внедрять экземпляры в LogsFragment
+ */
+// Чтобы LogsFragment использовать Hilt, мы должны аннотировать его @AndroidEntryPoint:
+@AndroidEntryPoint
 class LogsFragment : Fragment() {
 
-    private lateinit var logger: LoggerLocalDataSource
-    private lateinit var dateFormatter: DateFormatter
+    //Мы можем заставить Hilt вводить экземпляры разных типов с @Inject аннотацией к полям,
+    // которые мы хотим внедрить (т.е. logger и dateFormatter):
+    // Предупреждение: поля, введенные Hilt, не могут быть частными .
+    // Это то, что называется полевой инъекцией .
+
+    @Inject lateinit var logger: LoggerLocalDataSource
+    @Inject lateinit var dateFormatter: DateFormatter
+
+    // Чтобы выполнить внедрение поля, Hilt необходимо знать, как предоставить экземпляры этих зависимостей!
+    // В этом случае Hilt необходимо знать, как предоставить экземпляры LoggerLocalDataSource и DateFormatter.
+    // Однако Hilt еще не знает, как предоставить эти экземпляры.
+    // Информация Hilt о том, как предоставлять экземпляры разных типов, также называется привязками
+    // На данный момент у Hilt есть две привязки: как предоставить экземпляры
+    // 1) DateFormatter и 2) LoggerLocalDataSource.
+
 
     private lateinit var recyclerView: RecyclerView
 
@@ -56,7 +79,10 @@ class LogsFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
+// Поскольку Hilt будет отвечать за заполнение этих полей за нас, этот populateFields метод нам больше не нужен.
+// Удалим метод из класса:
+// LogsFragment заполняет свои поля в onAttach
+/*    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         populateFields(context)
@@ -67,7 +93,7 @@ class LogsFragment : Fragment() {
         dateFormatter =
             (context.applicationContext as LogApplication).serviceLocator.provideDateFormatter()
     }
-
+*/
     override fun onResume() {
         super.onResume()
 

@@ -20,12 +20,18 @@ import androidx.fragment.app.FragmentActivity
 import com.example.android.hilt.R
 import com.example.android.hilt.ui.ButtonsFragment
 import com.example.android.hilt.ui.LogsFragment
+import javax.inject.Inject
 
 /**
  * Navigator implementation.
  * Реализация навигатора.
+ * Теперь мы должны сообщить Hilt, как предоставлять экземпляры AppNavigatorImpl.
+ * Поскольку этот класс может быть внедрен в конструктор,
+ * мы просто аннотируем его конструктор @Inject.
  */
-class AppNavigatorImpl(private val activity: FragmentActivity) : AppNavigator {
+
+
+class AppNavigatorImpl @Inject constructor (private val activity: FragmentActivity) : AppNavigator {
 
     override fun navigateTo(screen: Screens) {
         val fragment = when (screen) {
@@ -39,3 +45,18 @@ class AppNavigatorImpl(private val activity: FragmentActivity) : AppNavigator {
             .commit()
     }
 }
+/*
+AppNavigatorImpl зависит от FragmentActivity.
+Поскольку AppNavigator экземпляр предоставляется в Activity контейнере
+(он также доступен в Fragment контейнере и в View контейнере,
+ поскольку NavigationModule он установлен в ActivityComponent),
+FragmentActivity он уже доступен, поскольку он поставляется как предопределенная привязка .
+ */
+/*
+Откройте MainActivity.kt файл и сделайте следующее:
+
+Аннотировать navigator поле с @Inject помощью Hilt,
+Удалите private модификатор видимости и
+Удалите navigator код инициализации в onCreate функции.
+ */
+

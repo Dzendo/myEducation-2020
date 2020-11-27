@@ -38,7 +38,7 @@ class AppTest {
     fun tearDown() {
         // Remove logs after the test finishes
         // Удаление журналов после завершения теста
-        ServiceLocator(getInstrumentation().targetContext).loggerLocalDataSource.removeLogs()
+     //   ServiceLocator(getInstrumentation().targetContext).loggerLocalDataSource.removeLogs()
     }
 
     @Test

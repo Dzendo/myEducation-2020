@@ -22,6 +22,8 @@ import com.example.android.hilt.LogApplication
 import com.example.android.hilt.R
 import com.example.android.hilt.navigator.AppNavigator
 import com.example.android.hilt.navigator.Screens
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Main activity of the application.
@@ -31,15 +33,22 @@ import com.example.android.hilt.navigator.Screens
  * Контейнер для фрагментов кнопок и журналов.
  * Это упражнение просто отслеживает нажатия на кнопки.
  */
+/**
+ * Теперь у Hilt есть вся необходимая информация для внедрения экземпляров LogsFragment.
+ * Тем не менее, перед запуском приложения, Эфес должен быть в курсе того, Activity что Саваофа Fragment ля работы.
+ * Нам нужно аннотировать MainActivity с помощью @AndroidEntryPoint.
+ */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navigator: AppNavigator
+    @Inject lateinit var navigator: AppNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigator = (applicationContext as LogApplication).serviceLocator.provideNavigator(this)
+        // Удалите navigator код инициализации в onCreate функции.
+       // navigator = (applicationContext as LogApplication).serviceLocator.provideNavigator(this)
 
         if (savedInstanceState == null) {
             navigator.navigateTo(Screens.BUTTONS)
@@ -54,3 +63,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+/*
+Обратите внимание, что экземпляр LoggerLocalDataSource будет таким же, как и тот, который мы использовали,
+ LogsFragment поскольку тип ограничен контейнером приложения.
+  Однако экземпляр AppNavigator будет отличаться от экземпляра,
+   MainActivity поскольку мы не ограничили его соответствующим Activity контейнером.
+ */

@@ -28,15 +28,25 @@ import com.example.android.hilt.R
 import com.example.android.hilt.data.LoggerLocalDataSource
 import com.example.android.hilt.navigator.AppNavigator
 import com.example.android.hilt.navigator.Screens
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Fragment that displays buttons whose interactions are recorded.
  * Фрагмент, отображающий кнопки, взаимодействие с которыми записывается.
+ * Единственный класс, который все еще использует ServiceLocator для получения зависимостей,
+ * - это ButtonsFragment.
+ * Поскольку Hilt уже знает, как предоставить все необходимые типы ButtonsFragment,
+ * мы можем просто выполнить внедрение поля в класс.
+ * Аннотируйте с ButtonsFragment помощью @AndroidEntryPoint,
+ * Удалить модификатор из частного logger и navigator полей и аннотировать их @Inject,
+ * Удалить код инициализации полей (т.е. onAttach и populateFields методы).
  */
+@AndroidEntryPoint
 class ButtonsFragment : Fragment() {
 
-    private lateinit var logger: LoggerLocalDataSource
-    private lateinit var navigator: AppNavigator
+    @Inject lateinit var logger: LoggerLocalDataSource
+    @Inject lateinit var navigator: AppNavigator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +56,8 @@ class ButtonsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_buttons, container, false)
     }
 
-    override fun onAttach(context: Context) {
+    // * Удалить код инициализации полей (т.е. onAttach и populateFields методы).
+/*    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         populateFields(context)
@@ -59,7 +70,7 @@ class ButtonsFragment : Fragment() {
         navigator = (context.applicationContext as LogApplication).
             serviceLocator.provideNavigator(requireActivity())
     }
-
+*/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<Button>(R.id.button1).setOnClickListener {
             logger.addLog("Interaction with 'Button 1'")

@@ -40,10 +40,12 @@ Implementing dependency injection provides you with the following advantages:
 
 # Getting Started
 # начало работы
+
 1. Install Android Studio, if you don't already have it.
 2. Download the sample.
 3. Import the sample into Android Studio.
 4. Build and run the sample.
+
 1. Установите Android Studio, Если у вас ее еще нет.
 2. Загрузите образец.
 3. импортируйте образец в Android Studio.
