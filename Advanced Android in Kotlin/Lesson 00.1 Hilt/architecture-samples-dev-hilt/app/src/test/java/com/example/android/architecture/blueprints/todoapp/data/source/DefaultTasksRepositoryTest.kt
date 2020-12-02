@@ -29,6 +29,7 @@ import org.junit.Test
 
 /**
  * Unit tests for the implementation of the in-memory repository with cache.
+ * Модульные тесты для реализации репозитория в памяти с кэшем.
  */
 @ExperimentalCoroutinesApi
 class DefaultTasksRepositoryTest {
@@ -44,6 +45,7 @@ class DefaultTasksRepositoryTest {
     private lateinit var tasksLocalDataSource: FakeDataSource
 
     // Class under test
+    // Тестируемый класс
     private lateinit var tasksRepository: DefaultTasksRepository
 
     // Set the main coroutines dispatcher for unit testing.
@@ -76,6 +78,7 @@ class DefaultTasksRepositoryTest {
     @Test
     fun getTasks_repositoryCachesAfterFirstApiCall() = mainCoroutineRule.runBlockingTest {
         // Trigger the repository to load data, which loads from remote and caches
+        // Триггер репозитория для загрузки данных, которые загружаются из удаленных и кэшированных хранилищ
         val initial = tasksRepository.getTasks()
 
         tasksRemoteDataSource.tasks = newTasks.toMutableList()
@@ -83,28 +86,34 @@ class DefaultTasksRepositoryTest {
         val second = tasksRepository.getTasks()
 
         // Initial and second should match because we didn't force a refresh
+        // Initial и second должны совпадать, потому что мы не форсировали обновление
         assertThat(second).isEqualTo(initial)
     }
 
     @Test
     fun getTasks_requestsAllTasksFromRemoteDataSource() = mainCoroutineRule.runBlockingTest {
         // When tasks are requested from the tasks repository
+        // Когда задачи запрашиваются из репозитория задач
         val tasks = tasksRepository.getTasks(true) as Success
 
         // Then tasks are loaded from the remote data source
+        // Затем задачи загружаются из удаленного источника данных
         assertThat(tasks.data).isEqualTo(remoteTasks)
     }
 
     @Test
     fun saveTask_savesToLocalAndRemote() = mainCoroutineRule.runBlockingTest {
         // Make sure newTask is not in the remote or local datasources
+        // Убедитесь, что новая задача не находится в удаленных или локальных источниках данных
         assertThat(tasksRemoteDataSource.tasks).doesNotContain(newTask)
         assertThat(tasksLocalDataSource.tasks).doesNotContain(newTask)
 
         // When a task is saved to the tasks repository
+        // Когда задача сохраняется в хранилище задач
         tasksRepository.saveTask(newTask)
 
         // Then the remote and local sources are called
+        // Затем вызываются удаленные и локальные источники
         assertThat(tasksRemoteDataSource.tasks).contains(newTask)
         assertThat(tasksLocalDataSource.tasks).contains(newTask)
     }
@@ -112,31 +121,39 @@ class DefaultTasksRepositoryTest {
     @Test
     fun getTasks_WithDirtyCache_tasksAreRetrievedFromRemote() = mainCoroutineRule.runBlockingTest {
         // First call returns from REMOTE
+        // Первый вызов возвращается с пульта дистанционного управления
         val tasks = tasksRepository.getTasks()
 
         // Set a different list of tasks in REMOTE
+        // Установите другой список задач в удаленном режиме
         tasksRemoteDataSource.tasks = newTasks.toMutableList()
 
         // But if tasks are cached, subsequent calls load from cache
+        // Но если задачи кэшируются, то последующие вызовы загружаются из кэша
         val cachedTasks = tasksRepository.getTasks()
         assertThat(cachedTasks).isEqualTo(tasks)
 
         // Now force remote loading
+        // Теперь принудительная удаленная загрузка
         val refreshedTasks = tasksRepository.getTasks(true) as Success
 
         // Tasks must be the recently updated in REMOTE
+        // Задачи должны быть недавно обновлены в удаленном режиме
         assertThat(refreshedTasks.data).isEqualTo(newTasks)
     }
 
     @Test
     fun getTasks_WithDirtyCache_remoteUnavailable_error() = mainCoroutineRule.runBlockingTest {
         // Make remote data source unavailable
+        // Сделать удаленный источник данных недоступным
         tasksRemoteDataSource.tasks = null
 
         // Load tasks forcing remote load
+        // Загрузка задач принудительная удаленная загрузка
         val refreshedTasks = tasksRepository.getTasks(true)
 
         // Result should be an error
+        // Результат должен быть ошибкой
         assertThat(refreshedTasks).isInstanceOf(Result.Error::class.java)
     }
 
@@ -144,19 +161,23 @@ class DefaultTasksRepositoryTest {
     fun getTasks_WithRemoteDataSourceUnavailable_tasksAreRetrievedFromLocal() =
         mainCoroutineRule.runBlockingTest {
             // When the remote data source is unavailable
+            // Когда удаленный источник данных недоступен
             tasksRemoteDataSource.tasks = null
 
             // The repository fetches from the local source
+            // Репозиторий извлекает данные из локального источника
             assertThat((tasksRepository.getTasks() as Success).data).isEqualTo(localTasks)
         }
 
     @Test
     fun getTasks_WithBothDataSourcesUnavailable_returnsError() = mainCoroutineRule.runBlockingTest {
         // When both sources are unavailable
+        // Когда оба источника недоступны
         tasksRemoteDataSource.tasks = null
         tasksLocalDataSource.tasks = null
 
         // The repository returns an error
+        // Репозиторий возвращает ошибку
         assertThat(tasksRepository.getTasks()).isInstanceOf(Result.Error::class.java)
     }
 
@@ -165,6 +186,7 @@ class DefaultTasksRepositoryTest {
         val initialLocal = tasksLocalDataSource.tasks
 
         // First load will fetch from remote
+        // Первая загрузка будет получена с пульта дистанционного управления
         val newTasks = (tasksRepository.getTasks(true) as Success).data
 
         assertThat(newTasks).isEqualTo(remoteTasks)
@@ -175,31 +197,39 @@ class DefaultTasksRepositoryTest {
     @Test
     fun completeTask_completesTaskToServiceAPIUpdatesCache() = mainCoroutineRule.runBlockingTest {
         // Save a task
+        // Сохранить задачу
         tasksRepository.saveTask(newTask)
 
         // Make sure it's active
+        // Убедитесь, что он активен
         assertThat((tasksRepository.getTask(newTask.id) as Success).data.isCompleted).isFalse()
 
         // Mark is as complete
+        // Марк так же полон
         tasksRepository.completeTask(newTask.id)
 
         // Verify it's now completed
+        // Убедитесь, что теперь он завершен
         assertThat((tasksRepository.getTask(newTask.id) as Success).data.isCompleted).isTrue()
     }
 
     @Test
     fun completeTask_activeTaskToServiceAPIUpdatesCache() = mainCoroutineRule.runBlockingTest {
         // Save a task
+        // Сохранить задачу
         tasksRepository.saveTask(newTask)
         tasksRepository.completeTask(newTask.id)
 
         // Make sure it's completed
+        // Убедитесь, что он завершен
         assertThat((tasksRepository.getTask(newTask.id) as Success).data.isActive).isFalse()
 
         // Mark is as active
+        // Марк так же активен
         tasksRepository.activateTask(newTask.id)
 
         // Verify it's now activated
+        // Убедитесь, что он теперь активирован
         val result = tasksRepository.getTask(newTask.id) as Success
         assertThat(result.data.isActive).isTrue()
     }
@@ -207,16 +237,19 @@ class DefaultTasksRepositoryTest {
     @Test
     fun getTask_repositoryCachesAfterFirstApiCall() = mainCoroutineRule.runBlockingTest {
         // Trigger the repository to load data, which loads from remote
+        // Запускает репозиторий для загрузки данных, которые загружаются с удаленного компьютера.
         tasksRemoteDataSource.tasks = mutableListOf(task1)
         tasksRepository.getTask(task1.id, true)
 
         // Configure the remote data source to store a different task
+        // Настройка удаленного источника данных для хранения другой задачи
         tasksRemoteDataSource.tasks = mutableListOf(task2)
 
         val task1SecondTime = tasksRepository.getTask(task1.id, true) as Success
         val task2SecondTime = tasksRepository.getTask(task2.id, true) as Success
 
         // Both work because one is in remote and the other in cache
+        // Оба работают, потому что один находится в удаленном режиме, а другой-в кэше
         assertThat(task1SecondTime.data.id).isEqualTo(task1.id)
         assertThat(task2SecondTime.data.id).isEqualTo(task2.id)
     }
@@ -224,17 +257,21 @@ class DefaultTasksRepositoryTest {
     @Test
     fun getTask_forceRefresh() = mainCoroutineRule.runBlockingTest {
         // Trigger the repository to load data, which loads from remote and caches
+        // Триггер репозитория для загрузки данных, которые загружаются из удаленных и кэшированных хранилищ
         tasksRemoteDataSource.tasks = mutableListOf(task1)
         tasksRepository.getTask(task1.id)
 
         // Configure the remote data source to return a different task
+        // Настройка удаленного источника данных для возврата другой задачи
         tasksRemoteDataSource.tasks = mutableListOf(task2)
 
         // Force refresh
+        // Принудительное обновление
         val task1SecondTime = tasksRepository.getTask(task1.id, true)
         val task2SecondTime = tasksRepository.getTask(task2.id, true)
 
         // Only task2 works because the cache and local were invalidated
+        // Работает только task2, потому что кэш и локальный были признаны недействительными
         assertThat((task1SecondTime as? Success)?.data?.id).isNull()
         assertThat((task2SecondTime as? Success)?.data?.id).isEqualTo(task2.id)
     }
@@ -257,12 +294,15 @@ class DefaultTasksRepositoryTest {
         val initialTasks = (tasksRepository.getTasks() as? Success)?.data
 
         // Delete all tasks
+        // Удалить все задачи
         tasksRepository.deleteAllTasks()
 
         // Fetch data again
+        // Снова получить данные
         val afterDeleteTasks = (tasksRepository.getTasks() as? Success)?.data
 
         // Verify tasks are empty now
+        // Проверьте, что задачи теперь пусты
         assertThat(initialTasks).isNotEmpty()
         assertThat(afterDeleteTasks).isEmpty()
     }
@@ -272,12 +312,15 @@ class DefaultTasksRepositoryTest {
         val initialTasks = (tasksRepository.getTasks(true) as? Success)?.data
 
         // Delete first task
+        // Удалить первую задачу
         tasksRepository.deleteTask(task1.id)
 
         // Fetch data again
+        // Снова получить данные
         val afterDeleteTasks = (tasksRepository.getTasks(true) as? Success)?.data
 
         // Verify only one task was deleted
+        // Убедитесь, что удалена только одна задача
         assertThat(afterDeleteTasks?.size).isEqualTo(initialTasks!!.size - 1)
         assertThat(afterDeleteTasks).doesNotContain(task1)
     }

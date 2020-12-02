@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * Default implementation of [TasksRepository]. Single entry point for managing tasks' data.
+ * Реализация по умолчанию [репозитория задач]. Единая точка входа для управления данными задач.
  */
 class DefaultTasksRepository(
     private val tasksRemoteDataSource: TasksDataSource,
@@ -37,6 +38,7 @@ class DefaultTasksRepository(
 
     override suspend fun getTasks(forceUpdate: Boolean): Result<List<Task>> {
         // Set app as busy while this function executes.
+        // Установите приложение как занятое во время выполнения этой функции.
         wrapEspressoIdlingResource {
 
             if (forceUpdate) {
@@ -67,6 +69,7 @@ class DefaultTasksRepository(
 
         if (remoteTasks is Success) {
             // Real apps might want to do a proper sync, deleting, modifying or adding each task.
+            // Реальные приложения могут захотеть выполнить правильную синхронизацию, удаление, изменение или добавление каждой задачи.
             tasksLocalDataSource.deleteAllTasks()
             remoteTasks.data.forEach { task ->
                 tasksLocalDataSource.saveTask(task)
@@ -90,9 +93,11 @@ class DefaultTasksRepository(
 
     /**
      * Relies on [getTasks] to fetch data and picks the task with the same ID.
+     * Полагается на [getTasks] для извлечения данных и выбирает задачу с тем же идентификатором.
      */
     override suspend fun getTask(taskId: String, forceUpdate: Boolean): Result<Task> {
         // Set app as busy while this function executes.
+        // Установите приложение как занятое во время выполнения этой функции.
         wrapEspressoIdlingResource {
             if (forceUpdate) {
                 updateTaskFromRemoteDataSource(taskId)

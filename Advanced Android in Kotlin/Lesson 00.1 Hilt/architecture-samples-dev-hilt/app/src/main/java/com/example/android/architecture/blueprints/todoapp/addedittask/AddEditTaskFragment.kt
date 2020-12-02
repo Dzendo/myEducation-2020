@@ -34,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
+ * Основной пользовательский интерфейс для экрана добавления задачи. Пользователи могут ввести название и описание задачи.
  */
 @AndroidEntryPoint
 class AddEditTaskFragment : Fragment() {
@@ -54,6 +55,7 @@ class AddEditTaskFragment : Fragment() {
             this.viewmodel = viewModel
         }
         // Set the lifecycle owner to the lifecycle of the view
+        // Установите владельца жизненного цикла на жизненный цикл представления
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         return viewDataBinding.root
     }

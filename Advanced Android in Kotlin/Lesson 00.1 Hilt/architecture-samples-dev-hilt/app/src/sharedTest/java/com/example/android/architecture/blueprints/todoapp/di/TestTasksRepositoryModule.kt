@@ -27,8 +27,10 @@ import javax.inject.Singleton
 
 /**
  * TasksRepository binding to use in tests.
+ * Привязка репозитория задач для использования в тестах.
  *
  * Hilt will inject a [FakeRepository] instead of a [DefaultTasksRepository].
+ * Hilt введет [поддельный репозиторий] вместо [репозитория задач по умолчанию].
  */
 @Module
 @InstallIn(SingletonComponent::class)

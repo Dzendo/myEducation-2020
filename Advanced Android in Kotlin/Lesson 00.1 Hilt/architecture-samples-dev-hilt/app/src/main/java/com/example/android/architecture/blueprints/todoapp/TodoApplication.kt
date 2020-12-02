@@ -24,8 +24,12 @@ import timber.log.Timber.DebugTree
 /**
  * An application with @HiltAndroidApp that triggers Hilt's code generation and
  * adds an application-level dependency container.
+ * Приложение с @HiltAndroidApp, которое запускает генерацию кода Hilt и
+ * добавляет контейнер зависимостей уровня приложения.
  *
  * Also, sets up Timber in the DEBUG BuildConfig. Read Timber's documentation for production setups.
+ * Кроме того, настраивает древесину в конфигурации DEBUG Build.
+ * Ознакомьтесь с документацией Timber'S для производственных установок.
  */
 @HiltAndroidApp
 class TodoApplication : Application() {

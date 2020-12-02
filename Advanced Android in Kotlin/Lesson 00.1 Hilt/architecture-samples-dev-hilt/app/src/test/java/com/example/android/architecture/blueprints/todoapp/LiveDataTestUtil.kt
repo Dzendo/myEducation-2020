@@ -24,9 +24,12 @@ import java.util.concurrent.TimeoutException
 
 /**
  * Gets the value of a [LiveData] or waits for it to have one, with a timeout.
+ * Получает значение a [Live Data] или ждет его получения с таймаутом.
  *
  * Use this extension from host-side (JVM) tests. It's recommended to use it alongside
  * `InstantTaskExecutorRule` or a similar mechanism to execute tasks synchronously.
+ * Используйте это расширение из тестов на стороне хоста (JVM). Рекомендуется использовать его вместе с
+ * 'Мгновенное правило TaskExecutor' или аналогичный механизм для асинхронного выполнения задач.
  */
 @VisibleForTesting(otherwise = VisibleForTesting.NONE)
 fun <T> LiveData<T>.getOrAwaitValue(
@@ -49,6 +52,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
         afterObserve.invoke()
 
         // Don't wait indefinitely if the LiveData is not set.
+        // Не ждите бесконечно, если текущие данные не установлены.
         if (!latch.await(time, timeUnit)) {
             this.removeObserver(observer)
             throw TimeoutException("LiveData value was never set.")
@@ -62,6 +66,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
 
 /**
  * Observes a [LiveData] until the `block` is done executing.
+ * Наблюдает за [живыми данными] до тех пор, пока "блок" не будет выполнен.
  */
 fun <T> LiveData<T>.observeForTesting(block: () -> Unit) {
     val observer = Observer<T> { }

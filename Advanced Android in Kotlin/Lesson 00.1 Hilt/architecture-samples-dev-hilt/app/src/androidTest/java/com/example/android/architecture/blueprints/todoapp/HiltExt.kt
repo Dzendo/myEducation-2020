@@ -30,10 +30,16 @@ import androidx.test.core.app.ApplicationProvider
  * launchFragmentInContainer from the androidx.fragment:fragment-testing library
  * is NOT possible to use right now as it uses a hardcoded Activity under the hood
  * (i.e. [EmptyFragmentActivity]) which is not annotated with @AndroidEntryPoint.
+ * запуска фрагмент в контейнер с Android.фрагмент:фрагмент-тестирование библиотека
+ * невозможно использовать прямо сейчас, так как он использует жестко закодированную активность под капотом
+ * (т. е. [Empty FragmentActivity]), которая не аннотируется с помощью @AndroidEntryPoint.
  *
  * As a workaround, use this function that is equivalent. It requires you to add
  * [HiltTestActivity] in the debug folder and include it in the debug AndroidManifest.xml file
  * as can be found in this project.
+ * В качестве обходного пути используйте эту эквивалентную функцию. Он требует, чтобы вы добавили
+ * [HiltTestActivity] в папке debug и включить его в отладку AndroidManifest.xml файл
+ * как можно найти в этом проекте.
  */
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,

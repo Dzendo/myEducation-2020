@@ -26,6 +26,7 @@ import com.example.android.architecture.blueprints.todoapp.tasks.TasksAdapter.Vi
 
 /**
  * Adapter for the task list. Has a reference to the [TasksViewModel] to send actions back to it.
+ * Адаптер для списка задач. Имеет ссылку на [TasksViewModel] для отправки действий обратно в него.
  */
 class TasksAdapter(private val viewModel: TasksViewModel) :
     ListAdapter<Task, ViewHolder>(TaskDiffCallback()) {
@@ -63,9 +64,12 @@ class TasksAdapter(private val viewModel: TasksViewModel) :
 
 /**
  * Callback for calculating the diff between two non-null items in a list.
+ * Обратный вызов для вычисления разницы между двумя ненулевыми элементами в списке.
  *
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
+ * Используется ListAdapter для расчета минимального количества изменений между старым списком и новым
+ * список, который был передан в "submit List".
  */
 class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
     override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {

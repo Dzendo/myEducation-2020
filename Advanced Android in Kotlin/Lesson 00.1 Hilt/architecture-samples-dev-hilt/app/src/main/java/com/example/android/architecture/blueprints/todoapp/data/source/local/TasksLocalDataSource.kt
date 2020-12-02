@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * Concrete implementation of a data source as a db.
+ * Конкретная реализация источника данных в виде БД.
  */
 class TasksLocalDataSource internal constructor(
     private val tasksDao: TasksDao,

@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Details screen.
+ * Модель представления на экране информации.
  */
 class TaskDetailViewModel @ViewModelInject constructor(
     private val tasksRepository: TasksRepository
@@ -60,6 +61,7 @@ class TaskDetailViewModel @ViewModelInject constructor(
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
     // This LiveData depends on another so we can use a transformation.
+    // Эти живые данные зависят от других, поэтому мы можем использовать преобразование.
     val completed: LiveData<Boolean> = _task.map { input: Task? ->
         input?.isCompleted ?: false
     }
@@ -88,10 +90,12 @@ class TaskDetailViewModel @ViewModelInject constructor(
 
     fun start(taskId: String?) {
         // If we're already loading or already loaded, return (might be a config change)
+        // Если мы уже загружаемся или уже загружены, return (может быть изменением конфигурации)
         if (_dataLoading.value == true || taskId == _taskId.value) {
             return
         }
         // Trigger the load
+        // Запуск нагрузки
         _taskId.value = taskId
     }
 
@@ -106,6 +110,7 @@ class TaskDetailViewModel @ViewModelInject constructor(
 
     fun refresh() {
         // Refresh the repository and the task will be updated automatically.
+        // Обновите репозиторий, и задача будет обновлена автоматически.
         _task.value?.let {
             _dataLoading.value = true
             viewModelScope.launch {

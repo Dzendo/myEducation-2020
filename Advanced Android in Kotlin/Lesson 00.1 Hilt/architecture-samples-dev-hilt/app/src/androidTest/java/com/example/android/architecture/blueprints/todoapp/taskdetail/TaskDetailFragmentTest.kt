@@ -42,6 +42,7 @@ import javax.inject.Inject
 
 /**
  * Integration test for the Task Details screen.
+ * Интеграционный тест для экрана сведений о задаче.будет
  */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -59,26 +60,32 @@ class TaskDetailFragmentTest {
     @Before
     fun init() {
         // Populate @Inject fields in test class
+        // Заполнить поля @Inject в тестовом классе
         hiltRule.inject()
     }
 
     @Test
     fun activeTaskDetails_DisplayedInUi() {
         // GIVEN - Add active (incomplete) task to the DB
+        // GIVEN-добавить активную (незавершенную) задачу в БД
         val activeTask = Task("Active Task", "AndroidX Rocks", false)
         repository.saveTaskBlocking(activeTask)
 
         // WHEN - Details fragment launched to display task
+        // WHEN-фрагмент сведений, запущенный для отображения задачи
         val bundle = TaskDetailFragmentArgs(activeTask.id).toBundle()
         launchFragmentInHiltContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
 
         // THEN - Task details are displayed on the screen
+        // На экране отображаются сведения о задаче
         // make sure that the title/description are both shown and correct
+        // убедитесь, что заголовок/описание показаны и корректны
         onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_title_text)).check(matches(withText("Active Task")))
         onView(withId(R.id.task_detail_description_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_description_text)).check(matches(withText("AndroidX Rocks")))
         // and make sure the "active" checkbox is shown unchecked
+        // и убедитесь, что флажок "активный" снят
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(not(isChecked())))
     }
@@ -86,20 +93,25 @@ class TaskDetailFragmentTest {
     @Test
     fun completedTaskDetails_DisplayedInUi() {
         // GIVEN - Add completed task to the DB
+        // GIVEN-добавить завершенную задачу в БД
         val completedTask = Task("Completed Task", "AndroidX Rocks", true)
         repository.saveTaskBlocking(completedTask)
 
         // WHEN - Details fragment launched to display task
+        // WHEN-фрагмент сведений, запущенный для отображения задачи
         val bundle = TaskDetailFragmentArgs(completedTask.id).toBundle()
         launchFragmentInHiltContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
 
         // THEN - Task details are displayed on the screen
+        // На экране отображаются сведения о задаче
         // make sure that the title/description are both shown and correct
+        // убедитесь, что заголовок/описание показаны и корректны
         onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_title_text)).check(matches(withText("Completed Task")))
         onView(withId(R.id.task_detail_description_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_description_text)).check(matches(withText("AndroidX Rocks")))
         // and make sure the "active" checkbox is shown unchecked
+        // и убедитесь, что флажок "активный" снят
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isChecked()))
     }

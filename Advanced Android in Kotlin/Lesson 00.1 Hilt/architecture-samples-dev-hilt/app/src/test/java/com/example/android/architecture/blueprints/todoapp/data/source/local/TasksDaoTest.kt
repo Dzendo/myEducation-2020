@@ -42,11 +42,13 @@ class TasksDaoTest {
     private lateinit var database: ToDoDatabase
 
     // Set the main coroutines dispatcher for unit testing.
+    // Установите главный диспетчер сопрограмм для модульного тестирования.
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
     // Executes each task synchronously using Architecture Components.
+    // Выполняет каждую задачу синхронно с использованием компонентов архитектуры.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
@@ -54,6 +56,8 @@ class TasksDaoTest {
     fun initDb() {
         // using an in-memory database because the information stored here disappears when the
         // process is killed
+        // использование базы данных в памяти, потому что информация, хранящаяся здесь, исчезает, когда процесс
+        // убит
         database = Room.inMemoryDatabaseBuilder(
             getApplicationContext(),
             ToDoDatabase::class.java
@@ -66,13 +70,16 @@ class TasksDaoTest {
     @Test
     fun insertTaskAndGetById() = runBlockingTest {
         // GIVEN - insert a task
+        // GIVEN-вставить задачу
         val task = Task("title", "description")
         database.taskDao().insertTask(task)
 
         // WHEN - Get the task by id from the database
+        // WHEN-получить задачу по идентификатору из базы данных
         val loaded = database.taskDao().getTaskById(task.id)
 
         // THEN - The loaded data contains the expected values
+        // THEN-загруженные данные содержат ожидаемые значения
         assertThat<Task>(loaded as Task, notNullValue())
         assertThat(loaded.id, `is`(task.id))
         assertThat(loaded.title, `is`(task.title))
@@ -83,14 +90,17 @@ class TasksDaoTest {
     @Test
     fun insertTaskReplacesOnConflict() = runBlockingTest {
         // Given that a task is inserted
+        // Учитывая, что задача вставлена
         val task = Task("title", "description")
         database.taskDao().insertTask(task)
 
         // When a task with the same id is inserted
+        // Когда вставляется задача с тем же идентификатором
         val newTask = Task("title2", "description2", true, task.id)
         database.taskDao().insertTask(newTask)
 
         // THEN - The loaded data contains the expected values
+        // THEN-загруженные данные содержат ожидаемые значения
         val loaded = database.taskDao().getTaskById(task.id)
         assertThat(loaded?.id, `is`(task.id))
         assertThat(loaded?.title, `is`("title2"))
@@ -101,13 +111,16 @@ class TasksDaoTest {
     @Test
     fun insertTaskAndGetTasks() = runBlockingTest {
         // GIVEN - insert a task
+        // GIVEN-вставить задачу
         val task = Task("title", "description")
         database.taskDao().insertTask(task)
 
         // WHEN - Get tasks from the database
+        // Когда - задачи из базы данных
         val tasks = database.taskDao().getTasks()
 
         // THEN - There is only 1 task in the database, and contains the expected values
+        // THEN-в базе данных есть только 1 задача, и она содержит ожидаемые значения
         assertThat(tasks.size, `is`(1))
         assertThat(tasks[0].id, `is`(task.id))
         assertThat(tasks[0].title, `is`(task.title))
@@ -118,14 +131,17 @@ class TasksDaoTest {
     @Test
     fun updateTaskAndGetById() = runBlockingTest {
         // When inserting a task
+        // При вставке задачи
         val originalTask = Task("title", "description")
         database.taskDao().insertTask(originalTask)
 
         // When the task is updated
+        // Когда задача обновляется
         val updatedTask = Task("new title", "new description", true, originalTask.id)
         database.taskDao().updateTask(updatedTask)
 
         // THEN - The loaded data contains the expected values
+        // THEN-загруженные данные содержат ожидаемые значения
         val loaded = database.taskDao().getTaskById(originalTask.id)
         assertThat(loaded?.id, `is`(originalTask.id))
         assertThat(loaded?.title, `is`("new title"))
@@ -136,13 +152,16 @@ class TasksDaoTest {
     @Test
     fun updateCompletedAndGetById() = runBlockingTest {
         // When inserting a task
+        // При вставке задачи
         val task = Task("title", "description", true)
         database.taskDao().insertTask(task)
 
         // When the task is updated
+        // Когда задача обновляется
         database.taskDao().updateCompleted(task.id, false)
 
         // THEN - The loaded data contains the expected values
+        // THEN-загруженные данные содержат ожидаемые значения
         val loaded = database.taskDao().getTaskById(task.id)
         assertThat(loaded?.id, `is`(task.id))
         assertThat(loaded?.title, `is`(task.title))
@@ -153,13 +172,16 @@ class TasksDaoTest {
     @Test
     fun deleteTaskByIdAndGettingTasks() = runBlockingTest {
         // Given a task inserted
+        // Учетом установленной задачей
         val task = Task("title", "description")
         database.taskDao().insertTask(task)
 
         // When deleting a task by id
+        // При удалении задачи по идентификатору
         database.taskDao().deleteTaskById(task.id)
 
         // THEN - The list is empty
+        // Тогда-список пуст
         val tasks = database.taskDao().getTasks()
         assertThat(tasks.isEmpty(), `is`(true))
     }
@@ -167,12 +189,15 @@ class TasksDaoTest {
     @Test
     fun deleteTasksAndGettingTasks() = runBlockingTest {
         // Given a task inserted
+        // Учетом установленной задачей
         database.taskDao().insertTask(Task("title", "description"))
 
         // When deleting all tasks
+        // При удалении всех задач
         database.taskDao().deleteTasks()
 
         // THEN - The list is empty
+        // Тогда-список пуст
         val tasks = database.taskDao().getTasks()
         assertThat(tasks.isEmpty(), `is`(true))
     }
@@ -180,12 +205,15 @@ class TasksDaoTest {
     @Test
     fun deleteCompletedTasksAndGettingTasks() = runBlockingTest {
         // Given a completed task inserted
+        // Задано выполненное задание вставлено
         database.taskDao().insertTask(Task("completed", "task", true))
 
         // When deleting completed tasks
+        // При удалении завершенных задач
         database.taskDao().deleteCompletedTasks()
 
         // THEN - The list is empty
+        // Тогда-список пуст
         val tasks = database.taskDao().getTasks()
         assertThat(tasks.isEmpty(), `is`(true))
     }

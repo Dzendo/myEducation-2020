@@ -29,18 +29,27 @@ import java.util.UUID
 /**
  * An espresso idling resource implementation that reports idle status for all data binding
  * layouts. Data Binding uses a mechanism to post messages which Espresso doesn't track yet.
+ * Эспрессо холостого хода осуществления ресурса, отчетов о состоянии холостого хода для привязки данных
+ * расположения. Привязка данных использует механизм для отправки сообщений, которые Espresso еще не отслеживает.
  *
  * Since this application only uses fragments, the resource only checks the fragments and their
  * children instead of the whole view tree.
+ * Поскольку это приложение использует только фрагменты, ресурс проверяет только фрагменты и их
+ * Дети вместо всего дерева представлений.
  */
 class DataBindingIdlingResource : IdlingResource {
     // list of registered callbacks
+    // список зарегистрированных обратных вызовов
     private val idlingCallbacks = mutableListOf<IdlingResource.ResourceCallback>()
     // give it a unique id to workaround an espresso bug where you cannot register/unregister
     // an idling resource w/ the same name.
+    // дайте ему уникальный идентификатор, чтобы обойти ошибку Эспрессо, когда вы не можете зарегистрироваться/отменить регистрацию
+    // ресурс холостого хода с тем же именем.
     private val id = UUID.randomUUID().toString()
     // holds whether isIdle is called and the result was false. We track this to avoid calling
     // onTransitionToIdle callbacks if Espresso never thought we were idle in the first place.
+    // удерживает, вызывается ли visible, и результат был ложным. Мы отслеживаем это, чтобы избежать звонков
+    // при переходе на холостые обратные вызовы, если Эспрессо никогда не думал, что мы простаиваем в первую очередь.
     private var wasNotIdle = false
 
     lateinit var activity: FragmentActivity
@@ -72,6 +81,7 @@ class DataBindingIdlingResource : IdlingResource {
 
     /**
      * Find all binding classes in all currently available fragments.
+     * Найти все классы привязки во всех доступных в данный момент фрагментах.
      */
     private fun getBindings(): List<ViewDataBinding> {
         val fragments = (activity as? FragmentActivity)
@@ -93,6 +103,7 @@ private fun View.getBinding(): ViewDataBinding? = DataBindingUtil.getBinding(thi
 
 /**
  * Sets the activity from an [ActivityScenario] to be used from [DataBindingIdlingResource].
+ * Устанавливает активности от [сценарий активности] с [привязка данных IdlingResource].
  */
 fun DataBindingIdlingResource.monitorActivity(
     activityScenario: ActivityScenario<out FragmentActivity>
@@ -104,6 +115,7 @@ fun DataBindingIdlingResource.monitorActivity(
 
 /**
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
+ * Задает фрагмент [сценарий фрагмент] с [привязка данных IdlingResource].
  */
 fun DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
     fragmentScenario.onFragment {

@@ -27,6 +27,7 @@ import java.util.LinkedHashMap
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
+ * Реализация удаленного источника данных со статическим доступом к данным для удобства тестирования.
  */
 object FakeTasksRemoteDataSource : TasksDataSource {
 
@@ -82,6 +83,7 @@ object FakeTasksRemoteDataSource : TasksDataSource {
 
     override suspend fun completeTask(taskId: String) {
         // Not required for the remote data source.
+        // Не требуется для удаленного источника данных.
     }
 
     override suspend fun activateTask(task: Task) {
@@ -91,6 +93,7 @@ object FakeTasksRemoteDataSource : TasksDataSource {
 
     override suspend fun activateTask(taskId: String) {
         // Not required for the remote data source.
+        // Не требуется для удаленного источника данных.
     }
 
     override suspend fun clearCompletedTasks() {

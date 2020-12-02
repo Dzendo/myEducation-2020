@@ -19,6 +19,7 @@ import androidx.test.espresso.IdlingResource
 
 /**
  * Contains a static reference to [IdlingResource], only available in the 'mock' build type.
+ * Содержит статическую ссылку на [IdlingResource], доступную только в типе сборки' mock'.
  */
 object EspressoIdlingResource {
 
@@ -40,11 +41,12 @@ object EspressoIdlingResource {
 
 inline fun <T> wrapEspressoIdlingResource(function: () -> T): T {
     // Espresso does not work well with coroutines yet. See
+    // Эспрессо еще не очень хорошо работает с сопрограммами.
     // https://github.com/Kotlin/kotlinx.coroutines/issues/982
-    EspressoIdlingResource.increment() // Set app as busy.
+    EspressoIdlingResource.increment() // Set app as busy. Установите приложение как занятое.
     return try {
         function()
     } finally {
-        EspressoIdlingResource.decrement() // Set app as idle.
+        EspressoIdlingResource.decrement() // Set app as idle. Установите приложение в режим ожидания.
     }
 }

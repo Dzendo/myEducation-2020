@@ -30,15 +30,18 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Add/Edit screen.
+ * ViewModel для экрана добавления / редактирования.
  */
 class AddEditTaskViewModel @ViewModelInject constructor(
     private val tasksRepository: TasksRepository
 ) : ViewModel() {
 
     // Two-way databinding, exposing MutableLiveData
+    // Двусторонняя привязка данных, предоставляющая изменяемые живые данные
     val title = MutableLiveData<String>()
 
     // Two-way databinding, exposing MutableLiveData
+    // Двусторонняя привязка данных, предоставляющая изменяемые живые данные
     val description = MutableLiveData<String>()
 
     private val _dataLoading = MutableLiveData<Boolean>()
@@ -66,11 +69,13 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         this.taskId = taskId
         if (taskId == null) {
             // No need to populate, it's a new task
+            // Нет необходимости заполнять, это новая задача
             isNewTask = true
             return
         }
         if (isDataLoaded) {
             // No need to populate, already have data.
+            // Нет необходимости заполнять, уже есть данные.
             return
         }
 
@@ -101,6 +106,7 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     }
 
     // Called when clicking on fab.
+    // Вызывается при нажатии на fab.
     fun saveTask() {
         val currentTitle = title.value
         val currentDescription = description.value

@@ -23,6 +23,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * [BindingAdapter]s for the [Task]s list.
+ * [Привязка адаптера]для [задачи]список С.
  */
 @BindingAdapter("items")
 fun setItems(listView: RecyclerView, items: List<Task>?) {

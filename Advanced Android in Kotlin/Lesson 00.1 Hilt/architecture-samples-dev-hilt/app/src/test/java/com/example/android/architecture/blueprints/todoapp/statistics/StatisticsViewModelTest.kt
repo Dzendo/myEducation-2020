@@ -32,21 +32,26 @@ import org.junit.Test
 
 /**
  * Unit tests for the implementation of [StatisticsViewModel]
+ * Модульные тесты для реализации [StatisticsViewModel]
  */
 @ExperimentalCoroutinesApi
 class StatisticsViewModelTest {
 
     // Executes each task synchronously using Architecture Components.
+    // Выполняет каждую задачу синхронно с использованием компонентов архитектуры.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
     // Subject under test
+    // Испытуемый
     private lateinit var statisticsViewModel: StatisticsViewModel
 
     // Use a fake repository to be injected into the viewmodel
+    // Использовать поддельные репозитория, чтобы быть введены в модель представления
     private lateinit var tasksRepository: FakeRepository
 
     // Set the main coroutines dispatcher for unit testing.
+    // Установите главный диспетчер сопрограмм для модульного тестирования.
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -61,14 +66,17 @@ class StatisticsViewModelTest {
     @Test
     fun loadEmptyTasksFromRepository_EmptyResults() = mainCoroutineRule.runBlockingTest {
         // Given an initialized StatisticsViewModel with no tasks
+        // Дана инициализированная StatisticsViewModel без каких-либо задач
 
         // Then the results are empty
+        // Тогда результаты будут пустыми
         assertThat(statisticsViewModel.empty.getOrAwaitValue()).isTrue()
     }
 
     @Test
     fun loadNonEmptyTasksFromRepository_NonEmptyResults() {
         // We initialise the tasks to 3, with one active and two completed
+        // Мы инициализируем задачи до 3, с одним активным и двумя завершенными
         val task1 = Task("Title1", "Description1")
         val task2 = Task("Title2", "Description2", true)
         val task3 = Task("Title3", "Description3", true)
@@ -76,6 +84,7 @@ class StatisticsViewModelTest {
         tasksRepository.addTasks(task1, task2, task3, task4)
 
         // Then the results are not empty
+        // Тогда результаты не пустые
         assertThat(statisticsViewModel.empty.getOrAwaitValue())
             .isFalse()
         assertThat(statisticsViewModel.activeTasksPercent.getOrAwaitValue())
@@ -95,6 +104,7 @@ class StatisticsViewModelTest {
         )
 
         // Then an error message is shown
+        // Затем появляется сообщение об ошибке
         assertThat(errorViewModel.empty.getOrAwaitValue()).isTrue()
         assertThat(errorViewModel.error.getOrAwaitValue()).isTrue()
     }
@@ -102,18 +112,22 @@ class StatisticsViewModelTest {
     @Test
     fun loadTasks_loading() {
         // Pause dispatcher so we can verify initial values
+        // Pause dispatcher, чтобы мы могли проверить начальные значения
         mainCoroutineRule.pauseDispatcher()
 
         // Load the task in the viewmodel
         statisticsViewModel.refresh()
 
         // Then progress indicator is shown
+        // Затем отображается индикатор прогресса
         assertThat(statisticsViewModel.dataLoading.getOrAwaitValue()).isTrue()
 
         // Execute pending coroutines actions
+        // Выполнить Отложенные действия сопрограмм
         mainCoroutineRule.resumeDispatcher()
 
         // Then progress indicator is hidden
+        // Тогда индикатор прогресса будет скрыт
         assertThat(statisticsViewModel.dataLoading.getOrAwaitValue()).isFalse()
     }
 }

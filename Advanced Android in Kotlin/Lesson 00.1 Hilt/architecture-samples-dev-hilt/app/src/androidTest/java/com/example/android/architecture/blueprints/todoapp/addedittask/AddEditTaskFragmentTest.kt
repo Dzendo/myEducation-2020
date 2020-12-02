@@ -50,6 +50,7 @@ import javax.inject.Inject
 
 /**
  * Integration test for the Add Task screen.
+ * Интеграционный тест для экрана добавления задачи.
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
@@ -67,12 +68,14 @@ class AddEditTaskFragmentTest {
     @Before
     fun init() {
         // Populate @Inject fields in test class
+        // Заполнить поля @Inject в тестовом классе
         hiltRule.inject()
     }
-
+    //Fail
     @Test
     fun emptyTask_isNotSaved() {
         // GIVEN - On the "Add Task" screen.
+        // GIVEN - на экране "Добавить задачу".
         val bundle = AddEditTaskFragmentArgs(
             null,
             getApplicationContext<Context>().getString(R.string.add_task)
@@ -81,26 +84,31 @@ class AddEditTaskFragmentTest {
         launchFragmentInHiltContainer<AddEditTaskFragment>(bundle, R.style.AppTheme)
 
         // WHEN - Enter invalid title and description combination and click save
+        // Когда - неверный введите название и описание и нажать "Сохранить".
         onView(withId(R.id.add_task_title_edit_text)).perform(clearText())
         onView(withId(R.id.add_task_description_edit_text)).perform(clearText())
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Entered Task is still displayed (a correct task would close it).
+        // Затем-введенная задача по-прежнему отображается (правильная задача закроет ее).
         onView(withId(R.id.add_task_title_edit_text)).check(matches(isDisplayed()))
     }
 
     @Test
     fun validTask_navigatesBack() {
         // GIVEN - On the "Add Task" screen.
+        // GIVEN - на экране "Добавить задачу".
         val navController = mock(NavController::class.java)
         launchFragment(navController)
 
         // WHEN - Valid title and description combination and click save
+        // WHEN-допустимая комбинация заголовка и описания и нажмите кнопку Сохранить
         onView(withId(R.id.add_task_title_edit_text)).perform(replaceText("title"))
         onView(withId(R.id.add_task_description_edit_text)).perform(replaceText("description"))
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Verify that we navigated back to the tasks screen.
+        // Затем-убедитесь, что мы вернулись к экрану задач.
         verify(navController).navigate(
             AddEditTaskFragmentDirections
                 .actionAddEditTaskFragmentToTasksFragment(ADD_EDIT_RESULT_OK)
@@ -110,15 +118,18 @@ class AddEditTaskFragmentTest {
     @Test
     fun validTask_isSaved() {
         // GIVEN - On the "Add Task" screen.
+        // GIVEN - на экране "Добавить задачу".
         val navController = mock(NavController::class.java)
         launchFragment(navController)
 
         // WHEN - Valid title and description combination and click save
+        // WHEN-допустимая комбинация заголовка и описания и нажмите кнопку Сохранить
         onView(withId(R.id.add_task_title_edit_text)).perform(replaceText("title"))
         onView(withId(R.id.add_task_description_edit_text)).perform(replaceText("description"))
         onView(withId(R.id.save_task_fab)).perform(click())
 
         // THEN - Verify that the repository saved the task
+        // Затем-убедитесь, что репозиторий сохранил задачу
         val tasks = (repository.getTasksBlocking(true) as Result.Success).data
         assertEquals(tasks.size, 1)
         assertEquals(tasks[0].title, "title")

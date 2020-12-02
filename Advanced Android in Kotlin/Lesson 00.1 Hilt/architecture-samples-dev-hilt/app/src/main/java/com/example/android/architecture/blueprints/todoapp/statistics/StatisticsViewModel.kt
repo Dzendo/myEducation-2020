@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the statistics screen.
+ * ViewModel для экрана статистики.
  */
 class StatisticsViewModel @ViewModelInject constructor(
     private val tasksRepository: TasksRepository

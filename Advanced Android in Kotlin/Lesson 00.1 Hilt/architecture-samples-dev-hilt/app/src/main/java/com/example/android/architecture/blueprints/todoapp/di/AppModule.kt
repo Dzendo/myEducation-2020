@@ -37,9 +37,12 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
 /**
  * Module to tell Hilt how to provide instances of types that cannot be constructor-injected.
+ * Модуль для указания Hilt, как предоставлять экземпляры типов,которые не могут быть введены конструктором.
  *
  * As these types are scoped to the application lifecycle using @Singleton, they're installed
  * in Hilt's ApplicationComponent.
+ * Поскольку эти типы привязаны к жизненному циклу приложения с помощью @Singleton, они устанавливаются
+ * в прикладном компоненте Hilt.
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -89,6 +92,7 @@ object AppModule {
 
 /**
  * The binding for TasksRepository is on its own module so that we can replace it easily in tests.
+ * Репозиторий binding for Tasks находится на своем собственном модуле, так что мы можем легко заменить его в тестах.
  */
 @Module
 @InstallIn(SingletonComponent::class)

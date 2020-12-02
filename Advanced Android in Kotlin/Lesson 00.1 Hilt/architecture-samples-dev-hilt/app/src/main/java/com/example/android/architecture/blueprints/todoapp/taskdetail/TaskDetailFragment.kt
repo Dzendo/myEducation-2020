@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main UI for the task detail screen.
+ * Основной пользовательский интерфейс для экрана сведений о задаче.
  */
 @AndroidEntryPoint
 class TaskDetailFragment : Fragment() {

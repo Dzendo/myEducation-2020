@@ -42,6 +42,7 @@ import javax.inject.Inject
 
 /**
  * Integration test for the statistics screen.
+ * * Интеграционный тест для экрана статистики.
  */
 @RunWith(AndroidJUnit4::class)
 @MediumTest
@@ -59,12 +60,14 @@ class StatisticsFragmentTest {
     @Before
     fun init() {
         // Populate @Inject fields in test class
+        // Заполнить поля @Inject в тестовом классе
         hiltRule.inject()
     }
 
     @Test
     fun tasks_showsNonEmptyMessage() {
         // Given some tasks
+        // Даны некоторые задачи
         repository.apply {
             saveTaskBlocking(Task("Title1", "Description1", false))
             saveTaskBlocking(Task("Title2", "Description2", true))
@@ -78,6 +81,7 @@ class StatisticsFragmentTest {
             .getString(R.string.statistics_completed_tasks, 50.0f)
 
         // check that both info boxes are displayed and contain the correct info
+        // убедитесь, что оба инфобокса отображаются и содержат правильную информацию
         onView(withId(R.id.stats_active_text)).check(matches(isDisplayed()))
         onView(withId(R.id.stats_active_text)).check(matches(withText(expectedActiveTaskText)))
         onView(withId(R.id.stats_completed_text)).check(matches(isDisplayed()))

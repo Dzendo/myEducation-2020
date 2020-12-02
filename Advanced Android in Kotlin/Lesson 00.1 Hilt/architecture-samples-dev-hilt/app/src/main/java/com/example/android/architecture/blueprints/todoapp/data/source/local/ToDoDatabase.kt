@@ -22,8 +22,10 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * The Room Database that contains the Task table.
+ * База данных комнат, содержащая таблицу задач.
  *
  * Note that exportSchema should be true in production databases.
+ * Обратите внимание, что схема экспорта должна быть истинной в производственных базах данных..
  */
 @Database(entities = [Task::class], version = 1, exportSchema = false)
 abstract class ToDoDatabase : RoomDatabase() {

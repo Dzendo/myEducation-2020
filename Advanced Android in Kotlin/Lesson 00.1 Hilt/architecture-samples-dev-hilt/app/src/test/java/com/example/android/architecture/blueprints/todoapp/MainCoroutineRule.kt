@@ -29,6 +29,8 @@ import kotlin.coroutines.ContinuationInterceptor
 /**
  * Sets the main coroutines dispatcher to a [TestCoroutineScope] for unit testing. A
  * [TestCoroutineScope] provides control over the execution of coroutines.
+ * Устанавливает главный диспетчер сопрограмм в область [Test Coroutine Scope] для модульного тестирования. Один
+ * [Test Coroutine Scope] обеспечивает контроль над выполнением сопрограмм.
  *
  * Declare it as a JUnit Rule:
  *

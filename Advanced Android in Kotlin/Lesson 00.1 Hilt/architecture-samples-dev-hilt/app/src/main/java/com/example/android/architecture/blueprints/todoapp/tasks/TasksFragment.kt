@@ -41,6 +41,7 @@ import timber.log.Timber
 
 /**
  * Display a grid of [Task]s. User can choose to view all, active or completed tasks.
+ * Отображение сетки [задач]. Пользователь может выбрать просмотр всех, активных или завершенных задач.
  */
 @AndroidEntryPoint
 class TasksFragment : Fragment() {
@@ -90,6 +91,7 @@ class TasksFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // Set the lifecycle owner to the lifecycle of the view
+        // Установите владельца жизненного цикла на жизненный цикл представления
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         setupSnackbar()
         setupListAdapter()

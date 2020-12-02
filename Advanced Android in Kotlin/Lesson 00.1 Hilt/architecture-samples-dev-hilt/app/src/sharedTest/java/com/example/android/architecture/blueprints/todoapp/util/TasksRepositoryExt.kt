@@ -22,6 +22,8 @@ import kotlinx.coroutines.runBlocking
 /**
  * A blocking version of TasksRepository.saveTask to minimize the number of times we have to
  * explicitly add <code>runBlocking { ... }</code> in our tests
+ * Блокирующая версия репозитория задач.сохраните задачу, чтобы свести к минимуму количество раз, когда мы должны
+ * явно добавить <код>выполнить блокирование { ... } < / code> в наших тестах
  */
 fun TasksRepository.saveTaskBlocking(task: Task) = runBlocking {
     this@saveTaskBlocking.saveTask(task)

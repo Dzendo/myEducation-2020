@@ -27,6 +27,7 @@ import kotlinx.coroutines.delay
 
 /**
  * Implementation of the data source that adds a latency simulating network.
+ * Реализация источника данных, добавляющего задержку, имитирующую сеть
  */
 object TasksRemoteDataSource : TasksDataSource {
 
@@ -69,6 +70,8 @@ object TasksRemoteDataSource : TasksDataSource {
 
     override suspend fun getTasks(): Result<List<Task>> {
         // Simulate network by delaying the execution.
+        // Имитация сети путем задержки выполнения.
+
         val tasks = TASKS_SERVICE_DATA.values.toList()
         delay(SERVICE_LATENCY_IN_MILLIS)
         return Success(tasks)
@@ -76,6 +79,7 @@ object TasksRemoteDataSource : TasksDataSource {
 
     override suspend fun getTask(taskId: String): Result<Task> {
         // Simulate network by delaying the execution.
+        // Имитация сети путем задержки выполнения.
         delay(SERVICE_LATENCY_IN_MILLIS)
         TASKS_SERVICE_DATA[taskId]?.let {
             return Success(it)
@@ -99,6 +103,7 @@ object TasksRemoteDataSource : TasksDataSource {
 
     override suspend fun completeTask(taskId: String) {
         // Not required for the remote data source
+        // Не требуется для удаленного источника данных
     }
 
     override suspend fun activateTask(task: Task) {
@@ -108,6 +113,7 @@ object TasksRemoteDataSource : TasksDataSource {
 
     override suspend fun activateTask(taskId: String) {
         // Not required for the remote data source
+        // Не требуется для удаленного источника данных
     }
 
     override suspend fun clearCompletedTasks() {

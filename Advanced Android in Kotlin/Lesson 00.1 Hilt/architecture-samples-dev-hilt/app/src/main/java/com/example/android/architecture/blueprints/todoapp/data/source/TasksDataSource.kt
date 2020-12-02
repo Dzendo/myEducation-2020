@@ -21,6 +21,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * Main entry point for accessing tasks data.
+ * Основная точка входа для доступа к данным задач.
  */
 interface TasksDataSource {
 

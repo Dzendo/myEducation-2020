@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main UI for the statistics screen.
+ * Основной пользовательский интерфейс для экрана статистики.
  */
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {

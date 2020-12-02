@@ -31,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main activity for the todoapp. Holds the Navigation Host Fragment and the Drawer, Toolbar, etc.
+ * Основная деятельность для todoapp. Содержит фрагмент Хоста навигации и ящик, панель инструментов и т. д.
  */
 @AndroidEntryPoint
 class TasksActivity : AppCompatActivity() {
@@ -68,6 +69,7 @@ class TasksActivity : AppCompatActivity() {
 }
 
 // Keys for navigation
+// Клавиши для навигации
 const val ADD_EDIT_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val DELETE_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_RESULT_OK = Activity.RESULT_FIRST_USER + 3

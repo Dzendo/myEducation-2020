@@ -30,22 +30,27 @@ import org.junit.Test
 
 /**
  * Unit tests for the implementation of [AddEditTaskViewModel].
+ * Модульные тесты для реализации [AddEditTaskViewModel].
  */
 @ExperimentalCoroutinesApi
 class AddEditTaskViewModelTest {
 
     // Subject under test
+    // Испытуемый
     private lateinit var addEditTaskViewModel: AddEditTaskViewModel
 
     // Use a fake repository to be injected into the viewmodel
+    // Использовать поддельные репозитория, чтобы быть введены в модель представления
     private lateinit var tasksRepository: FakeRepository
 
     // Set the main coroutines dispatcher for unit testing.
+    // Установите главный диспетчер сопрограмм для модульного тестирования.
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
     // Executes each task synchronously using Architecture Components.
+    // Выполняет каждую задачу синхронно с использованием компонентов архитектуры
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
@@ -54,9 +59,11 @@ class AddEditTaskViewModelTest {
     @Before
     fun setupViewModel() {
         // We initialise the repository with no tasks
+        // Мы инициализируем репозиторий без каких-либо задач
         tasksRepository = FakeRepository()
 
         // Create class under test
+        // Создать тестируемый класс
         addEditTaskViewModel = AddEditTaskViewModel(tasksRepository)
     }
 
@@ -73,6 +80,7 @@ class AddEditTaskViewModelTest {
         val newTask = tasksRepository.tasksServiceData.values.first()
 
         // Then a task is saved in the repository and the view updated
+        // Затем задача сохраняется в репозитории и представление обновляется
         assertThat(newTask.title).isEqualTo(newTitle)
         assertThat(newTask.description).isEqualTo(newDescription)
     }
@@ -80,30 +88,38 @@ class AddEditTaskViewModelTest {
     @Test
     fun loadTasks_loading() {
         // Pause dispatcher so we can verify initial values
+        // Pause dispatcher, чтобы мы могли проверить начальные значения
         mainCoroutineRule.pauseDispatcher()
 
         // Load the task in the viewmodel
+        // Загрузите задачу в viewmodel
         addEditTaskViewModel.start(task.id)
 
         // Then progress indicator is shown
+        // Затем отображается индикатор прогресса
         assertThat(addEditTaskViewModel.dataLoading.getOrAwaitValue()).isTrue()
 
         // Execute pending coroutines actions
+        // Выполнить Отложенные действия сопрограмм
         mainCoroutineRule.resumeDispatcher()
 
         // Then progress indicator is hidden
+        // Тогда индикатор прогресса будет скрыт
         assertThat(addEditTaskViewModel.dataLoading.getOrAwaitValue()).isFalse()
     }
 
     @Test
     fun loadTasks_taskShown() {
         // Add task to repository
+        // Добавить задачу в репозиторий
         tasksRepository.addTasks(task)
 
         // Load the task with the viewmodel
+        // Загрузите задачу с помощью viewmodel
         addEditTaskViewModel.start(task.id)
 
         // Verify a task is loaded
+        // Убедитесь, что задача загружена
         assertThat(addEditTaskViewModel.title.getOrAwaitValue()).isEqualTo(task.title)
         assertThat(addEditTaskViewModel.description.getOrAwaitValue()).isEqualTo(task.description)
         assertThat(addEditTaskViewModel.dataLoading.getOrAwaitValue()).isFalse()
@@ -146,9 +162,11 @@ class AddEditTaskViewModelTest {
         }
 
         // When saving an incomplete task
+        // При сохранении незавершенной задачи
         addEditTaskViewModel.saveTask()
 
         // Then the snackbar shows an error
+        // Тогда закусочная показывает ошибку
         assertSnackbarMessage(addEditTaskViewModel.snackbarText, string.empty_task_message)
     }
 }

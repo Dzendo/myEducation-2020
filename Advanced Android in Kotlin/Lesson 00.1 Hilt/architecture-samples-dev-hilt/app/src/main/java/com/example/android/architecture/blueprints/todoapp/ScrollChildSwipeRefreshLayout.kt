@@ -22,11 +22,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 /**
  * Extends [SwipeRefreshLayout] to support non-direct descendant scrolling views.
+ * Расширяет [SwipeRefreshLayout] для поддержки непрямых видов прокрутки потомков.
  *
  *
  * [SwipeRefreshLayout] works as expected when a scroll view is a direct child: it triggers
- * the refresh only when the view is on top. This class adds a way (@link #setScrollUpChild} to
- * define which view controls this behavior.
+ * the refresh only when the view is on top.
+ * This class adds a way (@link #setScrollUpChild} to define which view controls this behavior.
+ * [SwipeRefreshLayout] работает так, как ожидалось, когда вид прокрутки является прямым дочерним: он запускает
+ * обновление происходит только тогда, когда вид находится сверху.
+ * Этот класс добавляет способ (@link #setScrollUpChild}, чтобы определить, какое представление управляет этим поведением.
  */
 class ScrollChildSwipeRefreshLayout @JvmOverloads constructor(
     context: Context,

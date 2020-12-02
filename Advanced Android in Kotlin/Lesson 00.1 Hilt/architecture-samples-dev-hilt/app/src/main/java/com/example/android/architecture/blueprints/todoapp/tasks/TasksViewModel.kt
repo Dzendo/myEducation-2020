@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the task list screen.
+ * ViewModel для экрана списка задач.
  */
 class TasksViewModel @ViewModelInject constructor(
     private val tasksRepository: TasksRepository,
@@ -81,6 +82,7 @@ class TasksViewModel @ViewModelInject constructor(
     val snackbarText: LiveData<Event<Int>> = _snackbarText
 
     // Not used at the moment
+    // В данный момент не используется
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
     private val _openTaskEvent = MutableLiveData<Event<String>>()
@@ -92,18 +94,21 @@ class TasksViewModel @ViewModelInject constructor(
     private var resultMessageShown: Boolean = false
 
     // This LiveData depends on another so we can use a transformation.
+    // Эти живые данные зависят от других, поэтому мы можем использовать преобразование.
     val empty: LiveData<Boolean> = Transformations.map(_items) {
         it.isEmpty()
     }
 
     init {
         // Set initial state
+        // Установить начальное состояние
         setFiltering(getSavedFilterType())
         loadTasks(true)
     }
 
     /**
      * Sets the current task filtering type.
+     * Задает текущий тип фильтрации задач.
      *
      * @param requestType Can be [TasksFilterType.ALL_TASKS],
      * [TasksFilterType.COMPLETED_TASKS], or
@@ -113,6 +118,7 @@ class TasksViewModel @ViewModelInject constructor(
         savedStateHandle.set(TASKS_FILTER_SAVED_STATE_KEY, requestType)
 
         // Depending on the filter type, set the filtering label, icon drawables, etc.
+        // В зависимости от типа фильтра установите метку фильтрации, значок drawable и т. д.
         when (requestType) {
             ALL_TASKS -> {
                 setFilter(
@@ -134,6 +140,7 @@ class TasksViewModel @ViewModelInject constructor(
             }
         }
         // Refresh list
+        // Обновить список
         loadTasks(false)
     }
 
@@ -168,6 +175,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     /**
      * Called by the Data Binding library and the FAB's click listener.
+     * Вызывается библиотекой привязки данных и прослушивателем щелчков FAB.
      */
     fun addNewTask() {
         _newTaskEvent.value = Event(Unit)
@@ -175,6 +183,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     /**
      * Called by Data Binding.
+     * Вызывается привязкой данных..
      */
     fun openTask(taskId: String) {
         _openTaskEvent.value = Event(taskId)
@@ -196,6 +205,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     private fun filterTasks(tasksResult: Result<List<Task>>): LiveData<List<Task>> {
         // TODO: This is a good case for liveData builder. Replace when stable.
+        // TODO: это хороший случай для Live Data builder. Замените, когда он стабилен.
         val result = MutableLiveData<List<Task>>()
 
         if (tasksResult is Success) {
@@ -214,6 +224,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     /**
      * @param forceUpdate Pass in true to refresh the data in the [TasksDataSource]
+     * @param forceUpdate Pass in true для обновления данных в источнике данных [Tasks]
      */
     fun loadTasks(forceUpdate: Boolean) {
         _forceUpdate.value = forceUpdate
@@ -222,6 +233,7 @@ class TasksViewModel @ViewModelInject constructor(
     private fun filterItems(tasks: List<Task>, filteringType: TasksFilterType): List<Task> {
         val tasksToShow = ArrayList<Task>()
         // We filter the tasks based on the requestType
+        // Мы фильтруем задачи по типу запроса
         for (task in tasks) {
             when (filteringType) {
                 ALL_TASKS -> tasksToShow.add(task)
@@ -246,4 +258,5 @@ class TasksViewModel @ViewModelInject constructor(
 }
 
 // Used to save the current filtering in SavedStateHandle.
+// Используется для сохранения текущей фильтрации в дескрипторе сохраненного состояния.
 const val TASKS_FILTER_SAVED_STATE_KEY = "TASKS_FILTER_SAVED_STATE_KEY"

@@ -29,6 +29,7 @@ import javax.inject.Inject
 
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
+ * Реализация удаленного источника данных со статическим доступом к данным для удобства тестирования.
  */
 class FakeRepository @Inject constructor() : TasksRepository {
 
