@@ -202,7 +202,7 @@ class TasksActivityTest {
         // Make sure the activity is closed before resetting the db:
         activityScenario.close()
     }
-
+// fail 217
     @Test
     fun markTaskAsActiveOnDetailScreen_taskIsActiveInList() {
         // Add 1 completed task
