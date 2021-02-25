@@ -5,7 +5,7 @@ buildscript {
         version_coroutine = '1.4.2'
         version_navigation = '2.3.3'
         version_constraint_layout = '2.0.4'
-        version_gradle = '7.0.0-alpha06'
+        version_gradle = '7.0.0-alpha07'
         version_kotlin = '1.4.30'
         version_lifecycle_extensions = "2.2.0"
         version_room = '2.2.6'

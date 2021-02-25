@@ -19,7 +19,9 @@ package com.example.android.marsrealestate.network
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
+//import kotlinx.android.parcel.Parcelize
 
 // преобразовать класс в класс данных Kotlin со свойствами, которые соответствуют полям ответа JSON
 // Moshi анализирует эти данные JSON и преобразует их в объекты Kotlin.
