@@ -17,8 +17,9 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
+//import dagger.assisted.Assisted
+//import androidx.hilt.Assisted
+//import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -37,15 +38,19 @@ import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepo
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ACTIVE_TASKS
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.ALL_TASKS
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.COMPLETED_TASKS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for the task list screen.
  * ViewModel для экрана списка задач.
  */
-class TasksViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TasksViewModel @Inject constructor(
     private val tasksRepository: TasksRepository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    //@Assisted
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _forceUpdate = MutableLiveData<Boolean>(false)

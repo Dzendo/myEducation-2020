@@ -11,7 +11,7 @@
 
 -keep class com.google.common.base.Preconditions { *; }
 
--keep class androidx.room.RoomDataBase { *; }
+-keep class androidx.room.RoomDatabase { *; }
 -keep class androidx.room.Room { *; }
 -keep class android.arch.** { *; }
 

@@ -59,9 +59,15 @@ class AddEditTaskFragment : Fragment() {
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
         return viewDataBinding.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+/*
+Вызывается при создании действия фрагмента и создании экземпляра иерархии представлений этого фрагмента. Он может быть использован для окончательной инициализации, как только эти части будут на месте, например для извлечения представлений или восстановления состояния. Это также полезно для фрагментов, которые используют setRetainInstance(boolean) для сохранения своего экземпляра, поскольку этот обратный вызов сообщает фрагменту, когда он полностью связан с новым экземпляром activity. Это называется после onCreateView и перед onViewStateRestored(Bundle).
+Осуждаемый используйте onViewCreated(View, Bundle) для кода, соприкасающегося с представлением фрагмента, и onCreate(Bundle) для другой инициализации. Чтобы получить обратный вызов конкретно при вызове Фрагмента Activity.onCreate(Bundle), зарегистрируйте androidx.lifecycle.LifecycleObserver на жизненном цикле действия в onAttach(Контекст), удаляя его при получении жизненного цикла.Государство.СОЗДАН обратный вызов.
+Параметры: savedInstanceState – Если фрагмент воссоздается из предыдущего сохраненного состояния, то это и есть состояние.
+ */
+    //override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupSnackbar()
         setupNavigation()
         this.setupRefreshLayout(viewDataBinding.refreshLayout)

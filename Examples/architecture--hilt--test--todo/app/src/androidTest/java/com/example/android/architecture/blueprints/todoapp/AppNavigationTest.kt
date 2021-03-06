@@ -107,7 +107,7 @@ class AppNavigationTest {
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
-
+// сбоит один раз сначала
     @Test
     fun drawerNavigationFromTasksToStatistics() {
         // start up Tasks screen

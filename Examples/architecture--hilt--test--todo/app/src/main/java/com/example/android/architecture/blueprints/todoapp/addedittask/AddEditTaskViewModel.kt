@@ -16,7 +16,7 @@
 
 package com.example.android.architecture.blueprints.todoapp.addedittask
 
-import androidx.hilt.lifecycle.ViewModelInject
+//import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,13 +26,39 @@ import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+/*
+Идентифицирует жизненный цикл androidx.Конструктор ViewModel для инъекций.
+Похоже на javax.inject.Inject, ViewModel, содержащий конструктор, аннотированный ViewModelInject, будет иметь свои зависимости, определенные в параметрах конструктора, введенных Рукоятью кинжала. ViewModel будет доступен для создания HiltViewModelFactory и может быть извлечен по умолчанию в действии или фрагменте, аннотированном AndroidEntryPoint .
+Пример:
+публичный класс DonutViewModel расширяет ViewModel {
+@ViewModelInject
+public DonutViewModel(@Assisted SavedStateHandle handle, RecipeRepository repository) {
+// ...
+}
+}
+
+@AndroidEntryPoint
+public class CookingActivity расширяет AppCompatActivity {
+public void onCreate(Bundle savedInstanceState) {
+DonutViewModel vm = new ViewModelProvider(this).get(DonutViewModel.class);
+}
+}
+
+Только один конструктор в ViewModel должен быть аннотирован с помощью ViewModelInject. Конструктор может дополнительно определить androidx.hilt.Assisted-аннотированный androidx.lifecycle.Параметр SavedStateHandle вместе с любой другой зависимостью. SavedStateHandle не должен быть параметром типа javax.inject.Поставщик ни ленив и не должен быть квалифицированным.
+Только зависимости, доступные в ActivityRetainedComponent, могут быть введены в ViewModel.
+Осуждаемый
+Используйте HiltViewModel .
+ */
 /**
  * ViewModel for the Add/Edit screen.
  * ViewModel для экрана добавления / редактирования.
  */
-class AddEditTaskViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AddEditTaskViewModel @Inject constructor(
     private val tasksRepository: TasksRepository
 ) : ViewModel() {
 

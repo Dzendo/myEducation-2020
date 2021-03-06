@@ -24,6 +24,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingResource
+//import androidx.fragment.app.Fragment
+//import androidx.fragment.app.FragmentActivity
+//import androidx.fragment.app.testing.FragmentScenario
+//import androidx.test.core.app.ActivityScenario
+//import androidx.test.espresso.IdlingResource
 import java.util.UUID
 
 /**
@@ -117,8 +122,20 @@ fun DataBindingIdlingResource.monitorActivity(
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
  * Задает фрагмент [сценарий фрагмент] с [привязка данных IdlingResource].
  */
-fun DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
+//fragmentVersion = '1.3.0'
+//fragmentKtxVersion = '1.3.0'
+// работает с 1.2.5 а с 1.3.0 не знает it
+// не используется -- комментарю
+/*fun DataBindingIdlingResource.monitorFragment(
+    fragmentScenario: FragmentScenario<out Fragment>
+) {
     fragmentScenario.onFragment {
         this.activity = it.requireActivity()
     }
-}
+}*/
+/*
+Запускает данное действие в главном потоке текущего действия.
+Обратите внимание, что вы никогда не должны сохранять ссылку на фрагмент, переданную в ваше действие, потому что она может быть воссоздана в любое время во время переходов состояний.
+Выбрасывание исключения из действия приводит к сбою активности хоста. Вы можете проверить исключение в выходных данных logcat.
+Этот метод не может быть вызван из основного потока.
+ */

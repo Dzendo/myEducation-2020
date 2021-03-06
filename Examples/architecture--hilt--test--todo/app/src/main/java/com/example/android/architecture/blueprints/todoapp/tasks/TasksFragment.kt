@@ -87,8 +87,10 @@ class TasksFragment : Fragment() {
         inflater.inflate(R.menu.tasks_fragment_menu, menu)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    //override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //    super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Set the lifecycle owner to the lifecycle of the view
         // Установите владельца жизненного цикла на жизненный цикл представления
@@ -135,12 +137,21 @@ class TasksFragment : Fragment() {
         }
     }
 
-    private fun setupFab() {
+   /* private fun setupFab() {
         activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
             it.setOnClickListener {
                 navigateToAddNewTask()
             }
         }
+    }*/
+    private fun setupFab() {
+        viewDataBinding.addTaskFab.setOnClickListener { navigateToAddNewTask() }
+        // Исходный текст плохо работает
+        /*  activity?.findViewById<FloatingActionButton>(R.id.add_task_fab)?.let {
+            it.setOnClickListener {
+                navigateToAddNewTask()
+            }
+        }*/
     }
 
     private fun navigateToAddNewTask() {

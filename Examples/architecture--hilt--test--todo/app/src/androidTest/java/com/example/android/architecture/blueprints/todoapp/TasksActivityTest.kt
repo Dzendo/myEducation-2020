@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package com.example.android.architecture.blueprints.todoapp
-
+// сбоит 2 раза после onviewcreated
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
@@ -138,7 +138,7 @@ class TasksActivityTest {
         // Перед сбросом БД убедитесь, что действие закрыто:
         activityScenario.close()
     }
-
+// сбоит 2 раза после onviewcreated Исправил слушателя +
     @Test
     fun createOneTask_deleteTask() {
 
@@ -350,7 +350,7 @@ class TasksActivityTest {
         // Перед сбросом БД убедитесь, что действие закрыто:
         activityScenario.close()
     }
-// Fail
+// Fail // сбоит 2 раза после onviewcreated Исправил слушателя +
     @Test
     fun createTask() {
         // start up Tasks screen
