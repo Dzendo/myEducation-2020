@@ -127,11 +127,12 @@ fun DataBindingIdlingResource.monitorActivity(
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
  * Задает фрагмент из сценария [фрагмента], который будет использоваться из [Data Binding IdlingResource].
  */
+/*
 fun DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
     fragmentScenario.onFragment {
         this.activity = it.requireActivity()
     }
-}
+}*/
 
 /**
  * Здесь много чего происходит, но общая идея состоит в том,
