@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'com.mechanitis'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// jupiter; jupiter-api; jupiter-engines; jupiter-params 5.7.1
+// junit-platform-common; junit-platform-engine 1.7.1
+dependencies {
+    compile 'org.junit.jupiter:junit-jupiter:5.7.1'
+}
+// использовать платформу JUnit при запуске тестов
+test {
+    useJUnitPlatform()
+}
