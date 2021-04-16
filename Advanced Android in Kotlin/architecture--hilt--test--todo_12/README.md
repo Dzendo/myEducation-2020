@@ -6,7 +6,7 @@
 
 ### Summary
 ### Резюме
-
+https://github.com/android/architecture-samples/tree/mv/dagger_hilt_2_31
 This sample is written in Kotlin and based on the
 Этот образец написан на языке Kotlin и основан на
 [master](https://github.com/googlesamples/android-architecture/tree/master) branch which uses
