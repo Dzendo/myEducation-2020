@@ -39,12 +39,12 @@ import androidx.test.filters.MediumTest
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.di.TasksRepositoryModule
+// import com.example.android.architecture.blueprints.todoapp.di.TasksRepositoryModule
 import com.example.android.architecture.blueprints.todoapp.launchFragmentInHiltContainer
 import com.example.android.architecture.blueprints.todoapp.util.saveTaskBlocking
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
+// import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -64,7 +64,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 @ExperimentalCoroutinesApi
-@UninstallModules(TasksRepositoryModule::class)
+// @UninstallModules(TasksRepositoryModule::class)
 @HiltAndroidTest
 class TasksFragmentTest {
 
@@ -240,6 +240,7 @@ class TasksFragmentTest {
         onView(withText("TITLE2")).check(matches(isDisplayed()))
     }
 // fail Похоже не всегда успевает убрать третью задачу и в 259 строке ее находит
+    // отдельно иногда проходит иногда нет 50/50
     @Test
     fun showActiveTasks() {
         // Add 2 active tasks and one completed task

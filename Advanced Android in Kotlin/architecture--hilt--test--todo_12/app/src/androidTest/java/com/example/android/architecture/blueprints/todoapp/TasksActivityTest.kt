@@ -41,7 +41,7 @@ import com.example.android.architecture.blueprints.todoapp.util.EspressoIdlingRe
 import com.example.android.architecture.blueprints.todoapp.util.saveTaskBlocking
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
+// import dagger.hilt.android.testing.UninstallModules
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.After
@@ -62,7 +62,7 @@ import javax.inject.Inject
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@UninstallModules(TasksRepositoryModule::class)
+// @UninstallModules(TasksRepositoryModule::class)
 @HiltAndroidTest
 class TasksActivityTest {
 

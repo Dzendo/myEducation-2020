@@ -122,6 +122,7 @@ fun DataBindingIdlingResource.monitorActivity(
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
  * Задает фрагмент [сценарий фрагмент] с [привязка данных IdlingResource].
  */
+// убрано commit 2021
 //fragmentVersion = '1.3.0'
 //fragmentKtxVersion = '1.3.0'
 // работает с 1.2.5 а с 1.3.0 не знает it
