@@ -49,7 +49,7 @@ class SleepTrackerFragment : Fragment() {
      * Эта функция использует DataBindingUtil для раздувания R. layout.fragment_sleep_quality.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         // Get a reference to the binding object and inflate the fragment views.
         // Получить ссылку на объект привязки и раздуть представления фрагментов.

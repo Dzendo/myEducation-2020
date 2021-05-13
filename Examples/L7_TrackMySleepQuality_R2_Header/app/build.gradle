@@ -37,11 +37,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility(JavaVersion.VERSION_11)
+        targetCompatibility(JavaVersion.VERSION_11)
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = 11
     }
     // Enables data binding.
     buildFeatures {
@@ -57,7 +58,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$version_appcompat"
     implementation "androidx.fragment:fragment-ktx:$version_fragment"
     implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
-    // implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha04' //1.1.0'????
+    // implementation 'androidx.recyclerview:recyclerview:1.2.0' //1.1.0'????
     // Android KTX
     implementation "androidx.core:core-ktx:$version_core"
 

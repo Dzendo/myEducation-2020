@@ -33,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity
 // Мой вариант RecyclerView со стартового 7 со комметариямии версия R2 - По Udacyty стираю 10,07,2020
 // Доп вариант R2_Header (Копия) Уроки 23-26 Udacity
 
+// https://developer.android.com/codelabs/kotlin-android-training-headers/#0
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
