@@ -15,9 +15,6 @@ android {
         dataBinding  true
         viewBinding  true
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     defaultConfig {
         applicationId "com.example.android.marsrealestate"
         minSdkVersion 22

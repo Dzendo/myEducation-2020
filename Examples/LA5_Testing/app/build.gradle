@@ -13,7 +13,7 @@ plugins {
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion '30.0.3'
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         //applicationId "com.example.android.architecture.blueprints.todoapp"
@@ -60,6 +60,12 @@ android {
         returnDefaultValues = true
         // то, RuntimeException брошен не будет. Такое поведение может приводить к тяжело детектируемым ошибкам в тестах.
         // необходим для поддержания работы модульных тестов при добавлении кода ресурса простоя в код приложения.
+    }
+    packagingOptions {
+        // Multiple dependency bring these files in. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 }
 
