@@ -8,7 +8,7 @@ buildscript {
         // Версии для всех зависимостей, которые мы планируем использовать. Это особенно полезно для Котлина и
         // навигация, где версии плагина должны быть такими же, как и версии самого плагина.
         // библиотека, определенная в файле Gradle приложения
-        version_android_gradle_plugin = '7.0.0-beta02'
+        version_android_gradle_plugin = '7.1.0-alpha01'
         //version_android_gradle_plugin = '7.0.0-alpha06'
         version_core = '1.5.0'
         version_constraint_layout = '2.0.4'

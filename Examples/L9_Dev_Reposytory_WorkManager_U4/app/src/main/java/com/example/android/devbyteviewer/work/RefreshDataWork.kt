@@ -49,8 +49,9 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters) :
     // Правильно верните успех или повторите попытку:
         try {
             repository.refreshVideos( )
-            Timber.d("WorkManager: Work request for sync is run")
+            Timber.d("WorkManager: Result.success *******************Work request for sync is run****************")
         } catch (e: HttpException) {
+            Timber.d("WorkManager: Result.retry *******************Work request for sync is run****************")
             return Result.retry()
         }
 
