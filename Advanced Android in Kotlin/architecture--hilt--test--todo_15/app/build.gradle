@@ -86,6 +86,15 @@ android {
     }
 }
 
+kapt {
+    arguments {
+        // Make Hilt share the same definition of Components in tests instead of
+        // creating a new set of Components per test class.
+        arg("dagger.hilt.shareTestComponents", "true")
+    }
+}
+
+
 //hilt {
 //    enableTransformForLocalTests = true
 //}

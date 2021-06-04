@@ -62,11 +62,19 @@ android {
         // необходим для поддержания работы модульных тестов при добавлении кода ресурса простоя в код приложения.
     }
     packagingOptions {
-        // Multiple dependency bring these files in. Exclude them to enable
-        // our test APK to build (has no effect on our AARs)
+        // Multiple dependency bring these files in.
+        // Exclude them to enable our test APK to build
+        // (has no effect on our AARs)
+        // exclude "**/attach_hotspot_windows.dll"
+        //exclude "META-INF/licenses/**"
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
     }
+    /*
+    resolutionStrategy {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
+     */
 }
 
 dependencies {
@@ -106,12 +114,13 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
 
-
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
+    // conflicts with mockito due to direct inclusion of byte buddy
+    { exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug" }
 
     // AndroidX Test - Instrumented testing Инструментальное тестирование
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
