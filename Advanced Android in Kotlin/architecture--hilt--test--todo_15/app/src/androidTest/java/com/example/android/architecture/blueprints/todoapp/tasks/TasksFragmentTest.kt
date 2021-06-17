@@ -240,7 +240,7 @@ class TasksFragmentTest {
         onView(withText("TITLE2")).check(matches(isDisplayed()))
     }
 // fail Похоже не всегда успевает убрать третью задачу и в 259 строке ее находит
-    // отдельно иногда проходит иногда нет 50/50
+    // отдельно иногда проходит иногда нет 50/50 Сбоит устойчиво 17,06,2021
     @Test
     fun showActiveTasks() {
         // Add 2 active tasks and one completed task
