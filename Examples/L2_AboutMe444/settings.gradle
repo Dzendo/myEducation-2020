@@ -1,2 +1,10 @@
+// uppend for bildgradle Project to delete jcenter (gradle > 6.8)
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 include ':app'
 rootProject.name = "AboutMe"

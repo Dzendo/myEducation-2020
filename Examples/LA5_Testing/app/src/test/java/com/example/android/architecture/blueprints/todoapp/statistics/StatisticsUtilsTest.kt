@@ -150,5 +150,25 @@ class StatisticsUtilsTest{
         assertThat(result.activeTasksPercent, `is`(0f))
         assertThat(result.completedTasksPercent, `is`(0f))
     }
+    @Test
+    fun getActiveAndCompletedStats_both_returnsSixtyForty() {
+        // Given 3 completed tasks and 2 active tasks
+        // Дано 3 выполненных задания и 2 активных задания
+        val tasks = listOf(
+            Task("title1", "desc", isCompleted = false),
+            Task("title2", "desc", isCompleted = true),
+            Task("title", "desc", isCompleted = true),
+            Task("title", "desc", isCompleted = false),
+            Task("title", "desc", isCompleted = false)
+        )
+        // When the list of tasks is computed
+        // Когда вычисляется список задач
+        val result = getActiveAndCompletedStats(tasks)
+
+        // Then the result is 40-60
+        // Тогда результат будет 40-60
+        assertThat(result.activeTasksPercent, `is`(60f))
+        assertThat(result.completedTasksPercent, `is`(40f))
+    }
 
 }
