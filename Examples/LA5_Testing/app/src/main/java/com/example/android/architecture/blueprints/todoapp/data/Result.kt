@@ -23,7 +23,7 @@ package com.example.android.architecture.blueprints.todoapp.data
  * Универсальный класс, который содержит значение со своим статусом загрузки.
  * @param <T>
  *  Он используется как возвращаемое значение из источников данных и репозитория.
- *  Котлин запечатанный класс с тремя типами, что представляет состояние операции чтения / записи
+ *  Котлин запечатанный класс с тремя типами, что представляет состояние операции чтения / записи / загрузки
  *  Success, Error, and Loading
  */
 sealed class Result<out R> {
@@ -31,7 +31,7 @@ sealed class Result<out R> {
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val exception: Exception) : Result<Nothing>()
     object Loading : Result<Nothing>()
-
+// Not obligatory
     override fun toString(): String {
         return when (this) {
             is Success<*> -> "Success[data=$data]"
@@ -47,3 +47,7 @@ sealed class Result<out R> {
  */
 val Result<*>.succeeded
     get() = this is Result.Success && data != null
+// Not obligatory
+fun <T> Result<T>.successOr(fallback: T): T {
+    return (this as? Result.Success<T>)?.data ?: fallback
+}
