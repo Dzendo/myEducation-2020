@@ -24,6 +24,7 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
 /**
  * [BindingAdapter]s for the [Task]s list.
  * [Привязка адаптера]для [задачи]список С.
+ * Application namespace for attribute app:completedTask will be ignored.
  */
 @BindingAdapter("items")
 fun setItems(listView: RecyclerView, items: List<Task>?) {

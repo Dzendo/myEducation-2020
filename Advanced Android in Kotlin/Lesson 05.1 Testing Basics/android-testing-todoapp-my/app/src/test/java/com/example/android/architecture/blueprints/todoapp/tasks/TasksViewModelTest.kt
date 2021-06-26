@@ -3,6 +3,7 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 
 //import androidx.test.core.app.ApplicationProvider
 //import androidx.test.ext.junit.runners.AndroidJUnit4
+//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
