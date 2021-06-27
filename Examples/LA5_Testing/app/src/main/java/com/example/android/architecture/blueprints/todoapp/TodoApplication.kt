@@ -38,6 +38,7 @@ class TodoApplication : Application() {
     // назначьте ему репозиторий, полученный с использованием ServiceLocator.provideTaskRepository
     val taskRepository: TasksRepository
         get() = ServiceLocator.provideTasksRepository(this)
+   // val r = Result
 
     override fun onCreate() {
         super.onCreate()
