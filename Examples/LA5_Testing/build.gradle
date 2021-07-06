@@ -36,6 +36,8 @@ ext {
     targetSdkVersion = 30
     compileSdkVersion =  30  // 'android-S'
     buildToolsVersion = '30.0.3' //'31.0.0 rc4'
+    //compileSdkVersion = 'android-S'
+    //buildToolsVersion = '31.0.0 rc5'
 
     // App dependencies Зависимости приложений
     androidXVersion = '1.0.0'
