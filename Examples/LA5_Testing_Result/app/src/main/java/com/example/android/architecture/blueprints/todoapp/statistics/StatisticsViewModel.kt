@@ -49,8 +49,8 @@ class StatisticsViewModel(
     private val tasks: LiveData<Result<List<Task>>> = tasksRepository.observeTasks()
     private val _dataLoading = MutableLiveData(false)
     private val stats: LiveData<StatsResult?> = tasks.map {
-        if (it is Success) {
-            getActiveAndCompletedStats(it.data)
+        if (it.isSuccess) {
+            getActiveAndCompletedStats(it.getOrNull())
         } else {
             null
         }
@@ -60,9 +60,22 @@ class StatisticsViewModel(
         it?.activeTasksPercent ?: 0f }
     val completedTasksPercent: LiveData<Float> = stats.map { it?.completedTasksPercent ?: 0f }
     val dataLoading: LiveData<Boolean> = _dataLoading
-    val error: LiveData<Boolean> = tasks.map { it is Error }
-    val empty: LiveData<Boolean> = tasks.map { (it as? Success)?.data.isNullOrEmpty() }
+    //********************************************************* ERROR **************************
+    val error: LiveData<Boolean> = tasks.map { it.isFailure }
+    val empty: LiveData<Boolean> = tasks.map { it
+        .getOrNull()
+        .isNullOrEmpty() }
 
+
+    // val error: LiveData<Boolean> = tasks.map { it is Error }
+    // val empty: LiveData<Boolean> = tasks.map { (it as? Success)?.data.isNullOrEmpty() }
+    val truu   = MutableLiveData(true)
+    //val error: LiveData<Boolean> = truu
+    //val empty : LiveData<Boolean> = truu
+    val empty1 = empty.value
+    val empty2 = empty1
+    val error1 = error.value
+    val error2 = error1
     /**
      * Когда загружается статистика задачи, приложение отображает индикатор загрузки,
      * который исчезает, как только данные загружаются и статистические расчеты завершаются.

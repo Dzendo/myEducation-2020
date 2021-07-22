@@ -88,11 +88,11 @@ class DefaultTasksRepositoryTest {
         // testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
         // When tasks are requested from the tasks repository
         // Когда задачи запрашиваются из репозитория задач
-        val tasks = tasksRepository.getTasks(true) as Result.Success
+        val tasks = tasksRepository.getTasks(true) //as Result.Success
 
         // Then tasks are loaded from the remote data source
         // Затем задачи загружаются из удаленного источника данных
-        assertThat(tasks.data, IsEqual(remoteTasks))
+        assertThat(tasks.getOrNull(), IsEqual(remoteTasks))
     }
 }
 

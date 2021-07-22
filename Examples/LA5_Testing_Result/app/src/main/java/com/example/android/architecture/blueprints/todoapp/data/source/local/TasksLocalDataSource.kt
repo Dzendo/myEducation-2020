@@ -40,13 +40,13 @@ class TasksLocalDataSource internal constructor(
 
     override fun observeTasks(): LiveData<Result<List<Task>>> {
         return tasksDao.observeTasks().map {
-            Success(it)
+            Result.success(it)
         }
     }
 
     override fun observeTask(taskId: String): LiveData<Result<Task>> {
         return tasksDao.observeTaskById(taskId).map {
-            Success(it)
+            Result.success(it)
         }
     }
 
@@ -60,9 +60,9 @@ class TasksLocalDataSource internal constructor(
 
     override suspend fun getTasks(): Result<List<Task>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(tasksDao.getTasks())
+            Result.success(tasksDao.getTasks())
         } catch (e: Exception) {
-            Error(e)
+            Result.failure(e)
         }
     }
 
@@ -70,12 +70,12 @@ class TasksLocalDataSource internal constructor(
         try {
             val task = tasksDao.getTaskById(taskId)
             if (task != null) {
-                return@withContext Success(task)
+                return@withContext Result.success(task)
             } else {
-                return@withContext Error(Exception("Task not found!"))
+                return@withContext Result.failure(Exception("Task not found!"))
             }
         } catch (e: Exception) {
-            return@withContext Error(e)
+            return@withContext Result.failure(e)
         }
     }
 

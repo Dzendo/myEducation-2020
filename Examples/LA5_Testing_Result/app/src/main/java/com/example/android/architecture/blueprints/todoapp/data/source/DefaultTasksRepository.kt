@@ -94,7 +94,7 @@ class DefaultTasksRepository(
             try {
                 updateTasksFromRemoteDataSource()
             } catch (ex: Exception) {
-                return Result.Error(ex)
+                return Result.failure(ex)  //Result.Error(ex)
             }
         }
         return tasksLocalDataSource.getTasks()
@@ -115,15 +115,15 @@ class DefaultTasksRepository(
     private suspend fun updateTasksFromRemoteDataSource() {
         val remoteTasks = tasksRemoteDataSource.getTasks()
 
-        if (remoteTasks is Success) {
+        if (remoteTasks.isSuccess) {
             // Real apps might want to do a proper sync.
             // Реальные приложения могут захотеть сделать правильную синхронизацию.
             tasksLocalDataSource.deleteAllTasks()
-            remoteTasks.data.forEach { task ->
+            remoteTasks.getOrNull()?.forEach { task ->
                 tasksLocalDataSource.saveTask(task)
             }
-        } else if (remoteTasks is Result.Error) {
-            throw remoteTasks.exception
+        } else if (remoteTasks.isFailure) {
+            throw remoteTasks.exceptionOrNull()!! //   .exception
         }
     }
 
@@ -134,8 +134,8 @@ class DefaultTasksRepository(
     private suspend fun updateTaskFromRemoteDataSource(taskId: String) {
         val remoteTask = tasksRemoteDataSource.getTask(taskId)
 
-        if (remoteTask is Success) {
-            tasksLocalDataSource.saveTask(remoteTask.data)
+        if (remoteTask.isSuccess) {
+            tasksLocalDataSource.saveTask(remoteTask.getOrNull()!!)
         }
     }
 
@@ -166,9 +166,7 @@ class DefaultTasksRepository(
 
     override suspend fun completeTask(taskId: String) {
         withContext(ioDispatcher) {
-            (getTaskWithId(taskId) as? Success)?.let { it ->
-                completeTask(it.data)
-            }
+            getTaskWithId(taskId).getOrNull()?.let { completeTask(it) }
         }
     }
 
@@ -181,9 +179,7 @@ class DefaultTasksRepository(
 
     override suspend fun activateTask(taskId: String) {
         withContext(ioDispatcher) {
-            (getTaskWithId(taskId) as? Success)?.let { it ->
-                activateTask(it.data)
-            }
+            getTaskWithId(taskId).getOrNull()?.let { activateTask(it) }
         }
     }
 

@@ -102,8 +102,8 @@ class TaskDetailViewModel(
     }
 
     private fun computeResult(taskResult: Result<Task>): Task? {
-        return if (taskResult is Success) {
-            taskResult.data
+        return if (taskResult.isSuccess) {
+            taskResult.getOrNull()
         } else {
             showSnackbarMessage(R.string.loading_tasks_error)
             null

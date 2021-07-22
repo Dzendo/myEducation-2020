@@ -207,10 +207,10 @@ class TasksViewModel( private val tasksRepository: TasksRepository) : ViewModel(
         // TODO: это хороший случай для live Data builder. Замените, когда он стабилен.
         val result = MutableLiveData<List<Task>>()
 
-        if (tasksResult is Success) {
+        if (tasksResult.isSuccess) {
             isDataLoadingError.value = false
             viewModelScope.launch {
-                result.value = filterItems(tasksResult.data, currentFiltering)
+                result.value = filterItems(tasksResult.getOrNull()!!, currentFiltering)
             }
         } else {
             result.value = emptyList()

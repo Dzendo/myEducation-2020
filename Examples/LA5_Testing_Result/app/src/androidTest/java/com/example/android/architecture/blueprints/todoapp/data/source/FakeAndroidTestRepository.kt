@@ -50,33 +50,30 @@ package com.example.android.architecture.blueprints.todoapp.data.source
         override fun observeTask(taskId: String): LiveData<Result<Task>> {
             runBlocking { refreshTasks() }
             return observableTasks.map { tasks ->
-                when (tasks) {
-                    is Result.Loading -> Result.Loading
-                    is Error -> Error(tasks.exception)
-                    is Success -> {
-                        val task = tasks.data.firstOrNull { it.id == taskId }
-                            ?: return@map Error(Exception("Not found"))
-                        Success(task)
-                    }
+                when {
+                    tasks.isFailure -> Result.failure(tasks.exceptionOrNull()!!)
+                    tasks.isSuccess -> Result.success(tasks.getOrNull()?.firstOrNull { it.id == taskId }
+                        ?: return@map Result.failure(Exception("Not found")))
+                    else -> Result.failure(Exception("Not found"))
                 }
             }
         }
 
         override suspend fun getTask(taskId: String, forceUpdate: Boolean): Result<Task> {
             if (shouldReturnError) {
-                return Error(Exception("Test exception"))
+                return Result.failure(Exception("Test exception"))
             }
             tasksServiceData[taskId]?.let {
-                return Success(it)
+                return Result.success(it)
             }
-            return Error(Exception("Could not find task"))
+            return Result.failure(Exception("Could not find task"))
         }
 
         override suspend fun getTasks(forceUpdate: Boolean): Result<List<Task>> {
             if (shouldReturnError) {
-                return Error(Exception("Test exception"))
+                return Result.failure(Exception("Test exception"))
             }
-            return Success(tasksServiceData.values.toList())
+            return Result.success(tasksServiceData.values.toList())
         }
 
         override suspend fun saveTask(task: Task) {

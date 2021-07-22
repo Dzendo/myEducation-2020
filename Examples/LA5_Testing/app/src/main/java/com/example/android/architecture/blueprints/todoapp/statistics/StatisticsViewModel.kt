@@ -62,7 +62,10 @@ class StatisticsViewModel(
     val dataLoading: LiveData<Boolean> = _dataLoading
     val error: LiveData<Boolean> = tasks.map { it is Error }
     val empty: LiveData<Boolean> = tasks.map { (it as? Success)?.data.isNullOrEmpty() }
-
+    val empty1 = empty.value
+    val empty2 = empty1
+    val error1 = error.value
+    val error2 = error1
     /**
      * Когда загружается статистика задачи, приложение отображает индикатор загрузки,
      * который исчезает, как только данные загружаются и статистические расчеты завершаются.

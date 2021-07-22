@@ -59,14 +59,11 @@ object TasksRemoteDataSource : TasksDataSource {
 
     override fun observeTask(taskId: String): LiveData<Result<Task>> {
         return observableTasks.map { tasks ->
-            when (tasks) {
-                is Result.Loading -> Result.Loading
-                is Error -> Error(tasks.exception)
-                is Success -> {
-                    val task = tasks.data.firstOrNull { it.id == taskId }
-                        ?: return@map Error(Exception("Not found"))
-                    Success(task)
-                }
+            when {
+                tasks.isFailure -> Result.failure(tasks.exceptionOrNull()!!)
+                tasks.isSuccess -> Result.success(tasks.getOrNull()?.firstOrNull { it.id == taskId }
+                    ?: return@map Result.failure(Exception("Not found")))
+                else -> Result.failure(Exception("Not found"))
             }
         }
     }
@@ -76,7 +73,7 @@ object TasksRemoteDataSource : TasksDataSource {
         // Имитация сети путем задержки выполнения.
         val tasks = TASKS_SERVICE_DATA.values.toList()
         delay(SERVICE_LATENCY_IN_MILLIS)
-        return Success(tasks)
+        return Result.success(tasks)
     }
 
     override suspend fun getTask(taskId: String): Result<Task> {
@@ -84,9 +81,9 @@ object TasksRemoteDataSource : TasksDataSource {
         // Имитация сети путем задержки выполнения.
         delay(SERVICE_LATENCY_IN_MILLIS)
         TASKS_SERVICE_DATA[taskId]?.let {
-            return Success(it)
+            return Result.success(it)
         }
-        return Error(Exception("Task not found"))
+        return Result.failure(Exception("Task not found"))
     }
 
     private fun addTask(title: String, description: String) {

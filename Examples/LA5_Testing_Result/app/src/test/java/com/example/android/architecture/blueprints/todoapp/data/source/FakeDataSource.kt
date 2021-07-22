@@ -57,8 +57,8 @@ class FakeDataSource(var tasks: MutableList<Task>? = mutableListOf()) : TasksDat
          * Написать saveTask: добавить задачу в список.
          * Это похоже на то, как работают фактические локальные и удаленные источники данных.
          */
-        tasks?.let { return Success(ArrayList(it)) }
-        return Error(
+        tasks?.let { return Result.success(ArrayList(it)) }
+        return Result.failure(
                 Exception("Tasks not found")
         )
     }

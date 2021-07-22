@@ -22,7 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 //import com.example.android.architecture.blueprints.todoapp.data.Result.Success
-//import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.data.Task
 //import com.example.android.architecture.blueprints.todoapp.data.succeeded
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -103,11 +103,11 @@ class TasksLocalDataSourceTest {
 
         // THEN - Same task is returned
         // Утверждает, что эта задача была получена, и что все ее свойства соответствуют вставленной задаче.
-        assertThat(result.succeeded, `is`(true))
-        result as Success
-        assertThat(result.data.title, `is`("title"))
-        assertThat(result.data.description, `is`("description"))
-        assertThat(result.data.isCompleted, `is`(false))
+        assertThat(result.isSuccess, `is`(true))
+        //result as Success  ???
+        assertThat(result.getOrNull()?.title, `is`("title"))
+        assertThat(result.getOrNull()?.description, `is`("description"))
+        assertThat(result.getOrNull()?.isCompleted, `is`(false))
     }
 
     @Test
@@ -121,10 +121,10 @@ class TasksLocalDataSourceTest {
         val result = localDataSource.getTask(newTask.id)
 
         // Then the task can be retrieved from the persistent repository and is complete
-        assertThat(result.succeeded, `is`(true))
-        result as Success
-        assertThat(result.data.title, `is`(newTask.title))
-        assertThat(result.data.isCompleted, `is`(true))
+        assertThat(result.isSuccess, `is`(true))
+        // result as Success  ????
+        assertThat(result.getOrNull()?.title, `is`(newTask.title))
+        assertThat(result.getOrNull()?.isCompleted, `is`(true))
        // Единственное реальное отличие от аналогичного теста DAO состоит в том,
        // что локальный источник данных возвращает экземпляр запечатанного Result класса,
        // который является форматом, ожидаемым репозиторием.

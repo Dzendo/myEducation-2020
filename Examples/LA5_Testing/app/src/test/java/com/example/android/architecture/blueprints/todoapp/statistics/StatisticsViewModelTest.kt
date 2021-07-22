@@ -90,8 +90,15 @@ class StatisticsViewModelTest {
 
         // Then empty and error are true (which triggers an error message to be shown).
         // Тогда empty и error равны true (что вызывает отображение сообщения об ошибке).
+        val em = statisticsViewModel.empty.value
+        val emm = statisticsViewModel.empty.getOrAwaitValue()
+        val err = statisticsViewModel.error.getOrAwaitValue()
+        val ddd = emm and err
+
         assertThat(statisticsViewModel.empty.getOrAwaitValue(), `is`(true))
         assertThat(statisticsViewModel.error.getOrAwaitValue(), `is`(true))
+
+
     }
 }
 
