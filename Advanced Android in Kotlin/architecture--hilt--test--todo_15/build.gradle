@@ -12,8 +12,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-alpha03'
-        //classpath 'com.android.tools.build:gradle:7.0.0-beta04'
+        //classpath 'com.android.tools.build:gradle:7.1.0-alpha03'
+        classpath 'com.android.tools.build:gradle:7.0.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
@@ -53,10 +53,10 @@ ext {
     // Bumping minSdk to 21 to avoid adding multidex just for androidTests
     //compileSdkVersion = 'android-S' //30
     //buildToolsVersion = '31.0.0 rc5' //'30.0.3' //"31.0.0 rc2"
-    compileSdkVersion = 31
-    buildToolsVersion = '31.0.0' //"31.0.0 rc2"
+    compileSdkVersion = 30
+    buildToolsVersion = '30.0.3' //"31.0.0 rc2"
     minSdkVersion = 21
-    targetSdkVersion = 31
+    targetSdkVersion = 30
 
 
     // App dependencies
