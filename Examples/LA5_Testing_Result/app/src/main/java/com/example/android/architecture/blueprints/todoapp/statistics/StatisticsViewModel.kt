@@ -19,9 +19,6 @@ package com.example.android.architecture.blueprints.todoapp.statistics
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.architecture.blueprints.todoapp.TodoApplication
-//import com.example.android.architecture.blueprints.todoapp.data.Result
-//import com.example.android.architecture.blueprints.todoapp.data.Result.Error
-//import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
@@ -61,21 +58,14 @@ class StatisticsViewModel(
     val completedTasksPercent: LiveData<Float> = stats.map { it?.completedTasksPercent ?: 0f }
     val dataLoading: LiveData<Boolean> = _dataLoading
     //********************************************************* ERROR **************************
+    // java.lang.ClassCastException: kotlin.Result$Failure cannot be cast to kotlin.Result
+    // ошибка на котлин 1.5.21, 1.5.10
+    //нет ошибки на 1.5.30-M1
+    // getOrAwaitValue()
     val error: LiveData<Boolean> = tasks.map { it.isFailure }
     val empty: LiveData<Boolean> = tasks.map { it
         .getOrNull()
         .isNullOrEmpty() }
-
-
-    // val error: LiveData<Boolean> = tasks.map { it is Error }
-    // val empty: LiveData<Boolean> = tasks.map { (it as? Success)?.data.isNullOrEmpty() }
-    val truu   = MutableLiveData(true)
-    //val error: LiveData<Boolean> = truu
-    //val empty : LiveData<Boolean> = truu
-    val empty1 = empty.value
-    val empty2 = empty1
-    val error1 = error.value
-    val error2 = error1
     /**
      * Когда загружается статистика задачи, приложение отображает индикатор загрузки,
      * который исчезает, как только данные загружаются и статистические расчеты завершаются.

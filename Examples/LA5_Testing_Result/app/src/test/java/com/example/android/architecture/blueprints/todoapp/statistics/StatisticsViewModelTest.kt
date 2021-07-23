@@ -83,7 +83,6 @@ class StatisticsViewModelTest {
      * Затем вы можете написать тесты для этих состояний ошибки. Хорошая работа!
      */
     @Test
-    @Ignore
     fun loadStatisticsWhenTasksAreUnavailable_callErrorToDisplay() {
         // Make the repository return errors.
         // Сделайте так, чтобы репозиторий возвращал ошибки.
@@ -92,12 +91,13 @@ class StatisticsViewModelTest {
 
         // Then empty and error are true (which triggers an error message to be shown).
         // Тогда empty и error равны true (что вызывает отображение сообщения об ошибке).
-        val em = statisticsViewModel.empty.value
 
-        val err = statisticsViewModel.error.getOrAwaitValue()
-        val emm = statisticsViewModel.empty.getOrAwaitValue()
-
-        val ddd = emm and err
+        //********************************************************* ERROR **************************
+        // java.lang.ClassCastException: kotlin.Result$Failure cannot be cast to kotlin.Result
+        // ошибка на котлин 1.5.21, 1.5.10
+        //нет ошибки на 1.5.30-M1
+        // getOrAwaitValue()
+        // https://github.com/Kotlin/kotlinx.coroutines/issues/1035
 
         assertThat(statisticsViewModel.error.getOrAwaitValue(), `is`(true))
         assertThat(statisticsViewModel.empty.getOrAwaitValue(), `is`(true))
