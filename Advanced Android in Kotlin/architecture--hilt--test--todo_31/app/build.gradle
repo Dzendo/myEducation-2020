@@ -12,7 +12,6 @@ android {
     defaultConfig {
         applicationId "com.example.android.architecture.blueprints.master"
         minSdkVersion rootProject.minSdkVersion
-        //maxSdkVersion rootProject.maxSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -22,7 +21,6 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.incremental" : "true"]
-                //arguments["room.incremental"] = "true"
             }
         }
     }
@@ -78,7 +76,6 @@ android {
     kotlinOptions {
         jvmTarget = 11
     }
-    // commit 18 jan 2021
     packagingOptions {
         // Multiple dependency bring these files in. Exclude them to enable
         // our test APK to build (has no effect on our AARs)
@@ -94,12 +91,6 @@ kapt {
         arg("dagger.hilt.shareTestComponents", "true")
     }
 }
-
-
-//hilt {
-//    enableTransformForLocalTests = true
-//}
-
 
 /*
  Dependency versions are defined in the top level build.gradle file. This helps keeping track of
@@ -134,22 +125,14 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
-    // kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
-    //testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    //testImplementation "org.robolectric:android-all:11-robolectric-6757853" // 10-robolectric-5803371"
-    //testImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    //testImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
-    //testImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
-    //implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
     testImplementation "com.google.truth:truth:$truthVersion"
 
     // AndroidX Test - JVM testing
@@ -159,8 +142,6 @@ dependencies {
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
-
-    //implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // AndroidX Test - Instrumented testing
     androidTestImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
@@ -176,24 +157,10 @@ dependencies {
     // Hilt testing
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hiltVersion"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    // kaptAndroidTest "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
 
     // Dependencies for Android unit tests
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
-    // androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
 
-    // Resolve conflicts between main and test APK:
-    /*
-    androidTestImplementation "androidx.annotation:annotation:$androidXAnnotations"
-    androidTestImplementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
-    androidTestImplementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
-    androidTestImplementation "androidx.appcompat:appcompat:$appCompatVersion"
-    androidTestImplementation "com.google.android.material:material:$materialVersion"
-    */
-    // Kotlin
-    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    //implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-    //implementation 'com.github.bumptech.glide:glide:4.12.0'
 }
