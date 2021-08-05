@@ -4,16 +4,16 @@ buildscript {
     //ext.kotlinVersion = '1.4.32'
     ext.navigationVersion = '2.3.5'
     //ext.ktlintVersion = '0.41.0' //'0.38.1' // '0.33.0'
-    ext.ktlintVersion = '10.0.0' //'0.38.1' // '0.33.0'
-    ext.hiltVersion = '2.37' //'2.34.1-beta'//'2.33-beta'//'2.32-alpha'
+    ext.ktlintVersion = '10.1.0' //'0.38.1' // '0.33.0'
+    ext.hiltVersion = '2.38.1' //'2.37' //'2.34.1-beta'//'2.33-beta'//'2.32-alpha' // '2.38.1'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-alpha05'
-        //classpath 'com.android.tools.build:gradle:7.0.0-beta05'
+        classpath 'com.android.tools.build:gradle:7.1.0-alpha06'
+        //classpath 'com.android.tools.build:gradle:7.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
@@ -24,7 +24,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.spotless" version "5.12.5" //"5.10.2" //"5.8.2" //"5.2.0"
+    id "com.diffplug.spotless" version "5.14.2"//"5.12.5" //"5.10.2" //"5.8.2" //"5.2.0"
     //id "com.diffplug.gradle.spotless" version "3.24.2"
 }
 
@@ -51,13 +51,13 @@ allprojects {
 ext {
     // Sdk and tools
     // Bumping minSdk to 21 to avoid adding multidex just for androidTests
-    compileSdkVersion = 30
-    buildToolsVersion = '30.0.3' //"31.0.0 rc2"
-    //compileSdkVersion = 31
-    //buildToolsVersion = '31.0.0' //"31.0.0 rc2"
+    //compileSdkVersion = 30
+    //buildToolsVersion = '30.0.3' //"31.0.0 rc2"
+    compileSdkVersion = 31
+    buildToolsVersion = '31.0.0' //"31.0.0 rc2"
     minSdkVersion = 21
     targetSdkVersion = 30
-    maxSdkVersion=31
+    //maxSdkVersion=31
 
     // App dependencies
     androidXVersion = '1.0.0'
@@ -73,7 +73,7 @@ ext {
     coroutinesVersion = '1.5.1' //'1.5.0-RC' //"1.4.3"
     coroutinesTestVersion =  '1.5.1' //'1.5.0-RC' //'1.4.3'
     dexMakerVersion = '2.28.1'
-    espressoVersion = '3.3.0'//'3.3.0' // '3.4.0-alpha06' //'3.3.0'
+    espressoVersion = '3.4.0' //'3.3.0'//'3.3.0' // '3.4.0-alpha06' //'3.3.0'
     // https://github.com/android/architecture-samples/commit/41613083ed4c163ebb59c015c186ae8caaeeabae
     fragmentVersion = '1.3.6'
     fragmentKtxVersion = '1.3.6'

@@ -16,8 +16,9 @@
 
 package com.example.android.architecture.blueprints.todoapp.statistics
 
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
+//import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 //import org.junit.Assert.assertThat
 import org.junit.Test
