@@ -1,13 +1,8 @@
 plugins {
-    // Два первых стандрт обязательны для Котлина
     id 'com.android.application'
     id 'kotlin-android'
-    // ???
     id 'kotlin-kapt'
-    // Необходимо для класса передачи параметров в навигации проекта
     id "androidx.navigation.safeargs.kotlin"
-    // Для использования идиом (краткая запись) Котлина и Андроида для Котлина
-    //id 'kotlin-android-extensions'
     // kotlin-parcelize
 }
 
@@ -23,11 +18,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions { // зачем-то стоит в hilt testing
+            annotationProcessorOptions {
+                arguments += ["room.incremental" : "true"]
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            //  testCoverageEnabled true  // hilt
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -40,14 +42,12 @@ android {
         jvmTarget = 11
     }
     buildFeatures {
-     //  enabledForTests = true
-      // построит из xml спецклассы java см. java (generated)
+     //  enabledForTests = true  // no in Hilt
       dataBinding = true
      // viewBinding = true //будем использовать для других
     }
     dataBinding {
-     //   enabled = true
-        enabledForTests = true
+        enabledForTests = true  // no in Hilt
     }
     // Always show the result of every unit test when running via command line, even if it passes.
     // Всегда показывайте результат каждого модульного теста при запуске через командную строку, даже если он проходит.
@@ -80,9 +80,9 @@ android {
 dependencies {
     // App dependencies Зависимости приложений
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.cardview:cardview:$cardVersion"
     implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     implementation "androidx.annotation:annotation:$androidXAnnotations"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
