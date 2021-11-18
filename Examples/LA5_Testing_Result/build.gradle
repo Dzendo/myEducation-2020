@@ -1,13 +1,14 @@
 // https://developer.android.com/codelabs/advanced-android-kotlin-training-testing-basics?index=..%2F..index#3
 buildscript {
-    ext.kotlin_version = "1.5.30-M1" // '1.5.21'
+    ext.kotlin_version = "1.5.31" // '1.5.21'
+    //ext.kotlin_version = "1.6.0" // '1.5.21'
     ext.navigationVersion = "2.3.5"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:7.2.0-alpha05'
         //classpath 'com.android.tools.build:gradle:7.1.0-alpha01'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
@@ -34,13 +35,13 @@ ext {
     androidXTestCoreVersion = '1.4.0'
     androidXTestExtKotlinRunnerVersion = '1.1.3'
     androidXTestRulesVersion = '1.4.0'
-    androidXAnnotations = '1.2.0'
+    androidXAnnotations = '1.3.0'
     androidXLegacySupport = '1.0.0'
     appCompatVersion = '1.3.1'
-    archLifecycleVersion = '2.3.1'
+    archLifecycleVersion = '2.4.0'
     archTestingVersion = '2.1.0'
     cardVersion = '1.0.0'
-    coroutinesVersion = '1.5.1'
+    coroutinesVersion = '1.5.2'
     dexMakerVersion = '2.28.1'
     espressoVersion = '3.3.0' // '3.4.0' // сбоит
     fragmentVersion = '1.3.6'
@@ -48,11 +49,11 @@ ext {
     hamcrestVersion = '1.3'
     junitVersion = '4.13.2'
     materialVersion = '1.4.0'
-    mockitoVersion = '3.11.2'
+    mockitoVersion = '4.0.0'
     recyclerViewVersion = '1.2.1'
-    robolectricVersion = '4.6.1'
+    robolectricVersion = '4.7'
     roomVersion = '2.3.0'
     rulesVersion = '1.0.1'
-    timberVersion = '4.7.1'
+    timberVersion = '5.0.1'
     truthVersion = '1.1.3'
 }
