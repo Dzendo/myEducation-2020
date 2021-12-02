@@ -1,4 +1,5 @@
 // https://developer.android.com/codelabs/advanced-android-kotlin-training-testing-basics?index=..%2F..index#3
+//02122021 again
 buildscript {
     //ext.kotlin_version = "1.5.31" // '1.5.21'
     ext.kotlin_version = "1.5.32" // '1.5.21'
@@ -11,7 +12,7 @@ buildscript {
     }
     dependencies {
         //classpath 'com.android.tools.build:gradle:7.0.3'
-        //classpath 'com.android.tools.build:gradle:7.1.0-betta04'
+        //classpath 'com.android.tools.build:gradle:7.1.0-beta04'
         classpath 'com.android.tools.build:gradle:7.2.0-alpha05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
