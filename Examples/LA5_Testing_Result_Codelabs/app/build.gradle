@@ -19,11 +19,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        /*
         javaCompileOptions { // зачем-то стоит в hilt testing
             annotationProcessorOptions {
                 arguments += ["room.incremental" : "true"]
             }
         }
+        */
+        // Not Need
         externalNativeBuild {
             cmake {
                 cppFlags ''
@@ -75,13 +78,16 @@ android {
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
     }
-    externalNativeBuild {
+    // Not Need
+   /* externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
             version '3.18.1'
         }
     }
     ndkVersion '24.0.7856742 rc1'
+    */
+
     /*
     resolutionStrategy {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
@@ -92,13 +98,16 @@ android {
 dependencies {
     // App dependencies Зависимости приложений
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-    implementation "androidx.cardview:cardview:$cardVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+    // Not Need
+    // implementation "androidx.cardview:cardview:$cardVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     implementation "androidx.annotation:annotation:$androidXAnnotations"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    implementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
+    // Not Need
+    //implementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
 
     // Architecture Components
     implementation "androidx.room:room-ktx:$roomVersion"
@@ -124,7 +133,10 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+        // https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+        { exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug" }
+
 
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"

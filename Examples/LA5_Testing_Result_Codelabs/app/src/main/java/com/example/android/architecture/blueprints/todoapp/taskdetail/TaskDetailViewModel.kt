@@ -88,7 +88,7 @@ class TaskDetailViewModel(
         }
     }
 
-    fun start(taskId: String?) {
+    fun start(taskId: String) {
         // If we're already loading or already loaded, return (might be a config change)
         // Если мы уже загружаемся или уже загружены, return (может быть изменением конфигурации)
         if (_dataLoading.value == true || taskId == _taskId.value) {
@@ -96,7 +96,7 @@ class TaskDetailViewModel(
         }
         // Trigger the load
         // Запуск нагрузки
-        _taskId.value = taskId!!
+        _taskId.value = taskId
     }
 
     private fun computeResult(taskResult: Result<Task>): Task? {

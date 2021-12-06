@@ -115,6 +115,7 @@ private fun View.getBinding(): ViewDataBinding? = DataBindingUtil.getBinding(thi
  * Найдите все классы привязки во всех доступных в данный момент фрагментах.Задает действие из [сценария действия],
  * которое будет использоваться из [DataBindingIdlingResource].
  */
+/* 16.06.2021 */
 fun DataBindingIdlingResource.monitorActivity(
     activityScenario: ActivityScenario<out FragmentActivity>
 ) {
@@ -122,11 +123,16 @@ fun DataBindingIdlingResource.monitorActivity(
         this.activity = it
     }
 }
-
 /**
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
  * Задает фрагмент из сценария [фрагмента], который будет использоваться из [Data Binding IdlingResource].
  */
+fun <T : Fragment> DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<T>) {
+    fragmentScenario.onFragment {
+        this.activity = it.requireActivity()
+    }
+}
+
 // убрано commit 2021
 //fragmentVersion = '1.3.0'
 //fragmentKtxVersion = '1.3.0'
