@@ -3,7 +3,7 @@
 buildscript {
     //ext.kotlin_version = "1.5.31" // '1.5.21'
     ext.kotlin_version = "1.5.32" // '1.5.21'
-    //ext.kotlin_version = "1.6.0-RC2" // Ошибка на Gradle
+    //ext.kotlin_version = "1.6.10-RC" // Ошибка на Gradle
     //ext.kotlin_version = "1.6.0" // Ошибка на Gradle
     ext.navigationVersion = "2.3.5"  // 2.4.0-beta02 (Nov 03, 2021)
     repositories {
@@ -31,8 +31,8 @@ ext {
     // Поддержка компонентов библиотеки и архитектуры поддерживает minSdk 14 и выше.
     minSdkVersion = 21
     targetSdkVersion = 30
-    compileSdkVersion =  31
-    buildToolsVersion = '31.0.0'
+    compileSdkVersion =  32
+    buildToolsVersion = '32.0.0'
 
     // App dependencies Зависимости приложений
     androidXVersion = '1.0.0'
