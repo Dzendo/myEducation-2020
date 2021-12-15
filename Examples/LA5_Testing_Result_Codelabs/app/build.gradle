@@ -27,11 +27,11 @@ android {
         }
         */
         // Not Need
-        externalNativeBuild {
+      /*  externalNativeBuild {
             cmake {
                 cppFlags ''
             }
-        }
+        } */
     }
 
     buildTypes {
