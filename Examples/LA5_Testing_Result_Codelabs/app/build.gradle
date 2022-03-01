@@ -7,8 +7,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    compileSdk 32
+    //buildToolsVersion '33.0.0 rc1'
 
     defaultConfig {
         //applicationId "com.example.android.architecture.blueprints.todoapp"
