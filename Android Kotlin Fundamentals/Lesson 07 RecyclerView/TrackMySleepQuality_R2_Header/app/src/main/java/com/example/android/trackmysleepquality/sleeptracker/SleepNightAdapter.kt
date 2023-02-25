@@ -37,8 +37,8 @@ import kotlinx.coroutines.withContext
  */
 //23,6 Затем, чтобы выяснить, какой тип представления вернуть, добавьте проверку,
 // чтобы увидеть, какой тип элемента находится в списке:
-private val ITEM_VIEW_TYPE_HEADER = 0
-private val ITEM_VIEW_TYPE_ITEM = 1
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ITEM = 1
 
 //class SleepNightAdapter(private val clickListener: SleepNightListener):
 //    ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
@@ -70,7 +70,7 @@ class SleepNightAdapter(private val clickListener: SleepNightListener):
         when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> TextViewHolder.from(parent)
             ITEM_VIEW_TYPE_ITEM -> ViewHolder.from(parent)
-            else -> throw ClassCastException("Unknown viewType ${viewType}")
+            else -> throw ClassCastException("Unknown viewType $viewType")
         }
 
     //23,9 Вам понадобится способ конвертировать List<SleepNight>в List<DataItem>.

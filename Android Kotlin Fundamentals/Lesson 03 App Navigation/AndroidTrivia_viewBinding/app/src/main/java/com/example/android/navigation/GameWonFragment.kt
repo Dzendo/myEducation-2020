@@ -35,7 +35,7 @@ class GameWonFragment : Fragment() {
     private  val args by navArgs<GameWonFragmentArgs>()
    // val directions: NavDirections = GameWonFragmentArgs.winAction() не работает
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента
         val binding = FragmentGameWonBinding.inflate(inflater)

@@ -25,7 +25,7 @@ import com.example.android.navigation.databinding.FragmentRulesBinding
 
 class RulesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента через viewBinding
         return FragmentRulesBinding.inflate(inflater).root

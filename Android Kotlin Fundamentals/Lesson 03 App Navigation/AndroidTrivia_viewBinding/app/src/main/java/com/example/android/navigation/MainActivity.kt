@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // первый аргумент ставит navController в BAR, а второй ставит наверх бутерброд и <--
         // запретить навигационный жест, если он не включен в пункт назначения запуска
         navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, _: Bundle? ->
-            if (nd.id == nc.graph.startDestination)
+            if (nd.id == nc.graph.startDestinationId)  //    .startDestination)
                 binding.navdrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             else
                 binding.navdrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)

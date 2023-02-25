@@ -16,7 +16,7 @@ import com.example.android.navigation.databinding.FragmentTitleBinding
 class TitleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         setHasOptionsMenu(true)     // Установка меню три точки для этого фрагмента
         val binding = FragmentTitleBinding.inflate(inflater)  // viewBinding = true без layout
         binding.playButton.setOnClickListener { view: View ->

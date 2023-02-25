@@ -27,7 +27,7 @@ class AboutFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента через viewBinding
         return FragmentAboutBinding.inflate(inflater).root

@@ -69,7 +69,7 @@ class GameFragment : Fragment() {
     private val numQuestions = min((questions.size + 1) / 2, 3)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         // Inflate the layout for this fragment
         // Раздуть макет для этого фрагмента
