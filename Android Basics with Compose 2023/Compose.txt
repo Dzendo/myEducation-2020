@@ -1,0 +1,25 @@
+По кабелю Разрешить лтладку по кабелю USB в разработчику
+По WiFi Фтвкщшв 11 - Разрешить лтладку по кабелю WiFi в разработчику
+Ввести SSID network и BSSID wifi adress
+Выбрать в Device сопряжение по WiFi
+Сканировать код
+
+Имена функций Comose пишутся с Большой буквы и аннотируются:
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    GreetingCardTheme {
+        Greeting("Android")
+    }
+}
+
+DefaultPreview()функция - отличная функция, которая позволяет вам увидеть, как выглядит ваше приложение,
+ без необходимости создавать все приложение целиком.
+ Для того, чтобы быть функцией предварительного просмотра, вам необходимо добавить @Preview аннотацию.
+(showBackground = true) фон для предварительного просмотра

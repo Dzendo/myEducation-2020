@@ -1,0 +1,14 @@
+
+https://developer.android.com/studio/?gclid=Cj0KCQiAjJOQBhCkARIsAEKMtO3zEhdK4_I0CEZic3UH4dl-9gVXuHFR9dCl3TOHKjmv3xWLU3UxfhYaApfAEALw_wcB&gclsrc=aw.ds
+
+8 ГБ оперативной памяти или более
+
+Если вы столкнулись с какими-либо техническими трудностями при выполнении шагов по установке, обратитесь к руководству по устранению неполадок.
+https://developer.android.com/studio/troubleshoot
+
+Узнать больше
+Словарь для основ Android на Kotlin https://developer.android.com/courses/android-basics-kotlin/android-basics-kotlin-vocab
+Загрузите Android Studio https://developer.android.com/studio/
+Установите Android Studio https://developer.android.com/studio/install
+Познакомьтесь с Android Studio https://developer.android.com/studio/intro
+

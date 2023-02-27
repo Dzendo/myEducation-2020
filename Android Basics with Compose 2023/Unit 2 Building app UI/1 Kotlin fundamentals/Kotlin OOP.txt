@@ -1,0 +1,401 @@
+Краткие сведения
+Существует четыре основных принципа ООП: инкапсуляция, абстракция, наследование и полиморфизм.
+Классы определяются с помощью class ключевое слово и содержит свойства и методы.
+Свойства аналогичны переменным, за исключением того, что свойства могут иметь пользовательские методы получения и установки.
+Конструктор указывает, как создавать экземпляры объектов класса.
+Вы можете опустить constructor ключевое слово при определении основного конструктора.
+Наследование упрощает повторное использование кода.
+Отношение IS-A относится к наследованию.
+Отношение HAS-A относится к композиции.
+Модификаторы видимости играют важную роль в достижении инкапсуляции.
+Kotlin предоставляет четыре модификатора видимости: public, privateprotected, , и internal модификаторы.
+Делегат свойств позволяет повторно использовать код получения и установки в нескольких классах.
+
+
+ООП помогает упростить сложные задачи реального мира до более мелких объектов. Существует четыре основных понятия ООП, о каждом из которых вы узнаете подробнее позже в этой codelab:
+
+Инкапсуляция. Переносит связанные свойства и методы, которые выполняют действие над этими свойствами в классе. Например, рассмотрим ваш мобильный телефон. Он инкапсулирует камеру, дисплей, карты памяти и несколько других аппаратных и программных компонентов. Вам не нужно беспокоиться о том, как компоненты подключены внутри.
+Абстракция. Расширение для инкапсуляции. Идея состоит в том, чтобы максимально скрыть внутреннюю логику реализации. Например, чтобы сделать снимок с помощью мобильного телефона, все, что вам нужно сделать, это открыть приложение "Камера", навести телефон на сцену, которую вы хотите запечатлеть, и нажать кнопку, чтобы сделать снимок. Вам не нужно знать, как построено приложение камеры или как на самом деле работает оборудование камеры на вашем мобильном телефоне. Короче говоря, внутренняя механика приложения камеры и то, как мобильная камера делает снимки, абстрагированы, чтобы вы могли выполнять важные задачи.
+Наследование. Позволяет создавать класс на основе характеристик и поведения других классов путем установления отношений родитель-потомок. Например, существуют разные производители, которые выпускают различные мобильные устройства под управлением ОС Android, но пользовательский интерфейс для каждого из устройств отличается. Другими словами, производители наследуют функцию ОС Android и создают свои настройки поверх нее.
+Полиморфизм.Слово является адаптацией греческого корня poly-, что означает много, и -морфизм, что означает формы. Полиморфизм - это способность использовать разные объекты одним общим способом. Например, когда вы подключаете динамик Bluetooth к своему мобильному телефону, телефону нужно только знать, что есть устройство, которое может воспроизводить звук по Bluetooth. Тем не менее, существует множество динамиков Bluetooth, которые вы можете выбрать, и вашему телефону не нужно знать, как работать с каждым из них конкретно.
+
+Наконец, вы узнаете о делегатах свойств, которые предоставляют повторно используемый код для управления значениями свойств с помощью краткого синтаксиса. В этой кодовой лаборатории вы изучаете эти концепции при создании структуры классов для приложения для умного дома.
+
+Имя класса записывается в PascalCase
+Класс состоит из трех основных частей:
+Свойства. Переменные, которые определяют атрибуты объектов класса.
+Методы. Функции, которые содержат поведение и действия класса.
+Конструкторы. Специальная функция-член, которая создает экземпляры класса во всей программе, в которой он определен.
+
+class SmartDevice {
+
+    fun turnOn(){
+        println("Smart device is turned on.")
+    }
+
+    fun turnOff(){
+        println("Smart device is turned off.")
+    }
+}
+fun main() {
+    val smartTvDevice = SmartDevice()
+    smartTvDevice.turnOn()
+    smartTvDevice.turnOff()
+}
+
+class SmartDevice {
+
+    val name = "Android TV"
+    val category = "Entertainment"
+    var deviceStatus = "online"
+
+    fun turnOn(){
+        println("Smart device is turned on.")
+    }
+
+    fun turnOff(){
+        println("Smart device is turned off.")
+    }
+}
+fun main(){
+    val smartTvDevice = SmartDevice()
+    println("Device name is: ${smartTvDevice.name}")
+    smartTvDevice.turnOn()
+    smartTvDevice.turnOff()
+}
+
+var speakerVolume = 2
+    get() = field  
+    set(value) {
+        field = value    
+    }
+
+var speakerVolume = 2
+    set(value) {
+        if (value in 0..100) {
+            field = value
+        }
+    }
+
+class SmartDevice(val name: String, val category: String) {
+    var deviceStatus = "online"
+
+    constructor(name: String, category: String, statusCode: Int) : this(name, category) {
+        deviceStatus = when (statusCode) {
+            0 -> "offline"
+            1 -> "online"
+            else -> "unknown"
+        }
+    }
+    ...
+}
+
+class SmartTvDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {
+}
+Kotlin предоставляет четыре модификатора видимости:
+
+public. Модификатор видимости по умолчанию. Делает объявление доступным везде. Свойства и методы, которые вы хотите использовать вне класса, помечаются как общедоступные.
+private. Делает объявление доступным в том же классе или исходном файле.
+Вероятно, есть некоторые свойства и методы, которые используются только внутри класса, и вы не обязательно хотите, чтобы другие классы использовали их. Эти свойства и методы могут быть помечены private модификатор видимости, чтобы гарантировать, что другой класс не сможет случайно получить к ним доступ.
+
+protected. Делает объявление доступным в подклассах. Свойства и методы, которые вы хотите использовать в классе, который их определяет, и подклассах, помечены символом protected модификатор видимости.
+internal. Делает объявление доступным в том же модуле. Модификатор internal похож на private, но вы можете получить доступ к внутренним свойствам и методам извне класса, если доступ к нему осуществляется в том же модуле.
+Примечание: модуль это набор исходных файлов и параметров сборки, которые позволяют разделить ваш проект на отдельные функциональные единицы. Ваш проект может иметь один или несколько модулей. Вы можете независимо создавать, тестировать и отлаживать каждый модуль.
+
+Пакет по сути, это каталог или папка, в которой группируются связанные классы, тогда как модуль предоставляет контейнер для исходного кода вашего приложения, файлов ресурсов и настроек на уровне приложения. Модуль может содержать несколько пакетов.
+
+Когда вы определяете класс, он становится общедоступным и может быть доступен любому импортирующему его пакету, что означает, что он общедоступен по умолчанию, если вы не укажете модификатор видимости. Аналогично, когда вы определяете или объявляете свойства и методы в классе, по умолчанию к ним можно получить доступ за пределами класса через объект класса. Важно определить надлежащую видимость кода, в первую очередь для скрытия свойств и методов, доступ к которым другим классам не требуется.
+
+Например, рассмотрим, как сделать автомобиль доступным для водителя. Особенности того, из каких частей состоит автомобиль и как он работает внутри, по умолчанию скрыты. Предполагается, что автомобиль будет максимально интуитивно понятен в управлении. Вы не хотели бы, чтобы автомобиль был таким же сложным в эксплуатации, как коммерческий самолет, подобно тому, как вы не хотели бы, чтобы другой разработчик или вы сами в будущем были сбиты с толку относительно того, какие свойства и методы класса предназначены для использования.
+
+Модификаторы видимости помогают вам отображать соответствующие части кода в других классах вашего проекта и гарантировать, что реализация не может быть использована непреднамеренно, что делает код простым для понимания и менее подверженным ошибкам.
+
+Модификатор видимости следует размещать перед синтаксисом объявления при объявлении класса, метода или свойств, как вы можете видеть на этой диаграмме:
+
+d5f4f2af7b2136f1.png
+
+Укажите модификатор видимости для свойств
+Синтаксис для указания модификатора видимости для свойства начинается с private, protected, или internal модификатор, за которым следует синтаксис, определяющий свойство. Вы можете увидеть синтаксис на этой диаграмме:
+
+222cb4dc24ea76b1.png
+
+Например, вы можете увидеть, как сделать deviceStatus свойство private в этом фрагменте кода:
+
+open class SmartDevice(val name: String, val category: String) {
+
+    ...
+    private var deviceStatus = "online"
+      
+    ...
+}
+Вы также можете установить модификаторы видимости для функций настройки. Модификатор помещается перед set ключевое слово. Вы можете увидеть синтаксис на этой диаграмме:
+
+7c5f42f49271b19e.png
+
+Примечание: Если модификатор видимости для функции получения не совпадает с модификатором видимости для свойства, компилятор сообщает об ошибке.
+
+Для SmartDevice класс, значение deviceStatus свойство должно быть доступно для чтения за пределами класса через объекты класса. Однако только класс и его дочерние элементы должны иметь возможность обновлять или записывать значение. Для реализации этого требования необходимо использовать protected модификатор на set() функция deviceStatus свойство.
+
+Используйте protected модификатор на set() функция deviceStatus свойство:
+
+В SmartDevice суперклассы deviceStatus свойство, добавьте protected модификатор для set() функция:
+open class SmartDevice(val name: String, val category: String) {
+
+    ...
+    var deviceStatus = "online"
+        protected set(value){
+           field = value
+       }
+      
+    ...
+}
+Вы не выполняете никаких действий или проверок в set() функция. Вы просто присваиваете value параметр для field переменная. Как вы узнали ранее, это похоже на реализацию по умолчанию для установщиков свойств. Вы можете опустить круглые скобки и тело set() функция в этом случае:
+
+open class SmartDevice(val name: String, val category: String) {
+
+    ...
+    var deviceStatus = "online"
+        protected set      
+    ...
+}
+В SmartHome подкласс, определить deviceTurnOnCount свойство, установленное в 0 значение с помощью частной функции установки:
+class SmartHome(
+    val smartTvDevice: SmartTvDevice,
+    val smartLightDevice: SmartLightDevice
+) {
+
+    var deviceTurnOnCount = 0
+        private set
+    
+    ...
+}
+Добавьте deviceTurnOnCount свойство, за которым следует ++ арифметический оператор для turnOnTv(), turnOnLight() методы, а затем добавьте deviceTurnOnCount свойство, за которым следует -- арифметический оператор для turnOffTv() и turnOffLight():
+class SmartHome(
+    val smartTvDevice: SmartTvDevice,
+    val smartLightDevice: SmartLightDevice
+) {
+
+    var deviceTurnOnCount = 0
+        private set
+
+    fun turnOnTv() {
+        deviceTurnOnCount++
+        smartTvDevice.turnOn()
+    }
+
+    fun turnOffTv() {
+        deviceTurnOnCount--
+        smartTvDevice.turnOff()
+    }
+    
+    ...
+
+    fun turnOnLight() {
+        deviceTurnOnCount++
+        smartLightDevice.turnOn()
+    }
+
+    fun turnOffLight() {
+        deviceTurnOnCount--
+        smartLightDevice.turnOff()
+    }
+
+    ...
+
+}
+Kotlin предоставляет четыре модификатора видимости:
+
+public. Модификатор видимости по умолчанию. Делает объявление доступным везде. Свойства и методы, которые вы хотите использовать вне класса, помечаются как общедоступные.
+private. Делает объявление доступным в том же классе или исходном файле.
+Вероятно, есть некоторые свойства и методы, которые используются только внутри класса, и вы не обязательно хотите, чтобы другие классы использовали их. Эти свойства и методы могут быть помечены private модификатор видимости, чтобы гарантировать, что другой класс не сможет случайно получить к ним доступ.
+
+protected. Делает объявление доступным в подклассах. Свойства и методы, которые вы хотите использовать в классе, который их определяет, и подклассах, помечены символом protected модификатор видимости.
+internal. Делает объявление доступным в том же модуле. Модификатор internal похож на private, но вы можете получить доступ к внутренним свойствам и методам извне класса, если доступ к нему осуществляется в том же модуле.
+
+9. Определение делегатов свойств
+var brightnessLevel by RangeRegulator(initialValue = 2, minValue = 0, maxValue = 100)
+
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+open class SmartDevice(val name: String, val category: String) {
+
+    var deviceStatus = "online"
+        protected set
+
+    open val deviceType: String = "unknown"
+
+    open fun turnOn() {
+        deviceStatus = "on"
+    }
+
+    open fun turnOff() {
+        deviceStatus = "off"
+    }
+}
+
+class SmartTvDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {
+
+    override val deviceType: String = "Smart TV"
+
+    private var speakerVolume by RangeRegulator(initialValue = 2, minValue = 0, maxValue = 100)
+    private var channelNumber by RangeRegulator(initialValue = 1, minValue = 0, maxValue = 200)
+
+    override fun turnOn() {
+        super.turnOn()
+        println(
+            "$name is turned on. Speaker volume set to $speakerVolume and channel number is " +
+                "set to $channelNumber."
+        )
+    }
+
+    override fun turnOff() {
+        super.turnOff()
+        println("$name turned off")
+    }
+
+    fun increaseSpeakerVolume() {
+        speakerVolume++
+        println("Speaker volume increased to $speakerVolume.")
+    }
+
+    fun nextChannel() {
+        channelNumber++
+        println("Channel number increased to $channelNumber.")
+    }
+}
+
+class SmartLightDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {
+
+    override val deviceType: String = "Smart Light"
+    private var brightnessLevel by RangeRegulator(initialValue = 2, minValue = 0, maxValue = 100)
+
+    override fun turnOn() {
+        super.turnOn()
+        brightnessLevel = 2
+        println("$name is turned on. The brightness level is $brightnessLevel.")
+    }
+
+    override fun turnOff() {
+        super.turnOff()
+        brightnessLevel = 0
+        println("$name turned off")
+    }
+
+    fun increaseBrightness() {
+        brightnessLevel++
+        println("Brightness increased to $brightnessLevel.")
+    }
+}
+
+class SmartHome(val smartTvDevice: SmartTvDevice, val smartLightDevice: SmartLightDevice) {
+
+    var deviceTurnOnCount = 0
+        private set
+
+    fun turnOnTv() {
+        deviceTurnOnCount++
+        smartTvDevice.turnOn()
+    }
+
+    fun turnOffTv() {
+        deviceTurnOnCount--
+        smartTvDevice.turnOff()
+    }
+
+    fun increaseTvVolume() {
+        smartTvDevice.increaseSpeakerVolume()
+    }
+
+    fun changeTvChannelToNext() {
+        smartTvDevice.nextChannel()
+    }
+
+    fun turnOnLight() {
+        deviceTurnOnCount++
+        smartLightDevice.turnOn()
+    }
+
+    fun turnOffLight() {
+        deviceTurnOnCount--
+        smartLightDevice.turnOff()
+    }
+
+    fun increaseLightBrightness() {
+        smartLightDevice.increaseBrightness()
+    }
+
+    fun turnOffAllDevices() {
+        turnOffTv()
+        turnOffLight()
+    }
+}
+
+class RangeRegulator(
+    initialValue: Int,
+    private val minValue: Int,
+    private val maxValue: Int
+) : ReadWriteProperty<Any?, Int> {
+
+    private var fieldData = initialValue
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): Int {
+        return fieldData
+    }
+
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) {
+        if (value in minValue..maxValue) {
+            fieldData = value
+        }
+    }
+}
+
+fun main() {
+    val smartHome = SmartHome(
+        SmartTvDevice(deviceName = "Android TV", deviceCategory = "Entertainment"),
+        SmartLightDevice(deviceName = "Google light", deviceCategory = "Utility")
+    )
+
+    smartHome.turnOnTv()
+    smartHome.turnOnLight()
+    println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}")
+    println()
+
+    smartHome.increaseTvVolume()
+    smartHome.changeTvChannelToNext()
+    smartHome.increaseLightBrightness()
+    println()
+
+    smartHome.turnOffAllDevices()
+    println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}.")
+}
+
+Android TV is turned on. Speaker volume set to 2 and channel number is set to 1.
+Google light is turned on. The brightness level is 2.
+Total number of devices currently turned on: 2
+
+Speaker volume increased to 3.
+Channel number increased to 2.
+Brightness increased to 3.
+
+Android TV turned off
+Google light turned off
+Total number of devices currently turned on: 0.
+
+11. Попробуйте эту задачу
+В SmartDevice класс, определите printDeviceInfo() метод, который печатает "Device name: $name, category: $category, type: $deviceType" строка.
+В SmartTvDevice класс, определите decreaseVolume() метод, который уменьшает объем и previousChannel() метод, который переходит к предыдущему каналу.
+В SmartLightDevice класс, определите decreaseBrightness() метод, который уменьшает яркость.
+В SmartHome класс, убедитесь, что все действия могут быть выполнены только при deviceStatus свойство устанавливается в "on" строка. Кроме того, убедитесь, что deviceTurnOnCount свойство обновляется правильно.
+После того, как вы закончите с реализацией:
+
+В SmartHome класс, определите decreaseTvVolume(), changeTvChannelToPrevious(), printSmartTvInfo(), printSmartLightInfo(), и decreaseLightBrightness() метод.
+Вызовите соответствующие методы из SmartTvDevice и SmartLightDevice классы в SmartHome класс.
+В main() функция, вызовите эти добавленные методы, чтобы протестировать их.
+
+
+
+

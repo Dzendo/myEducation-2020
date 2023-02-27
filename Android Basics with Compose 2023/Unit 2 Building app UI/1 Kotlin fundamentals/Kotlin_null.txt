@@ -1,0 +1,31 @@
+
+Краткие сведения
+Переменной можно присвоить nullзначение, чтобы указать, что она не имеет значения.
+Ненулевые переменные не могут быть назначены .null
+Могут быть назначены обнуляемые переменные null.
+Чтобы получить доступ к методам или свойствам обнуляемых переменных, вам необходимо использовать ?.операторы безопасного вызова или операторы !!ненулевого утверждения.
+Вы можете использовать if/elseинструкции с nullпроверками для доступа к обнуляемым переменным в ненулевых контекстах.
+Вы можете преобразовать обнуляемую переменную в ненулевой тип с if/elseпомощью выражений.
+Вы можете указать значение по умолчанию для случаев, когда обнуляемая переменная nullимеет if/elseвыражение или оператор ?:Elvis.
+
+fun main() {
+    var number: Int? = 10
+    println(number)
+    
+    number = null
+    println(number)
+}
+
+fun main() {
+    var favoriteActor: String? = null
+    println(favoriteActor?.length)
+}
+
+fun main() {
+    val favoriteActor: String? = "Sandra Oh"
+
+    val lengthOfName = favoriteActor?.length ?: 0
+
+    println("The number of characters in your favorite actor's name is $lengthOfName.")
+}
+

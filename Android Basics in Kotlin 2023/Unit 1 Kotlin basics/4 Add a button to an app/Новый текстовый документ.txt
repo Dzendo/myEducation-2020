@@ -1,0 +1,103 @@
+Classes and object instances in Kotlin
+https://developer.android.com/codelabs/basic-android-kotlin-training-create-dice-roller-in-kotlin?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-four%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-create-dice-roller-in-kotlin#1
+
+https://github.com/google-developer-training/android-basics-kotlin-create-dice-roller-with-button-app-solution.git
+
+https://github.com/google-developer-training/android-basics-kotlin-dice-roller-with-images-app-solution
+
+fun main() {
+    val diceRange = 1..6
+    val randomNumber = diceRange.random()
+    println("Random number: ${randomNumber}")
+}
+
+fun main() {
+    val myFirstDice = Dice()
+    println(myFirstDice.sides)
+}
+
+class Dice {
+    var sides = 6
+}
+
+fun main() {
+    val myFirstDice = Dice()
+    println(myFirstDice.sides)
+    myFirstDice.roll()
+}
+
+class Dice {
+    var sides = 6
+
+    fun roll() {
+        val randomNumber = (1..6).random()
+        println(randomNumber)
+    }
+}
+
+fun main() {
+    val myFirstDice = Dice()
+    val diceRoll = myFirstDice.roll()
+    println("Your ${myFirstDice.sides} sided dice rolled ${diceRoll}!")
+}
+
+
+class Dice {
+    var sides = 6
+
+    fun roll(): Int {
+        val randomNumber = (1..6).random()
+        return randomNumber
+    }
+}
+
+fun main() {
+   
+    val myFirstDice = Dice()
+    val diceRoll = myFirstDice.roll()
+    println("Your ${myFirstDice.sides} sided dice rolled ${diceRoll}!")
+
+    myFirstDice.sides = 20
+    println("Your ${myFirstDice.sides} sided dice rolled ${myFirstDice.roll()}!")
+}
+
+class Dice {
+    var sides = 6
+
+    fun roll(): Int {
+        val randomNumber = (1..sides).random()
+        return randomNumber
+    }
+}
+
+fun main() {
+    val myFirstDice = Dice(6)
+    val diceRoll = myFirstDice.roll()
+    println("Your ${myFirstDice.numSides} sided dice rolled ${diceRoll}!")
+    
+    val mySecondDice = Dice(20)
+    println("Your ${mySecondDice.numSides} sided dice rolled ${mySecondDice.roll()}!")
+}
+
+class Dice (val numSides: Int) {
+
+    fun roll(): Int {
+        val randomNumber = (1..numSides).random()
+        return randomNumber
+    }
+}
+
+fun main() {
+    val myFirstDice = Dice(6)
+    println("Your ${myFirstDice.numSides} sided dice rolled ${myFirstDice.roll()}!")
+    
+    val mySecondDice = Dice(20)
+    println("Your ${mySecondDice.numSides} sided dice rolled ${mySecondDice.roll()}!")
+}
+
+class Dice (val numSides: Int) {
+
+    fun roll(): Int {
+        return (1..numSides).random()
+    }
+}

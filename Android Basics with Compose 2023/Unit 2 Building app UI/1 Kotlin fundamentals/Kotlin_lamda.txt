@@ -1,0 +1,200 @@
+Краткие сведения
+Функции в Kotlin являются первоклассными конструкциями и могут обрабатываться как типы данных.
+Лямбда-выражения предоставляют сокращенный синтаксис для записи функций.
+Вы можете передавать типы функций в другие функции.
+Вы можете возвращать тип функции из другой функции.
+Лямбда-выражение возвращает значение последнего выражения.
+Если метка параметра опущена в лямбда-выражении с одним параметром, на него ссылаются с itидентификатором.
+Лямбды могут быть записаны в строке без имени переменной.
+Если последний параметр функции является типом функции, вы можете использовать завершающий синтаксис лямбда-выражения для перемещения лямбда-выражения после последней круглой скобки при вызове функции.
+Функции более высокого порядка - это функции, которые принимают другие функции в качестве параметров или возвращают функцию.
+Функция repeat()- это функция более высокого порядка, которая работает аналогично forциклу.
+
+fun main() {
+     val trickFunction = trick
+    trick()
+    trickFunction()
+ treat()
+}
+
+val trick= {
+    println("No treats!")
+}
+
+(Int, Int) -> Int
+
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+No treats!
+No treats!
+Have a treat!
+
+Используйте функцию в качестве возвращаемого типа
+fun main() {
+     val treatFunction = trickOrTreat(false)
+    val trickFunction = trickOrTreat(true)
+        treatFunction()
+    trickFunction()
+}
+
+fun trickOrTreat(isTrick: Boolean): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        return treat
+    }
+}
+
+val trick= {
+    println("No treats!")
+}
+
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+Have a treat!
+No treats!
+
+Передайте функцию другой функции в качестве аргумента
+fun main() {
+    val coins: (Int) -> String = { quantity ->
+        "$quantity quarters"
+    }
+     val treatFunction = trickOrTreat(false, coins)
+    val trickFunction = trickOrTreat(true, coins)
+        treatFunction()
+    trickFunction()
+}
+
+fun trickOrTreat(isTrick: Boolean, extraTreat: (Int) -> String): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        println(extraTreat(5))
+        return treat
+    }
+}
+
+val trick= {
+    println("No treats!")
+}
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+5 quarters
+Have a treat!
+No treats!
+
+fun main() {
+    val coins: (Int) -> String = { quantity ->
+        "$quantity quarters"
+    }
+     val treatFunction = trickOrTreat(false, coins)
+    val trickFunction = trickOrTreat(true, coins)
+        treatFunction()
+    trickFunction()
+    val trickFunction1 = trickOrTreat(true, null)
+    trickFunction1()
+}
+
+fun trickOrTreat(isTrick: Boolean, extraTreat: ((Int) -> String)?): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        if (extraTreat != null) {
+            println(extraTreat(5))
+        }
+        return treat
+    }
+}
+
+val trick= {
+    println("No treats!")
+}
+
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+5 quarters
+Have a treat!
+No treats!
+No treats
+
+5. Пишите лямбда-выражения с сокращенным синтаксисом
+
+fun main() {
+
+     val treatFunction = trickOrTreat(false) { "$it quarters" }
+    val trickFunction = trickOrTreat(true) { "$it quarters" }
+        treatFunction()
+    trickFunction()
+    val trickFunction1 = trickOrTreat(true, null)
+    trickFunction1()
+}
+
+fun trickOrTreat(isTrick: Boolean, extraTreat: ((Int) -> String)?): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        if (extraTreat != null) {
+            println(extraTreat(5))
+        }
+        return treat
+    }
+}
+
+val trick= {
+    println("No treats!")
+}
+
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+5 quarters
+Have a treat!
+No treats!
+No treats!
+
+fun main() {
+
+     val treatFunction = trickOrTreat(false) { "$it quarters" }
+    val trickFunction = trickOrTreat(true) { "$it quarters" }
+       repeat(4) {
+        treatFunction()
+    }
+    trickFunction()
+    val trickFunction1 = trickOrTreat(true, null)
+    trickFunction1()
+}
+
+fun trickOrTreat(isTrick: Boolean, extraTreat: ((Int) -> String)?): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        if (extraTreat != null) {
+            println(extraTreat(5))
+        }
+        return treat
+    }
+}
+
+val trick= {
+    println("No treats!")
+}
+
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+5 quarters
+Have a treat!
+Have a treat!
+Have a treat!
+Have a treat!
+No treats!
+No treats!
+
+
+
+
+
