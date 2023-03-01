@@ -1,0 +1,277 @@
+Краткие сведения
+Массивы хранят упорядоченные данные одного и того же типа и имеют фиксированный размер.
+Массивы используются для реализации многих других типов коллекций.
+Списки представляют собой упорядоченную коллекцию с возможностью изменения размера.
+Наборы представляют собой неупорядоченные коллекции и не могут содержать дубликатов.
+Карты работают аналогично наборам и хранят пары ключей и значений указанного типа.
+
+Как создавать и изменять массивы.
+Как использовать Listи MutableList.
+Как использовать Setи MutableSet.
+Как использовать Mapи MutableMap.
+
+fun main() {
+    val rockPlanets = arrayOf<String>("Mercury", "Venus", "Earth", "Mars")
+    val gasPlanets = arrayOf("Jupiter", "Saturn", "Uranus", "Neptune")
+    val solarSystem = rockPlanets + gasPlanets
+    solarSystem.forEach { println(it) }
+}
+
+fun main() {
+    val rockPlanets = arrayOf<String>("Mercury", "Venus", "Earth", "Mars")
+    val gasPlanets = arrayOf("Jupiter", "Saturn", "Uranus", "Neptune")
+    val solarSystem = rockPlanets + gasPlanets
+    println(solarSystem[0])
+    println(solarSystem[1])
+    println(solarSystem[2])
+    println(solarSystem[3])
+    println(solarSystem[4])
+    println(solarSystem[5])
+    println(solarSystem[6])
+    println(solarSystem[7])
+}
+"C:\Program Files\Java\jdk-18.0.1.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\lib\idea_rt.jar=61102:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ASDze\IdeaProjects\untitled\build\classes\kotlin\main;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\1.8.0\1796921c7a3e2e2665a83e6c8d33399336cd39bc\kotlin-stdlib-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-common\1.8.0\f7197e7cc76453ac59f8b0f8d5137cc600becd36\kotlin-stdlib-common-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar MainKt
+Mercury
+Venus
+Earth
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+
+Process finished with exit code 0
+
+
+fun main() {
+    val rockPlanets = arrayOf<String>("Mercury", "Venus", "Earth", "Mars")
+    val gasPlanets = arrayOf("Jupiter", "Saturn", "Uranus", "Neptune")
+    val solarSystem = rockPlanets + gasPlanets
+    solarSystem[3] = "Little Earth"
+    println(solarSystem[0])
+    println(solarSystem[1])
+    println(solarSystem[2])
+    println(solarSystem[3])
+    println(solarSystem[4])
+    println(solarSystem[5])
+    println(solarSystem[6])
+    println(solarSystem[7])
+    val newSolarSystem = arrayOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto")
+    println(newSolarSystem[8])
+
+}
+"C:\Program Files\Java\jdk-18.0.1.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\lib\idea_rt.jar=61396:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ASDze\IdeaProjects\untitled\build\classes\kotlin\main;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\1.8.0\1796921c7a3e2e2665a83e6c8d33399336cd39bc\kotlin-stdlib-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-common\1.8.0\f7197e7cc76453ac59f8b0f8d5137cc600becd36\kotlin-stdlib-common-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar MainKt
+Mercury
+Venus
+Earth
+Little Earth
+Jupiter
+Saturn
+Uranus
+Neptune
+Pluto
+
+Process finished with exit code 0
+fun main() {
+    val solarSystem = listOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    println(solarSystem.size)
+    println(solarSystem)
+}
+8
+[Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune]
+
+println(solarSystem.indexOf("Pluto"))
+
+fun main() {
+    val solarSystem = listOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    println(solarSystem.size)
+    println(solarSystem)
+    println(solarSystem.indexOf("Earth"))
+    println(solarSystem.indexOf("Pluto"))
+}
+8
+[Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune]
+2
+-1
+fun main() {
+    val solarSystem = listOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    println(solarSystem.size)
+    println(solarSystem)
+    println(solarSystem.indexOf("Earth"))
+    println(solarSystem.indexOf("Pluto"))
+    for (planet in solarSystem) {
+        println(planet)
+    }
+}
+
+8
+[Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune]
+2
+-1
+Mercury
+Venus
+Earth
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+Возможность добавлять, удалять и обновлять элементы в коллекции доступна исключительно классам, реализующим MutableListинтерфейс
+
+fun main() {
+    val solarSystem = mutableListOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    solarSystem.add("Pluto")
+    solarSystem.add(3, "Theia")
+    solarSystem[2] = "Future Moon"
+    println(solarSystem.size)
+    println(solarSystem)
+    println(solarSystem.indexOf("Earth"))
+    println(solarSystem.indexOf("Pluto"))
+    for (planet in solarSystem) {
+        println(planet)
+    }
+}
+10
+[Mercury, Venus, Future Moon, Theia, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto]
+-1
+9
+Mercury
+Venus
+Future Moon
+Theia
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+Pluto
+
+fun main() {
+    val solarSystem = mutableListOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    solarSystem.add("Pluto")
+    solarSystem.add(3, "Theia")
+    solarSystem[2] = "Future Moon"
+    println(solarSystem.size)
+    println(solarSystem)
+    println(solarSystem.indexOf("Earth"))
+    println(solarSystem.indexOf("Pluto"))
+    solarSystem.removeAt(9)
+    for (planet in solarSystem) {
+        println(planet)
+    }
+    println("Future Moon" in solarSystem)
+}
+
+"C:\Program Files\Java\jdk-18.0.1.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\lib\idea_rt.jar=62927:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ASDze\IdeaProjects\untitled\build\classes\kotlin\main;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\1.8.0\1796921c7a3e2e2665a83e6c8d33399336cd39bc\kotlin-stdlib-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-common\1.8.0\f7197e7cc76453ac59f8b0f8d5137cc600becd36\kotlin-stdlib-common-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar MainKt
+10
+[Mercury, Venus, Future Moon, Theia, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto]
+-1
+9
+Mercury
+Venus
+Future Moon
+Theia
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+true
+
+Process finished with exit code 0
+
+Set перевод Набор
+Секрет - это хэш-код. Хэш-код Int- это код, созданный hashCode()методом любого класса Kotlin
+fun main() {
+    val solarSystem = mutableSetOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    println(solarSystem.size)
+    solarSystem.add("Pluto")
+    println(solarSystem.size)
+    solarSystem.add("Pluto")
+    println(solarSystem.size)
+    println(solarSystem.contains("Pluto"))
+}
+8
+9
+9
+true
+fun main() {
+    val solarSystem = mutableSetOf("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    println(solarSystem.size)
+    solarSystem.add("Pluto")
+    println(solarSystem.size)
+    solarSystem.add("Pluto")
+    println(solarSystem.size)
+    solarSystem.remove("Pluto")
+    println(solarSystem.size)
+    println(solarSystem.contains("Pluto"))
+}
+8
+9
+9
+8
+false
+
+5. Коллекция карт
+A Map- это коллекция, состоящая из ключей и значений. 
+fun main() {
+    val solarSystem = mutableMapOf(
+        "Mercury" to 0,
+        "Venus" to 0,
+        "Earth" to 1,
+        "Mars" to 2,
+        "Jupiter" to 79,
+        "Saturn" to 82,
+        "Uranus" to 27,
+        "Neptune" to 14
+    )
+    println(solarSystem.size)
+    solarSystem["Pluto"] = 5
+    println(solarSystem.size)
+    println(solarSystem["Pluto"])
+    println(solarSystem["Theia"])
+}
+8
+9
+5
+null
+
+fun main() {
+    val solarSystem = mutableMapOf(
+        "Mercury" to 0,
+        "Venus" to 0,
+        "Earth" to 1,
+        "Mars" to 2,
+        "Jupiter" to 79,
+        "Saturn" to 82,
+        "Uranus" to 27,
+        "Neptune" to 14
+    )
+    println(solarSystem.size)
+    solarSystem["Pluto"] = 5
+    println(solarSystem.size)
+    println(solarSystem["Pluto"])
+    println(solarSystem["Theia"])
+    solarSystem.remove("Pluto")
+    println(solarSystem.size)
+    solarSystem["Jupiter"] = 78
+    println(solarSystem["Jupiter"])
+}
+
+8
+9
+5
+null
+8
+78
+
+
+
+
+
+
+
+
+
+
+

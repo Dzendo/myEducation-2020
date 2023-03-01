@@ -1,0 +1,52 @@
+
+
+domain пакет: содержит dataклассы для представления данных приложения.
+ Например, DevByteVideoкласс данных в domain/Models.ktклассе представляет одно DevByte видео.
+ Здесь просто два Data класса Слово и Значение?? c усеченным представлением??
+
+network пакет:  DataTransferObjects.kt 
+ Класс содержит класс данных для вызываемого объекта передачи данных NetworkVideo.
+ Объект передачи данных используется для анализа сетевого результата.
+ Этот файл также содержит удобный метод, asDomainModel(),
+ для преобразования сетевых результатов в список объектов домена.
+ Объекты передачи данных отличаются от объектов домена,
+ поскольку они содержат дополнительную логику для анализа сетевых результатов.
+ Sky - @Parcelize
+ Dev - @JsonClass(generateAdapter = true)
+  Здесь 2 data класса с доп полем:
+	- data class NetworkVideo(   с доп полем
+	- data class NetworkVideoContainer(val videos: List<NetworkVideo>) 
+    и доп функции:(первая не используется)
+  - fun NetworkVideoContainer.asDomainModel(): List<Video> Преобразования сети к объектам базы данных
+  - fun NetworkVideoContainer.asDatabaseModel(): Array<DatabaseVideo>
+network/Service.kt - извлекает список devbytesвоспроизведения из сети.		
+
+DevByteViewModel - хранятся в виде LiveDataобъектов
+
+DevByteFragment - содержит a RecyclerViewдля отображения списка видео и наблюдателей для LiveDataобъектов
+
+/**
+https://ru.stackoverflow.com/questions/824816/%D0%9A%D0%B0%D0%BA-%D0%BF%D0%BE%D0%BC%D0%B5%D1%81%D1%82%D0%B8%D1%82%D1%8C-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9-json-%D0%B2-room-sql
+ * @Database(entities = {Data.class}, version = 1, exportSchema = false)
+ * @TypeConverters(Data.class) // <---- Это главная строчка в этом классе
+ * public abstract class MyDataBase extends RoomDatabase {
+ *
+ * public abstract DataDao getDataDao();
+ *
+ * Entity(tableName = "data")
+ *
+ * @TypeConverter
+ * fun toJSON(data: Data): String {
+ *     return Gson().toJson(data)
+ * }
+ *
+ * @TypeConverter
+ * fun fromJSON(str: String): Data {
+ *     return Gson().fromJson(str, Data::class.java)
+ * }
+ */
+/**
+
+@Embedded - записывать плоскую таблицу м.б 
+
+

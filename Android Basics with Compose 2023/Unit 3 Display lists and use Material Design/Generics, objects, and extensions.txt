@@ -1,0 +1,421 @@
+9. Краткие сведения
+У вас только что появилась возможность увидеть несколько новых функций Kotlin в действии. Обобщения позволяют передавать типы данных в качестве параметров классам, перечисляемые классы определяют ограниченный набор возможных значений, а классы данных помогают автоматически генерировать некоторые полезные методы для классов.
+Вы также видели, как создать одноэлементный объект, который ограничен одним экземпляром, как сделать его сопутствующим объектом другого класса и как расширить существующие классы с помощью новых свойств, доступных только для получения, и новых методов. Наконец, вы видели несколько примеров того, как функции области видимости могут обеспечить более простой синтаксис при доступе к свойствам и методам.
+Вы увидите эти концепции в последующих разделах, когда узнаете больше о Kotlin, разработке Android и Compose. Теперь вы лучше понимаете, как они работают и как они могут улучшить повторное использование и читаемость вашего кода.
+
+
+class FillInTheBlankQuestion(
+    val questionText: String,
+    val answer: String,
+    val difficulty: String
+)
+
+class TrueOrFalseQuestion(
+    val questionText: String,
+    val answer: Boolean,
+    val difficulty: String
+)
+class NumericQuestion(
+    val questionText: String,
+    val answer: Int,
+    val difficulty: String
+)
+
+class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: String
+)
+fun main() {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", "medium")
+    val question2 = Question<Boolean>("The sky is green. True or false", false, "easy")
+    val question3 = Question<Int>("How many days are there between full moons?", 28, "hard")
+}
+
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+fun main() {
+val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+  println(question1.toString())
+}
+Question@49c2faae
+
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+Question(questionText=Quoth the raven ___, answer=nevermore, difficulty=MEDIUM)
+
+
+data class не может быть abstract, open, sealed, или inner
+ реализует:
+equals()
+hashCode(): вы увидите этот метод при работе с определенными типами коллекций.
+toString()
+componentN(): component1(), component2(), и т.д.
+copy()
+
+Определите одноэлементный объект
+object StudentProgress {
+    var total: Int = 10
+    var answered: Int = 3
+}
+fun main() {
+    ...
+    println("${StudentProgress.answered} of ${StudentProgress.total} answered.")
+}
+
+class Quiz {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+fun main() {
+    println("${Quiz.answered} of ${Quiz.total} answered.")
+}
+
+
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+fun main() {
+    println("${Quiz.answered} of ${Quiz.total} answered.")
+}
+
+3 of 10 answered.
+
+6. Расширяйте классы с помощью новых свойств и методов
+val Quiz.StudentProgress.progressText: String
+    get() = "${answered} of ${total} answered"
+
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+ val Quiz.StudentProgress.progressText: String
+    get() = "${answered} of ${total} answered"
+fun main() {
+   
+    println(Quiz.progressText)
+}
+3 of 10 answered
+
+Добавление функции расширения
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+ val Quiz.StudentProgress.progressText: String
+    get() = "${answered} of ${total} answered"
+
+fun Quiz.StudentProgress.printProgressBar() {
+    repeat(Quiz.answered) { print("▓") }
+    repeat(Quiz.total - Quiz.answered) { print("▒") }
+    println()
+    println(Quiz.progressText)
+}
+fun main() {
+   
+    println(Quiz.progressText)
+    Quiz.printProgressBar()
+}
+3 of 10 answered
+▓▓▓▒▒▒▒▒▒▒
+3 of 10 answered
+
+7. Переписать функции расширения с использованием интерфейсов
+
+interface ProgressPrintable {
+    val progressText: String
+     fun printProgressBar()
+}
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz: ProgressPrintable {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+    override val progressText: String
+            get() = "${answered} of ${total} answered"
+    override fun printProgressBar() {
+    repeat(Quiz.answered) { print("▓") }
+    repeat(Quiz.total - Quiz.answered) { print("▒") }
+    println()
+    println(progressText)
+}
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+
+fun main() {
+   
+   Quiz().printProgressBar()
+}
+▓▓▓▒▒▒▒▒▒▒
+3 of 10 answered
+
+Внедрение зависимостей вручную. Создайте интерфейс, определяющий все свойства и методы зависимости. Требуется интерфейс в качестве типа данных зависимости (activity, test case и т. Д.), Чтобы можно было использовать экземпляр любого класса, реализующего интерфейс. Это позволяет вам менять базовые реализации.
+Издевательство над автоматизированными тестами. Как макет класса, так и реальный класс соответствуют одному и тому же интерфейсу.
+Доступ к тем же зависимостям в мультиплатформенном приложении Compose. Например, создайте интерфейс, который предоставляет общий набор свойств и методов для Android и Desktop, даже если базовая реализация отличается для каждой платформы.
+Несколько типов данных в Compose, таких как Modifier, являются интерфейсами. Это позволяет добавлять новые модификаторы без необходимости доступа или изменения базового исходного кода.
+
+8. Используйте функции области видимости для доступа к свойствам и методам класса
+
+Устраните повторяющиеся ссылки на объекты с помощью функций области видимости
+Замените длинные имена объектов с помощью let()
+fun printQuiz() {
+    println(question1.questionText)
+    println(question1.answer)
+    println(question1.difficulty)
+    println()
+    println(question2.questionText)
+    println(question2.answer)
+    println(question2.difficulty)
+    println()
+    println(question3.questionText)
+    println(question3.answer)
+    println(question3.difficulty)
+    println()
+}
+fun printQuiz() {
+    question1.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+    question2.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+    question3.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+}
+
+
+Не работает:
+
+interface ProgressPrintable {
+    val progressText: String
+     fun printProgressBar()
+}
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz: ProgressPrintable {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+    override val progressText: String
+            get() = "${answered} of ${total} answered"
+    override fun printProgressBar() {
+    repeat(Quiz.answered) { print("▓") }
+    repeat(Quiz.total - Quiz.answered) { print("▒") }
+    println()
+    println(progressText)
+    fun printQuiz() {
+    question1.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+    question2.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+    question3.let {
+        println(it.questionText)
+        println(it.answer)
+        println(it.difficulty)
+    }
+    println()
+}
+}
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+
+fun main() {
+   
+   Quiz.printProgressBar()
+    val quiz = Quiz()
+    quiz.printQuiz()
+}
+
+
+Intell:
+interface ProgressPrintable {
+    val progressText: String
+    fun printProgressBar()
+}
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+class Quiz: ProgressPrintable {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+    override val progressText: String
+        get() = "${answered} of ${total} answered"
+    override fun printProgressBar() {
+        repeat(Quiz.answered) { print("▓") }
+        repeat(Quiz.total - Quiz.answered) { print("▒") }
+        println()
+        println(progressText)
+    }
+        fun printQuiz() {
+            question1.let {
+                println(it.questionText)
+                println(it.answer)
+                println(it.difficulty)
+            }
+            println()
+            question2.let {
+                println(it.questionText)
+                println(it.answer)
+                println(it.difficulty)
+            }
+            println()
+            question3.let {
+                println(it.questionText)
+                println(it.answer)
+                println(it.difficulty)
+            }
+            println()
+        }
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+}
+
+fun main() {
+   // Quiz.printProgressBar()
+    val quiz = Quiz()
+    quiz.printQuiz()
+    quiz.printProgressBar()
+}
+"C:\Program Files\Java\jdk-18.0.1.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\lib\idea_rt.jar=59055:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ASDze\IdeaProjects\untitled\build\classes\kotlin\main;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\1.8.0\1796921c7a3e2e2665a83e6c8d33399336cd39bc\kotlin-stdlib-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-common\1.8.0\f7197e7cc76453ac59f8b0f8d5137cc600becd36\kotlin-stdlib-common-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar MainKt
+Quoth the raven ___
+nevermore
+MEDIUM
+
+The sky is green. True or false
+false
+EASY
+
+How many days are there between full moons?
+28
+HARD
+
+▓▓▓▒▒▒▒▒▒▒
+3 of 10 answered
+
+Process finished with exit code 0
+
+fun main() {
+   // Quiz.printProgressBar()
+    val quiz = Quiz().apply {
+        printQuiz()
+    }
+    quiz.printProgressBar()
+}
+fun main() {
+   // Quiz.printProgressBar()
+    Quiz().apply {
+        printQuiz()
+    }
+    Quiz().apply {printProgressBar()}
+}
+
+
+
+
+

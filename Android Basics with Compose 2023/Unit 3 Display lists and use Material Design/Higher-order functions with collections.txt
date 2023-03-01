@@ -1,0 +1,195 @@
+Функции более высокого порядка с коллекциями
+включая forEach(), map(), filter(), groupBy(), fold(), и sortedBy()
+
+Краткие сведения
+Вы можете перебирать каждый элемент в коллекции, используя forEach().
+Выражения могут быть вставлены в строки.
+map() используется для форматирования элементов в коллекции, часто как коллекции другого типа данных.
+filter() может генерировать подмножество коллекции.
+groupBy() разбивает коллекцию на основе возвращаемого значения функции.
+fold() превращает коллекцию в одно значение.
+sortedBy() используется для сортировки коллекции по указанному свойству.
+
+class Cookie(
+    val name: String,
+    val softBaked: Boolean,
+    val hasFilling: Boolean,
+    val price: Double
+)
+val cookies = listOf(
+    Cookie(
+        name = "Chocolate chip",
+        softBaked = false,
+        hasFilling = false,
+        price = 1.69
+    ),
+    Cookie(
+        name = "Banana Walnut",
+        softBaked = true,
+        hasFilling = false,
+        price = 1.49
+    ),
+    Cookie(
+        name = "Vanilla Creme",
+        softBaked = false,
+        hasFilling = true,
+        price = 1.59
+    ),
+    Cookie(
+        name = "Chocolate Peanut Butter",
+        softBaked = false,
+        hasFilling = true,
+        price = 1.49
+    ),
+    Cookie(
+        name = "Snickerdoodle",
+        softBaked = true,
+        hasFilling = false,
+        price = 1.39
+    ),
+    Cookie(
+        name = "Blueberry Tart",
+        softBaked = true,
+        hasFilling = true,
+        price = 1.79
+    ),
+    Cookie(
+        name = "Sugar and Sprinkles",
+        softBaked = false,
+        hasFilling = false,
+        price = 1.39
+    )
+)
+
+fun main() {
+    cookies.forEach {
+        println("Menu item: $it.name")
+    }
+}
+Menu item: Chocolate chip
+Menu item: Banana Walnut
+Menu item: Vanilla Creme
+Menu item: Chocolate Peanut Butter
+Menu item: Snickerdoodle
+Menu item: Blueberry Tart
+Menu item: Sugar and Sprinkles
+
+3. map() map()Функция позволяет преобразовать коллекцию в новую коллекцию с тем же количеством элементов.
+
+fun main() {
+    val fullMenu = cookies.map {
+        "${it.name} - $${it.price}"
+    }
+    println("Full menu:")
+    fullMenu.forEach {
+        println(it)}
+}
+Full menu:
+Chocolate chip - $1.69
+Banana Walnut - $1.49
+Vanilla Creme - $1.59
+Chocolate Peanut Butter - $1.49
+Snickerdoodle - $1.39
+Blueberry Tart - $1.79
+Sugar and Sprinkles - $1.39
+
+4. фильтр() filter()Функция позволяет создавать подмножество коллекции
+
+fun main() {
+    val softBakedMenu = cookies.filter {
+        it.softBaked
+    }
+    println("Soft cookies:")
+    softBakedMenu.forEach {
+        println("${it.name} - $${it.price}")
+    }
+}
+Soft cookies:
+Banana Walnut - $1.49
+Snickerdoodle - $1.39
+Blueberry Tart - $1.79
+
+5. groupBy() groupBy()Функция может использоваться для преобразования списка в карту на основе функции.
+ Каждое уникальное возвращаемое значение функции становится ключом в результирующей карте.
+ Значениями для каждого ключа являются все элементы в коллекции,
+ которые создали это уникальное возвращаемое значение.
+fun main() {
+    val groupedMenu = cookies.groupBy { it.softBaked }
+    val softBakedMenu = groupedMenu[true] ?: listOf()
+    val crunchyMenu = groupedMenu[false] ?: listOf()
+    println("Soft cookies:")
+    softBakedMenu.forEach {
+        println("${it.name} - $${it.price}")
+    }
+    println("Crunchy cookies:")
+    crunchyMenu.forEach {
+        println("${it.name} - $${it.price}")
+    }
+
+}
+Soft cookies:
+Banana Walnut - $1.49
+Snickerdoodle - $1.39
+Blueberry Tart - $1.79
+Crunchy cookies:
+Chocolate chip - $1.69
+Vanilla Creme - $1.59
+Chocolate Peanut Butter - $1.49
+Sugar and Sprinkles - $1.39
+
+6. fold()  fold()Функция используется для генерации одного значения из коллекции
+ Это чаще всего используется для таких вещей, как вычисление общего количества цен
+ или суммирование всех элементов в списке для нахождения среднего значения.
+fold()Функция принимает два параметра:
+
+Начальное значение. Тип данных выводится при вызове функции (то есть, начальное значение 0выводится как an Int).
+Лямбда-выражение, которое возвращает значение того же типа, что и начальное значение.
+Лямбда-выражение дополнительно имеет два параметра:
+
+Первый известен как накопитель. Он имеет тот же тип данных, что и начальное значение. Думайте об этом как о текущей сумме. Каждый раз, когда вызывается лямбда-выражение, накопитель равен возвращаемому значению из предыдущего раза, когда вызывался лямбда-выражение.
+Второй имеет тот же тип, что и каждый элемент в коллекции.
+fun main() {
+    val totalPrice = cookies.fold(0.0) {total, cookie ->
+        total + cookie.price
+    }
+    println("Total price: $${totalPrice}")
+}
+Total price: $10.83
+
+Примечание:fold() иногда вызывается reduce(). fold()
+Функция в Kotlin работает так же, как reduce()функция, найденная в JavaScript, Swift, Python и т.д.
+ Обратите внимание, что Kotlin также имеет свою собственную вызываемую функциюreduce(),
+ где накопитель начинается с первого элемента в коллекции,
+ а не с начального значения, переданного в качестве аргумента.
+
+7. sortedBy()
+Когда вы впервые узнали о коллекциях, вы узнали, что sort()функция может использоваться для сортировки элементов.
+ Однако это не будет работать с коллекцией Cookieобъектов.
+ CookieКласс имеет несколько свойств, и Kotlin не будет знать,
+ по каким свойствам (name, price, и т.д.) вы хотите отсортировать.
+
+fun main() {
+    val alphabeticalMenu = cookies.sortedBy {
+        it.name
+    }
+    println("Alphabetical menu:")
+    alphabeticalMenu.forEach {
+        println(it.name)
+    }
+}
+Alphabetical menu:
+Banana Walnut
+Blueberry Tart
+Chocolate Peanut Butter
+Chocolate chip
+Snickerdoodle
+Sugar and Sprinkles
+Vanilla Creme
+
+
+
+
+
+
+
+

@@ -1,0 +1,213 @@
+ть
+Практика: классы и коллекции
+
+data class Event(
+    val title: String,
+    val description: String? = null,
+    val daypart: String,
+    val durationInMinutes: Int,
+)
+fun main() {
+    println(Event(title="Study Kotlin", description="Commit to studying Kotlin at least 15 minutes per day.", daypart="Evening", durationInMinutes=15))
+}
+Event(title=Study Kotlin, description=Commit to studying Kotlin at least 15 minutes per day., daypart=Evening, durationInMinutes=15)
+
+enum class Daypart {
+    MORNING,
+    AFTERNOON,
+    EVENING,
+}
+data class Event(
+    val title: String,
+    val description: String? = null,
+    val daypart: Daypart,
+    val durationInMinutes: Int,
+)
+fun main() {
+    println(Event(title="Study Kotlin",
+        description="Commit to studying Kotlin at least 15 minutes per day.",
+        daypart=Daypart.EVENING, durationInMinutes=15))
+}
+
+Event(title=Study Kotlin, description=Commit to studying Kotlin at least 15 minutes per day., daypart=EVENING, durationInMinutes=15)
+
+Задача 3
+val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+
+val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+
+fun main() {
+    val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+    val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+    val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+    val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+    val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+    val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+    val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+   events.forEach { println(it.toString()) }
+}
+Event(title=Wake up, description=Time to get up, daypart=MORNING, durationInMinutes=0)
+Event(title=Eat breakfast, description=null, daypart=MORNING, durationInMinutes=15)
+Event(title=Learn about Kotlin, description=null, daypart=AFTERNOON, durationInMinutes=30)
+Event(title=Practice Compose, description=null, daypart=AFTERNOON, durationInMinutes=60)
+Event(title=Watch latest DevBytes video, description=null, daypart=AFTERNOON, durationInMinutes=10)
+Event(title=Check out latest Android Jetpack library, description=null, daypart=EVENING, durationInMinutes=45)
+
+Задание 4
+
+fun main() {
+    val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+    val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+    val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+    val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+    val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+    val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+    val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+    events.forEach { println(it.toString()) }
+    events.filter { it.durationInMinutes < 60 }.forEach {println("" + it.durationInMinutes + " " + it.title) }
+val shortEvents = events.filter { it.durationInMinutes < 60 }
+    println("You have ${shortEvents.size} short events.")
+}
+Event(title=Wake up, description=Time to get up, daypart=MORNING, durationInMinutes=0)
+Event(title=Eat breakfast, description=null, daypart=MORNING, durationInMinutes=15)
+Event(title=Learn about Kotlin, description=null, daypart=AFTERNOON, durationInMinutes=30)
+Event(title=Practice Compose, description=null, daypart=AFTERNOON, durationInMinutes=60)
+Event(title=Watch latest DevBytes video, description=null, daypart=AFTERNOON, durationInMinutes=10)
+Event(title=Check out latest Android Jetpack library, description=null, daypart=EVENING, durationInMinutes=45)
+0 Wake up
+15 Eat breakfast
+30 Learn about Kotlin
+10 Watch latest DevBytes video
+45 Check out latest Android Jetpack library
+You have 5 short events.
+
+Задание 5
+fun main() {
+    val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+    val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+    val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+    val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+    val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+    val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+    val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+    events.forEach { println(it.toString()) }
+    // 4
+    events.filter { it.durationInMinutes < 60 }.forEach {println("" + it.durationInMinutes + " " + it.title) }
+    val shortEvents = events.filter { it.durationInMinutes < 60 }
+    println("You have ${shortEvents.size} short events.")
+    // 5
+    val groupedEvents = events.groupBy { it.daypart }
+    groupedEvents.forEach { (daypart, events) ->
+        println("$daypart: ${events.size} events")
+    }
+}
+Event(title=Wake up, description=Time to get up, daypart=MORNING, durationInMinutes=0)
+Event(title=Eat breakfast, description=null, daypart=MORNING, durationInMinutes=15)
+Event(title=Learn about Kotlin, description=null, daypart=AFTERNOON, durationInMinutes=30)
+Event(title=Practice Compose, description=null, daypart=AFTERNOON, durationInMinutes=60)
+Event(title=Watch latest DevBytes video, description=null, daypart=AFTERNOON, durationInMinutes=10)
+Event(title=Check out latest Android Jetpack library, description=null, daypart=EVENING, durationInMinutes=45)
+0 Wake up
+15 Eat breakfast
+30 Learn about Kotlin
+10 Watch latest DevBytes video
+45 Check out latest Android Jetpack library
+You have 5 short events.
+MORNING: 2 events
+AFTERNOON: 3 events
+EVENING: 1 events
+
+Задание 6
+	println("Last event of the day: ${events[events.size - 1].title}")
+	println("Last event of the day: ${events.last().title}")
+Last event of the day: Check out latest Android Jetpack library
+Last event of the day: Check out latest Android Jetpack library
+
+
+enum class Daypart {
+    MORNING,
+    AFTERNOON,
+    EVENING,
+}
+data class Event(
+    val title: String,
+    val description: String? = null,
+    val daypart: Daypart,
+    val durationInMinutes: Int,
+)
+fun main() {
+    val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+    val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+    val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+    val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+    val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+    val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+    val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+    events.forEach { println(it.toString()) }
+    // 4
+    events.filter { it.durationInMinutes < 60 }.forEach {println("" + it.durationInMinutes + " " + it.title) }
+    val shortEvents = events.filter { it.durationInMinutes < 60 }
+    println("You have ${shortEvents.size} short events.")
+    // 5
+    val groupedEvents = events.groupBy { it.daypart }
+    groupedEvents.forEach { (daypart, events) ->
+        println("$daypart: ${events.size} events")
+    }
+// Задание 6
+    println("Last event of the day: ${events[events.size - 1].title}")
+    println("Last event of the day: ${events.last().title}")
+// Задача 7
+    val durationOfEvent1 = if (events[0].durationInMinutes < 60) {
+        "short"
+    } else {
+        "long"
+    }
+    println("Duration of first event of the day: $durationOfEvent1")
+
+   /* val Event.durationOfEvent: String
+        get() = if (this.durationInMinutes < 60) {
+        "short"
+    } else {
+        "long"
+    }
+    println("Duration of first event of the day: ${events[0].durationOfEvent}")
+*/
+}
+
+"C:\Program Files\Java\jdk-18.0.1.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\lib\idea_rt.jar=56964:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 231.4840.387\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\ASDze\IdeaProjects\untitled\build\classes\kotlin\main;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\1.8.0\1796921c7a3e2e2665a83e6c8d33399336cd39bc\kotlin-stdlib-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-common\1.8.0\f7197e7cc76453ac59f8b0f8d5137cc600becd36\kotlin-stdlib-common-1.8.0.jar;N:\_AndroidGradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar MainKt
+Event(title=Wake up, description=Time to get up, daypart=MORNING, durationInMinutes=0)
+Event(title=Eat breakfast, description=null, daypart=MORNING, durationInMinutes=15)
+Event(title=Learn about Kotlin, description=null, daypart=AFTERNOON, durationInMinutes=30)
+Event(title=Practice Compose, description=null, daypart=AFTERNOON, durationInMinutes=60)
+Event(title=Watch latest DevBytes video, description=null, daypart=AFTERNOON, durationInMinutes=10)
+Event(title=Check out latest Android Jetpack library, description=null, daypart=EVENING, durationInMinutes=45)
+0 Wake up
+15 Eat breakfast
+30 Learn about Kotlin
+10 Watch latest DevBytes video
+45 Check out latest Android Jetpack library
+You have 5 short events.
+MORNING: 2 events
+AFTERNOON: 3 events
+EVENING: 1 events
+Last event of the day: Check out latest Android Jetpack library
+Last event of the day: Check out latest Android Jetpack library
+Duration of first event of the day: short
+
+Process finished with exit code 0
+
+
+
+
+
+
+
+
+
+
+

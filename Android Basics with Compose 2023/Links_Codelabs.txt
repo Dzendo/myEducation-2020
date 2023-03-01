@@ -1,0 +1,78 @@
+27+36N:\2020_GCAAD
+https://developer.android.com/courses    Всего коделабов 260 (181+36=217)
+
+
+Android Basics in Kotlin 	Итого	88
+https://developer.android.com/courses/android-basics-kotlin/course
+Unit 1: Kotlin basics			5+6+4+9=24
+https://developer.android.com/courses/android-basics-kotlin/unit-1
+Unit 2: Layouts				6+5+7=16
+https://developer.android.com/courses/android-basics-kotlin/unit-2
+Unit 3: Navigation			5+5+4=14
+https://developer.android.com/courses/android-basics-kotlin/unit-3
+Unit 4: Connect to the internet		3+6=9
+https://developer.android.com/courses/android-basics-kotlin/unit-4
+Unit 5: Data persistence		3+7=10
+https://developer.android.com/courses/android-basics-kotlin/unit-5
+Unit 6: WorkManager			5
+https://developer.android.com/courses/android-basics-kotlin/unit-6
+
+N:\2020_GCAAD\Android Basics with Compose 2023
+Android Basics with Compose	Итого	93		
+https://developer.android.com/courses/android-basics-compose/course
+Unit 1: Your first Android app  6+5+5 = 16
+https://developer.android.com/courses/android-basics-compose/unit-1
+Unit 2: Building app UI  6+4+5 = 14
+https://developer.android.com/courses/android-basics-compose/unit-2
+Unit 3: Display lists and use Material Design  5+4+6=15 
+https://developer.android.com/courses/android-basics-compose/unit-3
+Unit 4: Navigation and app architecture  6+4+5=15
+https://developer.android.com/courses/android-basics-compose/unit-4
+Unit 5: Connect to the internet		4+6=10
+https://developer.android.com/courses/android-basics-compose/unit-5
+Unit 6: Data persistence		2+7+5 =14
+https://developer.android.com/courses/android-basics-compose/unit-6
+Unit 7: WorkManager			4
+https://developer.android.com/courses/android-basics-compose/unit-7
+Unit 8: Compose with Views		3+2 = 5
+https://developer.android.com/courses/android-basics-compose/unit-8
+
+Jetpack Compose for Android Developers	Итого 27
+https://developer.android.com/courses/jetpack-compose/course
+Compose essentials			8
+https://developer.android.com/courses/pathways/jetpack-compose-for-android-developers-1
+Layouts, theming, and animation		4
+https://developer.android.com/courses/pathways/jetpack-compose-for-android-developers-2
+Architecture and state			5
+https://developer.android.com/courses/pathways/jetpack-compose-for-android-developers-3
+Accessibility, testing, and performance	4
+https://developer.android.com/courses/pathways/jetpack-compose-for-android-developers-4
+Form factors				6
+https://developer.android.com/courses/pathways/jetpack-compose-for-android-developers-5
+
+
+
+@Deprecate
+Android Kotlin Fundamentals	Итого	36
+https://developer.android.com/courses/kotlin-android-fundamentals/overview
+Lesson 1: Build your first app		4
+https://developer.android.com/codelabs/kotlin-android-training-install-studio?index=..%2F..android-kotlin-fundamentals#0
+Lesson 2: Layouts			4
+https://developer.android.com/codelabs/kotlin-android-training-linear-layout?index=..%2F..android-kotlin-fundamentals#0
+Lesson 3: Navigation			6
+https://developer.android.com/codelabs/kotlin-android-training-create-and-add-fragment?index=..%2F..android-kotlin-fundamentals#0
+Lesson 4: Activity and fragment lifecycles	2
+https://developer.android.com/codelabs/kotlin-android-training-lifecycles-logging?index=..%2F..android-kotlin-fundamentals#0
+Lesson 5: Architecture components 	4
+https://developer.android.com/codelabs/kotlin-android-training-view-model?index=..%2F..android-kotlin-fundamentals#0
+Lesson 6: Room database and coroutines	3
+https://developer.android.com/codelabs/kotlin-android-training-room-database?index=..%2F..android-kotlin-fundamentals#0
+Lesson 7: RecyclerView			5
+https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals?index=..%2F..android-kotlin-fundamentals#0
+Lesson 8: Connecting to the internet 	3
+https://developer.android.com/codelabs/kotlin-android-training-internet-data?index=..%2F..android-kotlin-fundamentals#0
+Lesson 9: Repository			2
+https://developer.android.com/codelabs/kotlin-android-training-repository?index=..%2F..android-kotlin-fundamentals#0
+Lesson 10: Designing for everyone 	3
+https://developer.android.com/codelabs/kotlin-android-training-styles-and-themes?index=..%2F..android-kotlin-fundamentals#0
+

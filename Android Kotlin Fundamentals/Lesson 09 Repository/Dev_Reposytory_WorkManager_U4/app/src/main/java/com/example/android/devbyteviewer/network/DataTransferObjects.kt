@@ -82,7 +82,7 @@ fun NetworkVideoContainer.asDomainModel(): List<Video> =
 //потому что они содержат дополнительную логику для анализа сетевых результатов.
 
 /*
-Откройте network/DataTransferObjects.ktи создайте функцию расширения с именем asDatabaseModel().
+Откройте network/DataTransferObjects.kt и создайте функцию расширения с именем asDatabaseModel().
 Используйте функцию для преобразования сетевых объектов в DatabaseVideo объекты базы данных.
  */
 /**

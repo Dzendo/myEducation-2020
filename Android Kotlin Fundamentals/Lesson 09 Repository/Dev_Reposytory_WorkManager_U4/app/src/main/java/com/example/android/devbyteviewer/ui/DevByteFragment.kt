@@ -77,8 +77,11 @@ class DevByteFragment : Fragment() {
      * Он может быть использован для окончательной инициализации после того, как эти части
      * находятся на месте, например, получение представлений или восстановление состояния.
      */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    // override fun onActivityCreated(savedInstanceState: Bundle?) {
+    //    super.onActivityCreated(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+       super.onViewCreated(view, savedInstanceState)
 
         viewModel.playlist.observe(viewLifecycleOwner) { videos ->
             videos?.apply {
@@ -161,6 +164,8 @@ class DevByteFragment : Fragment() {
 
         return binding.root
     }
+
+
     /**
      * Method for displaying a Toast error message for network errors.
      * Метод отображения всплывающего сообщения об ошибке для сетевых ошибок.

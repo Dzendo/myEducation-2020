@@ -35,7 +35,7 @@ interface VideoDao {
  */
 // @Database аннотацию, чтобы пометить VideosDatabase класс как Room базу данных.
 // Объявите DatabaseVideo объект, который принадлежит в этой базе данных, и установите номер версии в 1.
-@Database(entities = [DatabaseVideo::class], version = 1)
+@Database(entities = [DatabaseVideo::class], version = 1, exportSchema = false)
 abstract class VideosDatabase: RoomDatabase() {
     // помнить и хранить переменную типа VideoDao для доступа к Dao методам.
     abstract val videoDao: VideoDao

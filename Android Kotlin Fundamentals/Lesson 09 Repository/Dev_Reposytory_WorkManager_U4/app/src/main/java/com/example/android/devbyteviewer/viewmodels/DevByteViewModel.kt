@@ -176,6 +176,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
             val playlist = Network.devbytes.getPlaylist().await()
             _playlist.postValue(playlist.asDomainModel())
         } catch (networkError: IOException) {
+        // delay(2000)  //  Этот код задержки задержит установку ошибки сети
             // Show an infinite loading spinner if the request fails
             // challenge exercise: show an error to the user if the network request fails
             // Показать бесконечный загрузочный счетчик, если запрос не выполняется
@@ -197,7 +198,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
      * Фабрика для построения DevByteViewModel с параметром
      */
     class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(DevByteViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return DevByteViewModel(app) as T
